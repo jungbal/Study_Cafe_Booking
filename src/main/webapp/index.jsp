@@ -7,7 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1> 내용 </h1>
-
+	<h1>메인 페이지</h1>
+	
+	<h2>메인페이지 소스 코드</h2>
 </body>
 </html>
