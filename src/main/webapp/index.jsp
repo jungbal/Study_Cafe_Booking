@@ -3,12 +3,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<meta charset="EUC-KR">
+<title>메인 페이지</title>
 </head>
 <body>
-	<h1>메인 페이지</h1>
-	
-	<h2>메인페이지 소스 코드</h2>
+<!-- 상세 페이지(/cafeDetail/info)로 가는 버튼 만들기. -->
+<a href="/cafeDetail">상세 페이지</a>
+
 </body>
 </html>
