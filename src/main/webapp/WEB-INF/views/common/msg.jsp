@@ -5,11 +5,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="/resources/js/sweetalert.min.js"></script>
 </head>
 <body>
 	<script>
 		const title = '${title}'; 	//알림창 제목
 		const msg = '${msg}';		//본문 메세지
+		const icon = '${icon}';
 		const loc = '${loc}';		//알림창 출력 후, 요청 url
 		const callback = '${callback}'; //알림창 출력 후, 실행할 스크립트 함수
 		
