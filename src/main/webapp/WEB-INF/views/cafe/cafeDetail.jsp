@@ -23,7 +23,10 @@
       <br><hr><br>
       <div class="seat-selection">
         <p>좌석선택 화면</p>
-        <button>이용권 선택하기</button>
+        
+        <%-- 이용권 선택 화면 --%>
+        
+        <button>이용권 선택하기</button> <%-- 결제 서블릿 (/payInfo) 로 보내기. --%>
       </div>
     </div>
   </section>
