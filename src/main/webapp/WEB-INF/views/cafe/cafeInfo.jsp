@@ -4,20 +4,7 @@
 <!-- WEB-INF/views/cafe/cafeInfo.jsp -->
 <div class="cafeIntroDetail">
     <main>
-    <section class="cafe-header">
-      <h1 class="cafeName">${cafe.cafeName}</h1> <%--스터디카페이름 --%>
-      <p class="cafeAddr">${cafe.cafeAddr}</p> <%--스터디카페세부주소 --%>
-
-      <div class="cafe-media">
-        <div class="cafeImage">
-          <img src="placeholder.jpg" alt="스터디카페 사진">
-        </div>
-        <div class="seat-selection">
-          <p>좌석선택 화면</p>
-          <button>이용권 선택하기</button>
-        </div>
-      </div>
-    </section>
+    
 
     <section class="details">
       <div class="cafeIntroDetail">
