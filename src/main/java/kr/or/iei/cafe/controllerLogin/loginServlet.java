@@ -17,13 +17,13 @@ import kr.or.iei.cafe.model.vo.Login;
  * Servlet implementation class loginServlet
  */
 @WebServlet("/cafeLogin/login")
-public class loginServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public loginServlet() {
+    public LoginServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -45,7 +45,8 @@ public class loginServlet extends HttpServlet {
 			
 			request.setAttribute("title", "알림");
 			request.setAttribute("msg", "아이디 또는 비밀번호를 확인하세요");
-			request.setAttribute("loc", "/member/loginFrm");
+			request.setAttribute("icon", "error");
+			request.setAttribute("loc", "/controllerLogin/loginFrmServlet");
 		}else {
 			view = request.getRequestDispatcher("/index.jsp");
 			

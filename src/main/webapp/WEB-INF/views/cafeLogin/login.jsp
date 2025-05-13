@@ -10,8 +10,8 @@
 	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 	<main>
 		<section class="login-contatiner">
-			<div>로그인</div>
-			<form action="/login/login" method="post" >	
+			
+			<form action="/cafeLogin/login" method="post" >	
 				<div class="input-title">
 					<label for="loginId">아이디</label>
 				</div>

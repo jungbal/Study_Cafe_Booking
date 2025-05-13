@@ -16,7 +16,7 @@ public class LoginDao {
 		
 		Login loginCafe = null;
 		
-		String query = "select * tbl_user where user_id =? and user_pw ";
+		String query = "select * from tbl_user where user_id =? and user_pw = ?";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
