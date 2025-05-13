@@ -16,7 +16,7 @@ import kr.or.iei.cafe.model.vo.Cafe;
 /**
  * Servlet implementation class Search
  */
-@WebServlet("/Search")
+@WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -35,6 +35,7 @@ public class SearchServlet extends HttpServlet {
 		//1. 인코딩 - 필터
 		//2. 값 추출 - 클라이언트가 검색창에 입력한 값
 		String srchStr = request.getParameter("srchStr");
+		System.out.println("srchStr : " + srchStr);
 		
 		//3. 로직 - 상세 정보 조회
 		CafeService service = new CafeService();
@@ -42,6 +43,7 @@ public class SearchServlet extends HttpServlet {
 		
 		//4. 결과 처리
 			//4.1. 이동할 jsp 페이지 경로 지정
+		
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/cafeList.jsp");
 			//4.2. 화면 구현에 필요한 데이터 등록 (카페 정보 리스트)
 		request.setAttribute("list", list);

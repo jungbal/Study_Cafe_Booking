@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.or.iei.cafe.model.service.CafeService;
+import kr.or.iei.cafe.model.vo.Cafe;
+
 /**
  * Servlet implementation class cafeInfo
  */
@@ -29,13 +32,17 @@ public class cafeInfoServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 1. 인코딩 - 필터 : x
-		// 2. 값 추출 : x
-		// 3. 로직 - 회원 정보! 세션에 등록되어 있으므로 조회 불필요
+		// 2. 값 추출 : cafeNo
+		String cafeNo = request.getParameter("cafeNo");
+		// 3. 로직 - 카페 정보 가져오기.
+		CafeService service = new CafeService();
+		Cafe cafe = service.selectcafeNo(cafeNo);
 		// 4. 결과 처리
 			// 4.1. 이동할 JSP 페이지 지정
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/cafeInfo.jsp");
 			// 4.2. 화면 구현에 필요한 데이터 등록 => 세션에 이미 데이터 구현되어 있음.. 받기만 하면 됨
-			//4.3. 페이지 이동
+		request.setAttribute("cafe", cafe);	
+		//4.3. 페이지 이동
 		view.forward(request, response);
 	}
 
