@@ -20,7 +20,14 @@
 <br><br><br>
 <hr>
 <%-- 성우님 개발 --%>
-<a href="/member/loginFrm">로그인</a> <br>
+
+<c:if test="${empty sessionScope.loginCafe}">
+	<a href="/controllerLogin/loginFrmServlet">로그인</a>
+</c:if>
+<c:if test="${not empty sessionScope.loginCafe}">
+	<a href="/LogoutServlet">로그아웃</a> 
+</c:if>
+
 <a href="/join">회원가입</a>
 
 
