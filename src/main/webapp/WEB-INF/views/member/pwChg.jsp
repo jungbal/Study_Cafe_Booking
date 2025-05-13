@@ -94,7 +94,7 @@
 	
 	function validateForm(){
 		//현재 비밀번호 검증(사용자가 입력한 기존 비밀번호와 세션에 저장된 회원의 비밀번호 비교)
-		if($('#memberPw').val() != '${loginMember.memberPw}'){
+		if($('#memberPw').val() != '${loginMember.userPw}'){
 			swal({
 				title : "알림",
 				text : "현재 비밀번호가 일치하지 않습니다.",
