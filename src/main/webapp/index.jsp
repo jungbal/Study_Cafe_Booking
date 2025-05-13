@@ -20,7 +20,7 @@
 <br><br><br>
 <hr>
 <%-- 성우님 개발 --%>
-<a href="/cafeLogin/login">로그인</a> <br>
+<a href="/member/loginFrm">로그인</a> <br>
 <a href="/join">회원가입</a>
 
 
