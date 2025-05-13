@@ -35,7 +35,7 @@
 <hr>
 <a><관리자 페이지 메뉴></a><br> <%-- 휘훈님 개발 --%>
 <a href="/manager/userManage?reqPage=1">이용자 관리</a>
-<a href="/manager/cafeManage">업체 관리</a>
+<a href="/manager/cafeManage?reqPage=1">업체 관리</a>
 <a href="/manger/cafeApplyChk">업체신청정보열람</a>
 <a href="/manager/chkReport">신고접수열람</a>
 
