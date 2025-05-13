@@ -34,7 +34,11 @@
 						<td>${user.userId}</td>
 						<td>${user.userRole}</td>
 						<td>${user.userPhone }</td>
-						
+						<td>
+							<form action="/user/deleteUser" method = 'post'></form>
+							<input type = 'hidden' name= 'userId' value = '${user.userId}'>	<%-- type을 hidden으로 한 이유는 현재 jsp에서 id를 보여줄 필요 없고, 데이터만 전송하기 위해 hidden으로 생성 --%>
+							<button type = 'submit'>삭제</button>
+						</td>
 					</tr>
 					</c:forEach>
 				</table>
