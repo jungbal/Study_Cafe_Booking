@@ -24,4 +24,12 @@ public class CafeService {
 	      return list;
 	}
 
+	// 
+	public Cafe selectcafeNo(String cafeNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		Cafe cafe = dao.selectNocafe(conn, cafeNo);
+		JDBCTemplate.close(conn);
+		return cafe;
+	}
+
 }

@@ -28,9 +28,16 @@ public class CafeDao {
 			
 			while(rset.next()) {
 				Cafe cafe = new Cafe();
-				cafe.setCafeName(rset.getString("cafeName"));
-				cafe.setCafeAddr(rset.getString("cafeAddr"));
-				cafe.setCafeNo(rset.getString("cafeNo"));
+				cafe.setCafeNo(rset.getString("cafe_No"));
+				cafe.setCafeName(rset.getString("cafe_name"));
+				cafe.setCafeAddr(rset.getString("cafe_addr"));
+				cafe.setCafeBiznum(rset.getString("cafe_biznum"));
+				cafe.setCafeIntroduce(rset.getString("cafe_introduce"));
+				cafe.setCafeStartHour(rset.getString("cafe_start_hour"));
+				cafe.setCafeEndHour(rset.getString("cafe_start_hour"));
+				cafe.setCafeStatus(rset.getString("cafe_status"));
+				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
+				cafe.setHostId(rset.getString("host_id"));
 				
 				cafeList.add(cafe);
 			}
@@ -45,6 +52,46 @@ public class CafeDao {
 		
 		// TODO Auto-generated method stub
 		return cafeList;
+	}
+
+	public Cafe selectNocafe(Connection conn, String cafeNo) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		Cafe cafe = null;
+		
+		// cafe 테이블 전체 정보 select
+		String query = "SELECT * FROM tbl_cafe WHERE cafe_no = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, cafeNo);
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				cafe = new Cafe();
+				cafe.setCafeNo(cafeNo);
+				cafe.setCafeName(rset.getString("cafe_name"));
+				cafe.setCafePhone(rset.getString("cafe_phone"));
+				cafe.setCafeAddr(rset.getString("cafe_addr"));
+				cafe.setCafeBiznum(rset.getString("cafe_biznum"));
+				cafe.setCafeIntroduce(rset.getString("cafe_introduce"));
+				cafe.setCafeStartHour(rset.getString("cafe_start_hour"));
+				cafe.setCafeEndHour(rset.getString("cafe_end_hour"));
+				cafe.setCafeStatus(rset.getString("cafe_status"));
+				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
+				cafe.setHostId(rset.getString("host_id"));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+			
+		}
+		return cafe;
 	}
 	
 	
