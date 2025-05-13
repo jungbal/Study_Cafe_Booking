@@ -12,6 +12,7 @@ import kr.or.iei.member.model.vo.Member;
 
 public class MemberDao {
 	
+	//이정원
 	public Member selectOneMember(Connection conn, String userId, String userPw) {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -46,6 +47,7 @@ public class MemberDao {
 	}
 
 
+	//이정원
 	public int updateMember(Connection conn, Member updMember) {
 		PreparedStatement pstmt = null;
 
@@ -72,6 +74,50 @@ public class MemberDao {
 
 		return result;
 	}
+	
+	//이정원
+	public int updateMemberPw(Connection conn, String userId, String newMemberPw) {
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		String query = "update tbl_user set user_pw = ? where user_id = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			
+			pstmt.setString(1, newMemberPw);
+			pstmt.setString(2, userId);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+	
+	//이정원
+	public int updateProfileImg(Connection conn, String userId, String fileSrc) {
+	    PreparedStatement pstmt = null;
+	    int result = 0;
+	    String query = "UPDATE TBL_USER SET USER_IMAGE = ? WHERE USER_ID = ?";
+	    try {
+	        pstmt = conn.prepareStatement(query);
+	        pstmt.setString(1, fileSrc);
+	        pstmt.setString(2, userId);
+	        result = pstmt.executeUpdate();
+	    } catch(SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        JDBCTemplate.close(pstmt);
+	    }
+	    return result;
+	}
+
 	
 	//정휘훈 파트
 	public ArrayList<Member> selectAllUser(Connection conn, int start, int end) {
