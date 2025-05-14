@@ -19,5 +19,8 @@ public class Cafe {
 	private String cafeStatus;
 	private String cafeIntroDetail;
 	private String hostId;
+	
+	// 카페 관리 상태 나타내는 변수 추가.
+	private String cafeManageStatus;
 
 }
