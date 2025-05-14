@@ -40,7 +40,6 @@ public class cafeReviewServlet extends HttpServlet {
 		String RVQA = request.getParameter("RVQA");
 		// 3. 로직 - cafeNo로 리뷰 조회 (select * from tbl_comment where comment_cafe_no = ?)
 		CommentService service = new CommentService();
-	
 		ArrayList<Comment> reviewList = service.selectComment(cafeNo, RVQA);
 		// 4. 결과 처리
 		
