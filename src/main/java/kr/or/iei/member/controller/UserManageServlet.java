@@ -1,4 +1,4 @@
-package kr.or.iei.cafe.controller;
+package kr.or.iei.member.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,20 +10,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.or.iei.cafe.model.service.CommentService;
-import kr.or.iei.cafe.model.vo.Comment;
+import kr.or.iei.common.ListData;
+import kr.or.iei.member.model.service.MemberService;
+import kr.or.iei.member.model.vo.Member;
+
+
 
 /**
- * Servlet implementation class cafeQA
+ * Servlet implementation class UserManageServlet
  */
-@WebServlet("/cafeDetail/qna")
-public class cafeQAServlet extends HttpServlet {
+@WebServlet("/manager/userManage")
+public class UserManageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public cafeQAServlet() {
+    public UserManageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,19 +35,20 @@ public class cafeQAServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 1. 인코딩 - 필터 : x
-		// 2. 값 추출 : cafeNo, RVQA(dao의 sql문에서 리뷰인지 Q&A 인지 구분하기 위해 QA 값을 담아 전달)
-		String cafeNo = request.getParameter("cafeNo");
-		String RVQA = request.getParameter("RVQA");
-		// 3. 로직 - cafeNo로 Q&A 리스트 조회
-		CommentService service = new CommentService();
-		ArrayList<Comment> qaList = service.selectComment(cafeNo, RVQA);
-		// 4. 결과 처리
-			// 4.1. 이동할 JSP 페이지 지정
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/cafeQA.jsp");
-			// 4.2. 화면 구현에 필요한 데이터 등록 => 세션에 이미 데이터 구현되어 있음.. 받기만 하면 됨
-		request.setAttribute("qaList", qaList); 	
-			//4.3. 페이지 이동
+		//1. 인코딩 - 필터
+		//2. 값 추출
+		int reqPage =  Integer.parseInt(request.getParameter("reqPage"));
+		//3. 로직
+		MemberService service = new MemberService();
+		ListData<Member> userList =service.selectAllUser(reqPage);
+		//4. 결과 처리
+			//4.1 이동할 페이지 경로 등록
+		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/manager/manageUser.jsp");
+		
+			//4.2 화면 구현에 필요한 데이터 등록
+		request.setAttribute("userList", userList.getList());
+		request.setAttribute("pageNavi", userList.getPageNavi());
+			//4.3 페이지 이동
 		view.forward(request, response);
 	}
 

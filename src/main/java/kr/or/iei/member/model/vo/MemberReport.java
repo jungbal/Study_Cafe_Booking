@@ -1,4 +1,4 @@
-package kr.or.iei.user.model.vo;
+package kr.or.iei.member.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserReport {
+public class MemberReport {
 	private String reportId;
 	private String reporterId;
 	private String targetCommentId;

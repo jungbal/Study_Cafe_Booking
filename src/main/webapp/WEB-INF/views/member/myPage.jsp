@@ -6,6 +6,9 @@
 <head>
 <meta charset="UTF-8">
 <title>마이페이지</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/sweetalert.min.js"></script>
+
 <style>
 	.mypage-container {
 		display: flex;
@@ -58,8 +61,26 @@
 							</tr>
 							<tr>
 								<th>프로필 이미지</th>
-								<td>
-									<input type="text" id="userImage" name="userImage" value="${loginMember.userImage}" placeholder="이미지 경로">
+								<td colspan="2">
+									<c:choose>
+										<c:when test="${not empty loginMember.userImage}">
+											<img src="${pageContext.request.contextPath}${loginMember.userImage}" 
+												width="100" height="100" 
+												alt="회원 프로필">
+										</c:when>
+										<c:otherwise>
+											<img src="data:image/svg+xml;utf8,
+												<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'>
+													<rect width='100' height='100' fill='%23eee'/>
+													<text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='12'>No Image</text>
+												</svg>" 
+												width="100" height="100" alt="기본 프로필">
+										</c:otherwise>
+									</c:choose>
+									<br>
+									<button type="button" class="btn-primary sm" onclick="document.getElementById('profileImgInput').click()">
+										이미지 변경
+									</button>
 								</td>
 							</tr>
 							<tr>
@@ -78,7 +99,7 @@
 							</tr>
 						</table>
 						<div class="mypage-btn">
-							<button type="submit" onclick="updateValidate()" class="btn-primary lg">정보수정</button>
+							<button type="button" onclick="updateValidate()" class="btn-primary lg">정보수정</button>
 							<c:if test="${loginMember.userRole ne 1}">
 								<button type="button" onclick="deleteMember()" class="btn-secondary lg">회원탈퇴</button>
 							</c:if>
@@ -86,6 +107,11 @@
 								<button type="button" class="btn-point lg" onclick="moveAdminPage()">관리자 페이지</button>
 							</c:if>
 						</div>
+					</form>
+
+					<!-- 🔥 프로필 이미지 업로드용 숨겨진 form -->
+					<form id="profileImgForm" action="/member/updateImg" method="post" enctype="multipart/form-data" style="display:none;">
+						<input type="file" name="profileImg" id="profileImgInput" accept="image/*">
 					</form>
 				</div>
 			</section>
@@ -139,6 +165,29 @@
 		let attr = `width=${width}, height=${height}, top=${top}, left=${left}`;
 		window.open("/member/pwChgFrm", "chgPw", attr);
 	}
+
+	window.addEventListener('DOMContentLoaded', function () {
+	    const input = document.getElementById('profileImgInput');
+	    if (input) {
+	        input.addEventListener('change', function () {
+	            if (this.files.length > 0) {
+	                swal({
+	                    title: "프로필 이미지 변경",
+	                    text: "선택한 이미지로 프로필을 변경하시겠습니까?",
+	                    icon: "info",
+	                    buttons: ["취소", "변경"]
+	                }).then((confirm) => {
+	                    if (confirm) {
+	                        console.log("🔥 submit 실행");
+	                        document.getElementById('profileImgForm').submit();
+	                    }
+	                });
+	            }
+	        });
+	    } else {
+	        console.log("❌ profileImgInput 요소를 찾을 수 없습니다.");
+	    }
+	});
 
 	<% if (((Member)session.getAttribute("loginMember")).getUserRole() == 1) { %>
 	function moveAdminPage(){

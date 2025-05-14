@@ -34,7 +34,14 @@
 						<td>${user.userId}</td>
 						<td>${user.userRole}</td>
 						<td>${user.userPhone }</td>
-						
+						<td>
+						<c:if test = "${user.userRole == 3}">	<%-- 권한 3(일반 이용자)만 삭제버튼 나올 수 있게 설정--%>
+							<form action="/user/deleteUser" method = 'post'>
+							<input type = 'hidden' name= 'userId' value = '${user.userId}'>	<%-- type을 hidden으로 한 이유는 현재 jsp에서 id를 보여줄 필요 없고, 데이터만 전송하기 위해 hidden으로 생성 --%>
+							<button type = 'submit'>삭제</button>
+							</form>
+							</c:if>
+						</td>
 					</tr>
 					</c:forEach>
 				</table>

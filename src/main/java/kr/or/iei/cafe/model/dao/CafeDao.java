@@ -93,6 +93,78 @@ public class CafeDao {
 		}
 		return cafe;
 	}
+
+	
+	//정휘훈 파트
+	public ArrayList<Cafe> selectAllCafe(Connection conn, int start, int end) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		ArrayList<Cafe> list = new ArrayList<Cafe>();
+		
+		String query = "select * from (select ROWNUM RNUM, A.* from ( select * from tbl_cafe A ) A) where RNUM >=? and RNUM <=?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			
+			pstmt.setInt(1, start);
+			pstmt.setInt(2, end);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Cafe cafe = new Cafe();
+				
+				cafe.setCafeNo(rset.getString("cafe_no"));
+				cafe.setCafeName(rset.getString("cafe_name"));
+				cafe.setCafePhone(rset.getString("cafe_phone"));
+				cafe.setCafeAddr(rset.getString("cafe_addr"));
+				cafe.setCafeBiznum(rset.getString("cafe_biznum"));
+				cafe.setCafeIntroduce(rset.getString("cafe_introduce"));
+				cafe.setCafeStartHour(rset.getString("cafe_start_hour"));
+				cafe.setCafeEndHour(rset.getString("cafe_end_hour"));
+				cafe.setCafeStatus(rset.getString("cafe_status"));
+				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
+				cafe.setHostId(rset.getString("host_id"));
+				
+				list.add(cafe);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return list;
+	}
+
+	public int selectTotalCount(Connection conn) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		int totCnt = 0;
+		
+		String query = "select count(*) as cnt from tbl_cafe";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			
+			rset=pstmt.executeQuery();
+			rset.next();
+			totCnt = rset.getInt("cnt");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		
+		return totCnt;
+	}
 	
 	
 
