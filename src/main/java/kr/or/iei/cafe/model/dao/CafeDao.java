@@ -102,7 +102,20 @@ public class CafeDao {
 		
 		ArrayList<Cafe> list = new ArrayList<Cafe>();
 		
-		String query = "select * from (select ROWNUM RNUM, A.* from ( select * from tbl_cafe A ) A) where RNUM >=? and RNUM <=?";
+		String query = "select * from (select ROWNUM RNUM, A.* from (SELECT \r\n"
+				+ "    c.*,\r\n"
+				+ "    h.status AS host_request_status,\r\n"
+				+ "    CASE \r\n"
+				+ "        WHEN c.cafe_status = 'N' AND h.status = 'N' THEN '등록대기'\r\n"
+				+ "        WHEN c.cafe_status = 'N' AND h.status = 'Y' THEN '수정대기'\r\n"
+				+ "        WHEN c.cafe_status = 'Y' AND h.status = 'Y' THEN '승인'\r\n"
+				+ "        ELSE '기타'\r\n"
+				+ "    END AS cafe_manage_status\r\n"
+				+ "FROM tbl_cafe c\r\n"
+				+ "JOIN tbl_host_request h ON c.cafe_no = h.host_no\r\n"
+				+ "WHERE \r\n"
+				+ "    (c.cafe_status = 'N' AND h.status IN ('N', 'Y'))\r\n"
+				+ "    OR (c.cafe_status = 'Y' AND h.status = 'Y')) A) where RNUM >=? and RNUM <=?";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -126,6 +139,7 @@ public class CafeDao {
 				cafe.setCafeStatus(rset.getString("cafe_status"));
 				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
 				cafe.setHostId(rset.getString("host_id"));
+				cafe.setCafeManageStatus(rset.getString("cafe_manage_status"));
 				
 				list.add(cafe);
 			}
