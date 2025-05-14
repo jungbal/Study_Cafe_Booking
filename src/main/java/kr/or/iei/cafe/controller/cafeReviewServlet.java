@@ -35,7 +35,6 @@ public class cafeReviewServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 1. 인코딩 - 필터 : x
-
 		// 2. 값 추출 : cafeNo, RVQA(dao의 sql문에서 리뷰인지 Q&A 인지 구분하기 위해 RV 값을 담아 전달)
 		String cafeNo = request.getParameter("cafeNo");
 		String RVQA = request.getParameter("RVQA");
