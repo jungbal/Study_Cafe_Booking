@@ -18,9 +18,8 @@ public class CommentService {
 	public ArrayList<Comment> selectComment(String cafeNo, String RVQA) {
 		Connection conn = JDBCTemplate.getConnection();
 		ArrayList<Comment> commentList = dao.selectComment(conn, cafeNo, RVQA);
-		return commentList;
+		JDBCTemplate.close(conn);
+	      return commentList;
 	}
-	
-	
 
 }
