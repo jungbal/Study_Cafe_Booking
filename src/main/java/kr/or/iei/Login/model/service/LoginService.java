@@ -34,5 +34,11 @@ public class LoginService {
 		return result;
 	}
 	
+	public int idDuplChk(String memberId) {
+		Connection conn = JDBCTemplate.getConnection();
+		int cnt = dao.idDuplChk(conn, memberId);
+		JDBCTemplate.close(conn);
+		return cnt;
+	}
 
 }
