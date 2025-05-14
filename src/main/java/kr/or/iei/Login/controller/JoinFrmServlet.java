@@ -1,4 +1,4 @@
-package kr.or.iei.cafe.controllerLogin;
+package kr.or.iei.Login.controller;
 
 import java.io.IOException;
 
@@ -10,16 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class LoginFrmServlet
+ * Servlet implementation class JoinFrmServlet
  */
-@WebServlet("/controllerLogin/loginFrmServlet")
-public class LoginFrmServlet extends HttpServlet {
+@WebServlet("/joinFrm")
+public class JoinFrmServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginFrmServlet() {
+    public JoinFrmServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,8 +28,8 @@ public class LoginFrmServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafeLogin/login.jsp");
-		view.forward(request, response);
+	 RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafeLogin/join.jsp");
+	 view.forward(request, response);
 	}
 
 	/**

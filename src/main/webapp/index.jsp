@@ -28,7 +28,7 @@
 	<a href="/LogoutServlet">로그아웃</a> 
 </c:if>
 
-<a href="/join">회원가입</a>
+<a href="/joinFrm">회원가입</a>
 
 
 <br><br><br>

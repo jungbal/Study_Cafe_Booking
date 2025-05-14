@@ -1,15 +1,16 @@
-package kr.or.iei.cafe.model.dao;
+package kr.or.iei.Login.model.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import kr.or.iei.cafe.model.vo.Login;
+import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.common.JDBCTemplate;
 
 public class LoginDao {
 
+//	로그인 메소드
 	public Login cafeLogin(Connection conn, String loginId, String loginPw) {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -40,6 +41,33 @@ public class LoginDao {
 		}
 		
 		return loginCafe;
+	}
+	
+//  회원 가입 메소드
+	public int memberJoin(Connection conn, Login joinInfo) {
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		String query =
+		"INSERT INTO TBL_USER (user_id, user_pw, user_phone) VALUES (?, ?, ?)";
+	// (USER_ID, USER_PW, USER_ROLE, USER_PHONE, USER_STATUS, USER_IMAGE)
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, joinInfo.getLoginId());
+			pstmt.setString(2, joinInfo.getLoginPw());
+			pstmt.setString(3, joinInfo.getMemberPhone());
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+	
+		return result;
 	}
 
 	

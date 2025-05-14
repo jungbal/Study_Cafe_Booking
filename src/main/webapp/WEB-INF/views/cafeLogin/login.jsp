@@ -32,10 +32,6 @@
 					<button type="submit" class="btn-primary lg">로그인</button>
 				</div>
 				
-				<div class="member-link-box">
-					<a href="/member/joinFrm">회원가입</a> 
-					<a href="#">비밀번호 찾기</a>
-				</div>
 			</form>
 		</section>
 	</main>

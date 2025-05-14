@@ -1,4 +1,4 @@
-package kr.or.iei.cafe.model.vo;
+package kr.or.iei.Login.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,4 +12,5 @@ public class Login {
 	
 	private String loginId;
 	private String loginPw;
+	private String memberPhone;
 }
