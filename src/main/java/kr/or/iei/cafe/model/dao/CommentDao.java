@@ -13,7 +13,6 @@ public class CommentDao {
 
 	// 특정 카페의 카페 리뷰 / Q&A list 조회
 	public ArrayList<Comment> selectComment(Connection conn, String cafeNo, String RVQA) {
-
 	    PreparedStatement pstmt = null;
 	    ResultSet rset = null;
 	    ArrayList<Comment> commentList = new ArrayList<Comment>();
@@ -38,7 +37,8 @@ public class CommentDao {
 	            comment.setCommentUserId(rset.getString("comment_user_id"));
 	            comment.setCommentCafeNo(rset.getString("comment_cafe_no"));
 	            comment.setCommentParent(rset.getString("comment_parent"));
-	            comment.setUserRole(rset.getString("user_role")); // 또는 getString, JSP와 맞춰서
+	            comment.setUserRole(rset.getString("user_role"));
+
 	            commentList.add(comment);
 	        }
 
