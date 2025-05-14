@@ -55,6 +55,14 @@
 							</td>
 						</tr>
 						<tr>
+							<th>비밀번호</th>
+							<td>
+								<button type="button" onclick="window.open('/member/pwChgFrm', '_blank', 'width=500,height=400');">
+									비밀번호 변경
+								</button>
+							</td>
+						</tr>
+						<tr>
 							<th>전화번호</th>
 							<td>
 								<input type="text" id="userPhone" name="userPhone" value="${loginMember.userPhone}" maxlength="13" placeholder="010-0000-0000">
