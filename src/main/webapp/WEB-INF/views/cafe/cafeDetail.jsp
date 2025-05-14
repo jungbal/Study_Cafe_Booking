@@ -109,64 +109,6 @@
 </body>
 
 <script>
-const tabButtons = document.querySelectorAll(".tab-btn");
-const tabContents = document.querySelectorAll(".tab-content");
-
-tabButtons.forEach((btn, index) => {
-  btn.addEventListener("click", function () {
-    // 버튼 활성화 처리
-    tabButtons.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-
-    // 탭 컨텐츠 보이기/숨기기
-    tabContents.forEach(c => c.style.display = "none");
-    tabContents[index].style.display = "block";
-
-    const cafeNo = "${cafe.cafeNo}";
-    // 리뷰 탭 클릭 시
-    if (btn.id === "btn-review") {
-      $.ajax({
-        url: "/cafeDetail/review",
-        type: "GET",
-        data: { cafeNo: cafeNo, RVQA: "RV" },
-        success: function (data) {
-          $("#review-tab").html(data);
-        },
-        error: function () {
-          $("#review-tab").html("<p>리뷰 정보를 불러오지 못했습니다.</p>");
-        }
-      });
-    }
-    // Q&A 탭 클릭 시
-    if (btn.id === "btn-qna") {
-      $.ajax({
-        url: "/cafeDetail/qna", // Q&A를 처리하는 서블릿
-        type: "GET",
-        data: { cafeNo: cafeNo, RVQA: "QA" },
-        success: function (data) {
-          $("#qna-tab").html(data);
-        },
-        error: function () {
-          $("#qna-tab").html("<p>Q&A 정보를 불러오지 못했습니다.</p>");
-        }
-      });
-    }
-  });
-});
-</script>
-<script>
-$(document).ready(function() {
-  $(".seat-box").click(function() {
-    $(".seat-box").removeClass("selected");
-    $(this).addClass("selected");
-
-    let seatNo = $(this).data("seat");
-    $("#seatNo").val(seatNo);
-    $(".ticket-section").slideDown();
-  });
-});
-
-<script>
 $(document).ready(function() {
   $(".seat-box").click(function() {
     $(".seat-box").removeClass("selected");
@@ -219,5 +161,6 @@ tabButtons.forEach((btn, index) => {
   });
 });
 </script>
+
 </body>
 </html>
