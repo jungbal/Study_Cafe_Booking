@@ -166,6 +166,18 @@ $(document).ready(function() {
   });
 });
 
+<script>
+$(document).ready(function() {
+  $(".seat-box").click(function() {
+    $(".seat-box").removeClass("selected");
+    $(this).addClass("selected");
+
+    let seatNo = $(this).data("seat");
+    $("#seatNo").val(seatNo);
+    $(".ticket-section").slideDown();
+  });
+});
+
 const tabButtons = document.querySelectorAll(".tab-btn");
 const tabContents = document.querySelectorAll(".tab-content");
 
