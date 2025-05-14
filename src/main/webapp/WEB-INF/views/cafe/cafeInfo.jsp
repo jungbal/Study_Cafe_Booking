@@ -4,8 +4,6 @@
 <!-- WEB-INF/views/cafe/cafeInfo.jsp -->
 <div class="cafeIntroDetail">
     <main>
-    
-
     <section class="details">
       <div class="cafeIntroDetail">
         <h2>공간소개</h2> <%--공간소개 --%>
