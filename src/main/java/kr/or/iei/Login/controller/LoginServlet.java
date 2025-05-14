@@ -16,7 +16,7 @@ import kr.or.iei.Login.model.vo.Login;
 /**
  * Servlet implementation class loginServlet
  */
-@WebServlet("/cafeLogin/login")
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -46,7 +46,7 @@ public class LoginServlet extends HttpServlet {
 			request.setAttribute("title", "알림");
 			request.setAttribute("msg", "아이디 또는 비밀번호를 확인하세요");
 			request.setAttribute("icon", "error");
-			request.setAttribute("loc", "/controllerLogin/loginFrmServlet");
+			request.setAttribute("loc", "/loginFrm");
 		}else {
 			view = request.getRequestDispatcher("/index.jsp");
 			

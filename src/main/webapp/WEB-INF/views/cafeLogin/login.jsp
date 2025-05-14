@@ -11,7 +11,7 @@
 	<main>
 		<section class="login-contatiner">
 			
-			<form action="/cafeLogin/login" method="post" >	
+			<form action="/login" method="post" >	
 				<div class="input-title">
 					<label for="loginId">아이디</label>
 				</div>
