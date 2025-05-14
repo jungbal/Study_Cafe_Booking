@@ -15,6 +15,7 @@
 
           <%-- 답글 리스트 표시 --%>
           <c:forEach var="reply" items="${reviewList}">
+
             <c:if test="${reply.userRole == '2' && reply.commentParent == review.commentId}"> <%-- 답글일 때 => userRole이 2이어야 함 --%>
               <div class="reply" style="margin-left: 30px; margin-top: 10px;">
                 <input type="hidden" value="${reply.commentId}" />
