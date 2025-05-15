@@ -179,6 +179,54 @@ public class CafeDao {
 		
 		return totCnt;
 	}
+
+	
+
+
+	public int deleteHost(Connection conn, String cafeNo) {
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		String query = "delete from tbl_cafe where cafe_no =?";
+		
+		try {
+			pstmt=conn.prepareStatement(query);
+			
+			pstmt.setString(1, cafeNo);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(conn);
+		}
+		return result;
+	}
+
+	public int updateRole(Connection conn, String cafeNo) {
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		String query = "UPDATE tbl_user SET user_roll = '3' WHERE user_id IN (SELECT host_id FROM tbl_cafe WHERE cafe_no = ?)";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, cafeNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
 	
 	
 

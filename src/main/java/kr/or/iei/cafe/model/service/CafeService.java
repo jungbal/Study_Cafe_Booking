@@ -121,6 +121,33 @@ public class CafeService {
 	return listData;
 	}
 
+	public int selectCafeList(String cafeNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		
+		
+		//1. DB 카페 정보 삭제
+		int result = dao.deleteHost(conn,cafeNo);
+		
+		if(result > 0) {
+			//2. 삭제 뒤 유저 권한 수정
+			int rst = dao.updateRole(conn,cafeNo);
+			
+			if(rst > 0) {
+				JDBCTemplate.commit(conn);
+			}else {
+				JDBCTemplate.rollback(conn);
+			}
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+	
 	
 
 }
