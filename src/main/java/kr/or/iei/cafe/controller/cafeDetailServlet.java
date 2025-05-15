@@ -39,7 +39,7 @@ public class cafeDetailServlet extends HttpServlet {
 
 	    // 2. 로직 : 카페 정보 가져오기, 이용권 정보 가져오기.
 	    CafeService service = new CafeService();
-	    Cafe cafe = service.selectcafeNo(cafeNo);
+	    Cafe cafe = service.selectCafeByNo(cafeNo);
 	    
 	    TicketService ticketService = new TicketService();
 	    ArrayList<Ticket> ticketList = ticketService.selectCafeTicket(cafeNo);

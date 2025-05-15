@@ -27,9 +27,9 @@ public class CafeService {
 	}
 
 	// 
-	public Cafe selectcafeNo(String cafeNo) {
+	public Cafe selectCafeByNo(String cafeNo) {
 		Connection conn = JDBCTemplate.getConnection();
-		Cafe cafe = dao.selectNocafe(conn, cafeNo);
+		Cafe cafe = dao.selectCafeByNo(conn, cafeNo);
 		JDBCTemplate.close(conn);
 		return cafe;
 	}

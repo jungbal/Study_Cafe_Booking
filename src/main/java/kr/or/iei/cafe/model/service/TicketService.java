@@ -22,5 +22,14 @@ public class TicketService {
 		JDBCTemplate.close(conn);
 	      return ticketList;
 	}
+	
+	// ticket_id로 해당 이용권의 정보 가져오기
+	public Ticket selectOneTicket (String ticketId) {
+		Connection conn = JDBCTemplate.getConnection();
+		Ticket ticket = dao.selectOneTicket(conn, ticketId);
+		JDBCTemplate.close(conn);
+		System.out.println(ticket.getTicketType());
+	      return ticket;
+	}
 
 }

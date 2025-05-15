@@ -45,40 +45,44 @@
       <div class="cafeImage">
         <img src="placeholder.jpg" alt="스터디카페 사진">
       </div>
+
       <br><hr><br>
+
       <div class="seat-selection">
-        <p>좌석선택 화면</p>
-        
-        <%-- 이용권 선택 화면 --%>
-        
-        <button>이용권 선택하기</button> <%-- 결제 서블릿 (/payInfo) 로 보내기. --%>
-      
-      <div class="seat-selection">
-        <p><strong>좌석 선택 화면</strong></p>
-        <div class="seats-container">
-          <c:forEach var="i" begin="1" end="30">
-            <div class="seat-box" data-seat="${i}">${i}</div>
-          </c:forEach>
-        </div>
+        <p><strong>좌석선택 화면</strong></p>
 
-        <div class="ticket-section">
-          <form id="ticketForm" method="post" action="/payInfo">
-            <input type="hidden" name="seatNo" id="seatNo" value="">
+        <c:choose>
+          <c:when test="${empty sessionScope.loginCafe}">
+            <p style="color: red; font-weight: bold;">로그인 후 좌석을 선택할 수 있습니다.</p>
+          </c:when>
+          <c:otherwise>
+            <div class="seats-container">
+              <c:forEach var="i" begin="1" end="30">
+                <div class="seat-box" data-seat="${i}">${i}</div>
+              </c:forEach>
+            </div>
 
-            <p><strong>이용권 선택</strong></p>
-            <c:forEach var="ticket" items="${ticketList}">
-              <div>
-                <label>
-                  <input type="radio" name="ticketId" value="${ticket.ticketId}" required>
-                  ${ticket.ticketType} (${ticket.ticketHour}시간) - ${ticket.ticketPrice}원
-                </label>
-              </div>
-            </c:forEach>
+            <div class="ticket-section">
+              <form id="ticketForm" method="post" action="/payInfo">
+                <input type="hidden" name="seatNo" id="seatNo" value="">
+                <input type="hidden" name="cafeNo" value="${cafe.cafeNo}">
 
-            <br>
-            <button type="submit">이용권 선택하기</button>
-          </form>
-        </div>
+                <p><strong>이용권 선택</strong></p>
+                <c:forEach var="ticket" items="${ticketList}">
+                  <div>
+                    <label>
+                      <input type="radio" name="ticketId" value="${ticket.ticketId}" required>
+                      ${ticket.ticketType} - ${ticket.ticketPrice}원
+                    </label>
+                  </div>
+                </c:forEach>
+
+                <br>
+                <button type="submit">이용권 선택하기</button>
+              </form>
+            </div>
+          </c:otherwise>
+        </c:choose>
       </div>
     </div>
   </section>
@@ -107,6 +111,7 @@
     </div>
   </div>
 </body>
+
 
 <script>
 $(document).ready(function() {
