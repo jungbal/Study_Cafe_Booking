@@ -99,5 +99,35 @@ public class LoginDao {
 		return cnt;
 	}
 
+	public int chkUserRole(Connection conn, String loginId) {
+		// TODO Auto-generated method stub
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		int role = 0;
+		
+		String query =
+				"select user_role from tbl_user where user_id = ? ";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, loginId);
+			rset = pstmt.executeQuery();	
+			
+			if(rset.next()) {
+				role = rset.getInt("user_role");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+	
+		return role;
+	}
+
 	
 }
