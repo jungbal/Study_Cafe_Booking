@@ -22,4 +22,18 @@ public class CommentService {
 	      return commentList;
 	}
 
+	public int insertComment(Comment comment, String RVQA) {
+		Connection conn = JDBCTemplate.getConnection();
+		int result = dao.insertComment(conn, comment, RVQA);
+		
+		if(result>0) {
+	         JDBCTemplate.commit(conn);
+	      }else {
+	         JDBCTemplate.rollback(conn);
+	      }
+	      JDBCTemplate.close(conn);
+	      
+	      return result;
+	}
+
 }

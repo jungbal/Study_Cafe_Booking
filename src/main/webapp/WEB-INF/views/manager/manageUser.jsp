@@ -49,7 +49,7 @@
 			<div id = 'pageNavi'>${pageNavi}</div>
 		</section>
 	</main>
-	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
+	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 	</div>
 </body>
 </html>

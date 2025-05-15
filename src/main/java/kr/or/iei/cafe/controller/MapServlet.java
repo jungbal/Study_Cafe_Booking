@@ -37,7 +37,7 @@ public class MapServlet extends HttpServlet {
 
         // 1. DB에서 주소 가져오기 (CafeService 이용)
         CafeService cafeservice = new CafeService();
-        Cafe cafe = cafeservice.selectcafeNo(cafeNo); // 예: "서울 종로구 세종대로 110"
+        Cafe cafe = cafeservice.selectCafeByNo(cafeNo); // 예: "서울 종로구 세종대로 110"
         System.out.println("cafe.getCafeAddr() : " + cafe.getCafeAddr()); // null 확인
 
         if (cafe.getCafeAddr() == null || cafe.getCafeAddr().isEmpty()) {

@@ -52,5 +52,39 @@ public class CommentDao {
 	    return commentList;
 	}
 
+	public int insertComment(Connection conn, Comment comment, String RVQA) {
+	    PreparedStatement pstmt = null;
+	    int result = 0;
+
+	    String query = "INSERT INTO TBL_COMMENT (TARGET_TYPE, CONTENT, COMMENT_TIME, COMMENT_USER_ID, COMMENT_CAFE_NO, COMMENT_PARENT) " +
+	                   "VALUES (?, ?, SYSDATE, ?, ?, ?)";
+
+	    try {
+	        pstmt = conn.prepareStatement(query);
+
+	        pstmt.setString(1, RVQA);
+	        pstmt.setString(2, comment.getContent());
+	        pstmt.setString(3, comment.getCommentUserId());
+	        pstmt.setString(4, comment.getCommentCafeNo());
+
+	        String parent = comment.getCommentParent();
+	        if (parent != null && !parent.equals("0") && !parent.isEmpty()) {
+	            pstmt.setString(5, parent);
+	        } else {
+	            pstmt.setNull(5, java.sql.Types.VARCHAR);
+	        }
+
+	        result = pstmt.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        JDBCTemplate.close(pstmt);
+	    }
+
+	    return result;
+	}
+
+
+
 
 }

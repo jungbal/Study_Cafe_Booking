@@ -46,5 +46,38 @@ public class TicketDao {
 	    }
 		return ticketList;
 	}
+	
+	
+	// ticket_id로 해당 이용권의 정보 가져오기
+	public Ticket selectOneTicket (Connection conn, String ticketId) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		Ticket ticket = null;
+		
+		String query = "select * from tbl_ticket where ticket_id= ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, ticketId);
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				ticket = new Ticket();
+				ticket.setTicketId(ticketId);
+				ticket.setTicketPrice(rset.getString("ticket_price"));
+				ticket.setTicketHour(rset.getString("ticket_hour"));
+				ticket.setTicketType(rset.getString("ticket_type"));
+				ticket.setTicketRegDate(rset.getString("ticket_reg_date"));
+				ticket.setCafeNo(rset.getString("cafe_no"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return ticket;
+	}
 
 }

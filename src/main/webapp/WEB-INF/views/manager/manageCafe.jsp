@@ -45,10 +45,13 @@
 							<th>
 								<c:choose>
 								<c:when test="${cafe.cafeManageStatus == '승인'}">
-									<button type = 'submit'>삭제</button>
+								<form action="/deleteHost" method = 'post'>
+									<input type = 'hidden' name = "cafeNo" value = "${cafe.cafeNo}">
+									<button type = 'submit' >삭제</button>
+									</form>
 								</c:when>
 								<c:when test="${cafe.cafeManageStatus == '수정대기' || cafe.cafeManageStatus == '등록대기' }">
-									<select name = "${cafe.cafeManageStatus}">
+									<select name = "${cafe.cafeNo}">
 										<option>승인</option>
 										<option>반려</option>
 									</select>

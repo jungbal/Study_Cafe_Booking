@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import kr.or.iei.cafe.model.dao.CafeDao;
 import kr.or.iei.cafe.model.service.CafeService;
 import kr.or.iei.cafe.model.service.CommentService;
+import kr.or.iei.cafe.model.vo.Cafe;
 import kr.or.iei.cafe.model.vo.Comment;
 
 /**
@@ -41,12 +42,18 @@ public class cafeReviewServlet extends HttpServlet {
 		// 3. 로직 - cafeNo로 리뷰 조회 (select * from tbl_comment where comment_cafe_no = ?)
 		CommentService service = new CommentService();
 		ArrayList<Comment> reviewList = service.selectComment(cafeNo, RVQA);
+		
+			// hostId값 가져오기 위해서 cafe 객체 가져오기
+		CafeService cafeService = new CafeService();
+		Cafe cafe = cafeService.selectCafeByNo(cafeNo);
+		
 		// 4. 결과 처리
 		
 			// 4.1. 이동할 JSP 페이지 지정
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/cafeReview.jsp");
 			// 4.2. 화면 구현에 필요한 데이터 등록 
 		request.setAttribute("reviewList", reviewList); 
+		request.setAttribute("cafe", cafe);
 		
 		view.forward(request, response);
 	}

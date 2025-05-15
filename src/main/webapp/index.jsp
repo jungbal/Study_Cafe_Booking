@@ -8,8 +8,6 @@
 <title>메인 페이지</title>
 </head>
 <body>
-<!-- 상세 페이지(/cafeDetail/info)로 가는 버튼 만들기. -->
-<a href="/cafeDetail">상세 페이지</a>
 
 <!-- 검색 폼 -->
 <form action="/search" method="get">
