@@ -54,7 +54,7 @@ public class CafeDao {
 		return cafeList;
 	}
 
-	public Cafe selectNocafe(Connection conn, String cafeNo) {
+	public Cafe selectCafeByNo(Connection conn, String cafeNo) {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		

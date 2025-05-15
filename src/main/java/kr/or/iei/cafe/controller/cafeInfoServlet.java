@@ -36,7 +36,7 @@ public class cafeInfoServlet extends HttpServlet {
 		String cafeNo = request.getParameter("cafeNo");
 		// 3. 로직 - 카페 정보 가져오기.
 		CafeService service = new CafeService();
-		Cafe cafe = service.selectcafeNo(cafeNo);
+		Cafe cafe = service.selectCafeByNo(cafeNo);
 		// 4. 결과 처리
 			// 4.1. 이동할 JSP 페이지 지정
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/cafeInfo.jsp");
