@@ -1,11 +1,19 @@
 package kr.or.iei.cafe.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import kr.or.iei.cafe.model.service.CafeService;
+import kr.or.iei.cafe.model.service.TicketService;
+import kr.or.iei.cafe.model.vo.Cafe;
+import kr.or.iei.cafe.model.vo.Ticket;
 
 /**
  * Servlet implementation class PayInfoServlet
@@ -13,36 +21,39 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/payInfo")
 public class PayInfoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
     public PayInfoServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//1. 필터 - x
-		//2. 값 추출 - cafeNo, seatNo (좌석번호), ticketId(티켓 아이디), userID(세션으로 받기)
+		// 1. 파라미터 추출
 		String cafeNo = request.getParameter("cafeNo");
+		String ticketId = request.getParameter("ticketId");
 		String seatNo = request.getParameter("seatNo");
-	    String ticketId = request.getParameter("ticketId");
-	    //3. 로직 : 결제 테이블에 저장하기 (결제 상태 : 미완료)
-	    
-	    // 4. 토스 결제 api로 결제 정보 보내기
-		
+
+		// 필수 파라미터 체크
+		if (cafeNo == null || ticketId == null || seatNo == null) {
+			response.sendRedirect("/errorPage.jsp");
+			return;
+		}
+
+		// 2. 비즈니스 로직
+		CafeService cafeService = new CafeService();
+		Cafe cafe = cafeService.selectCafeByNo(cafeNo); // 메서드명 주의
+
+		TicketService ticketService = new TicketService();
+		Ticket ticket = ticketService.selectOneTicket(ticketId);
+
+		// 3. 화면 처리
+		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/payInfo.jsp");
+		request.setAttribute("cafe", cafe);
+		request.setAttribute("seatNo", seatNo);
+		request.setAttribute("ticket", ticket);
+		view.forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }
