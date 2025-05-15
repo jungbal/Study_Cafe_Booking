@@ -35,7 +35,7 @@
 	<c:if test="${not empty sessionScope.loginCafe}">
 		<a href="/LogoutServlet">로그아웃</a> 
 		<a href="#">마이페이지</a>
-		<a href="#">내 리뷰/Q&A</a>
+		<a href="#">내 리뷰/Q&A</a><br>
 		
 	<%-- 일반이용자 메뉴 --%>
 		<c:if test="${3 == sessionScope.role}">
