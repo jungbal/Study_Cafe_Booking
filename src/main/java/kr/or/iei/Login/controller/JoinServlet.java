@@ -15,7 +15,7 @@ import kr.or.iei.Login.model.vo.Login;
 /**
  * Servlet implementation class JoinServlet
  */
-@WebServlet("/JoinServlet")
+@WebServlet("/joinServlet")
 public class JoinServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

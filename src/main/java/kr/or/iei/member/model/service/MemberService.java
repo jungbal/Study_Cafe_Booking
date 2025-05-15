@@ -24,6 +24,14 @@ public class MemberService {
 		JDBCTemplate.close(conn);
 		return m;
 	}
+	
+	// 단순 정보 조회용 (프로필 이미지 변경 등)
+	public Member selectOneMember(String userId) {
+	    Connection conn = JDBCTemplate.getConnection();
+	    Member m = dao.selectOneMember(conn, userId);
+	    JDBCTemplate.close(conn);
+	    return m;
+	}
 
 	//이정원
 	public int updateMember(Member updMember) {
@@ -52,17 +60,18 @@ public class MemberService {
 	}
 	
 	//이정원
-	public int updateProfileImg(String userId, String fileSrc) {
-	    Connection conn = JDBCTemplate.getConnection();
-	    int result = dao.updateProfileImg(conn, userId, fileSrc);
-	    if(result > 0) {
-	        JDBCTemplate.commit(conn);
-	    } else {
-	        JDBCTemplate.rollback(conn);
+	 public int updateProfileImg(String userId, String filePath) {
+	        Connection conn = JDBCTemplate.getConnection();
+	        int result = dao.updateProfileImg(conn, userId, filePath);
+	        if (result > 0) {
+	            JDBCTemplate.commit(conn);
+	        } else {
+	            JDBCTemplate.rollback(conn);
+	        }
+	        JDBCTemplate.close(conn);
+	        return result;
 	    }
-	    JDBCTemplate.close(conn);
-	    return result;
-	}
+	 
 
 	
 	//정휘훈 파트

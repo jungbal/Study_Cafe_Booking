@@ -21,13 +21,13 @@
 <hr>
 <%-- 성우님 개발 --%>
 
-	<c:if test="${empty sessionScope.loginCafe}">
-		<a href="/loginFrm">로그인</a>
+	<%--<c:if test="${empty sessionScope.loginCafe}">
+		<a href="/loginFrm">로그인</a>--%>
 		
-		<%-- "정원님 테스트용"
+		<%-- "정원님 테스트용"--%>
 			<c:if test="${empty sessionScope.loginMember}">
 			 <a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a> 
-		--%>
+		
 		
 	</c:if>
 	<c:if test="${not empty sessionScope.loginCafe}">

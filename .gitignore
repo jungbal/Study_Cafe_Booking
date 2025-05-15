@@ -123,4 +123,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# 업로드 폴더 내부 파일은 무시하되 폴더 자체는 유지
+src/main/webapp/resources/upload/*
+!src/main/webapp/resources/upload/.gitkeep
+
 # End of https://www.toptal.com/developers/gitignore/api/java,eclipse,windows

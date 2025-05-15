@@ -46,6 +46,37 @@ public class MemberDao {
 		return m;
 	}
 
+	//이정원 오버로딩: 단순 조회용 (userId만 필요)
+	public Member selectOneMember(Connection conn, String userId) {
+	    PreparedStatement pstmt = null;
+	    ResultSet rset = null;
+	    Member m = null;
+
+	    String query = "SELECT * FROM TBL_USER WHERE USER_ID = ?";
+
+	    try {
+	        pstmt = conn.prepareStatement(query);
+	        pstmt.setString(1, userId);
+	        rset = pstmt.executeQuery();
+
+	        if (rset.next()) {
+	            m = new Member();
+	            m.setUserId(rset.getString("USER_ID"));
+	            m.setUserPw(rset.getString("USER_PW"));
+	            m.setUserRole(rset.getInt("USER_ROLE"));
+	            m.setUserPhone(rset.getString("USER_PHONE"));
+	            m.setUserStatus(rset.getString("USER_STATUS"));
+	            m.setUserImage(rset.getString("USER_IMAGE"));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        JDBCTemplate.close(rset);
+	        JDBCTemplate.close(pstmt);
+	    }
+
+	    return m;
+	}
 
 	//이정원
 	public int updateMember(Connection conn, Member updMember) {
@@ -101,22 +132,23 @@ public class MemberDao {
 	}
 	
 	//이정원
-	public int updateProfileImg(Connection conn, String userId, String fileSrc) {
-	    PreparedStatement pstmt = null;
-	    int result = 0;
-	    String query = "UPDATE TBL_USER SET USER_IMAGE = ? WHERE USER_ID = ?";
-	    try {
-	        pstmt = conn.prepareStatement(query);
-	        pstmt.setString(1, fileSrc);
-	        pstmt.setString(2, userId);
-	        result = pstmt.executeUpdate();
-	    } catch(SQLException e) {
-	        e.printStackTrace();
-	    } finally {
-	        JDBCTemplate.close(pstmt);
-	    }
-	    return result;
-	}
+	public int updateProfileImg(Connection conn, String userId, String filePath) {
+        PreparedStatement pstmt = null;
+        int result = 0;
+        String query = "UPDATE TBL_USER SET USER_IMAGE = ? WHERE USER_ID = ?";
+
+        try {
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, filePath);
+            pstmt.setString(2, userId);
+            result = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCTemplate.close(pstmt);
+        }
+        return result;
+    }
 
 	
 	//정휘훈 파트

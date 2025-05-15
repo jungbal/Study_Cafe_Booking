@@ -69,6 +69,35 @@ public class LoginDao {
 	
 		return result;
 	}
+	
+// 아이디 중복 체크 메소드
+	public int idDuplChk(Connection conn, String memberId) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		int cnt = 0;
+		
+		String query = "select count(*) cnt from TBL_USER where USER_ID = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			
+			pstmt.setString(1, memberId);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				cnt = rset.getInt("cnt");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return cnt;
+	}
 
 	
 }
