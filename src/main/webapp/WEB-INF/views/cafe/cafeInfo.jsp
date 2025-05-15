@@ -1,14 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!-- WEB-INF/views/cafe/cafeInfo.jsp -->
 <div class="cafeIntroDetail">
     <main>
     <section class="details">
       <div class="cafeIntroDetail">
         <h2>공간소개</h2> <%--공간소개 --%>
         <ul class="cafeIntroList">
-          ${cafe.cafeIntroDetail}
+          <li>${cafe.cafeIntroDetail}</li>
         </ul>
       </div>
 
