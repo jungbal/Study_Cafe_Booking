@@ -43,9 +43,7 @@ public class LoginServlet extends HttpServlet {
 		
 		RequestDispatcher view = null;
 		
-		
-		
-		if(loginCafe == null && role == 0) {
+		if(loginCafe == null || role == 0) {
 			view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
 			
 			request.setAttribute("title", "알림");
