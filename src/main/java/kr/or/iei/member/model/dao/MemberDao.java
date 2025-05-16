@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import kr.or.iei.common.JDBCTemplate;
 import kr.or.iei.member.model.vo.Member;
+import kr.or.iei.member.model.vo.MemberReport;
 
 
 public class MemberDao {
@@ -233,5 +234,41 @@ public class MemberDao {
 		}
 		
 		return result;
+	}
+
+	public ArrayList<MemberReport> selectReportList(Connection conn, int start, int end) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		ArrayList<MemberReport> list = new ArrayList<MemberReport>();
+		
+		String query = "select * from (select ROWNUM RNUM, A.*from ( select * from tbl_user_report A ) A) where RNUM >=? and RNUM <=?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			
+			pstmt.setInt(1, start);
+			pstmt.setInt(2, end);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				MemberReport report = new MemberReport();
+				report.setReportId(rset.getString("report_id"));
+				report.setReporterId(rset.getString("reporter_id"));
+				report.setTargetCommentId(rset.getString("target_comment_id"));
+				report.setReportCodeId(rset.getString("report_code_id"));
+				
+				list.add(report);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return list;
+	
 	}
 }
