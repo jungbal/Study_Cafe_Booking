@@ -149,6 +149,22 @@ public class CafeService {
 		return result;
 	}
 
+	// 업체(호스트) 신청
+	public int insertCafe(Cafe cafeInfo, String loginId) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = dao.insertCafe(conn, cafeInfo, loginId);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
 	
 	
 

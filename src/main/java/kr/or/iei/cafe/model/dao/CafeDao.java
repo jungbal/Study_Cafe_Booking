@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.cafe.model.vo.Cafe;
 import kr.or.iei.common.JDBCTemplate;
 
@@ -225,6 +226,41 @@ public class CafeDao {
 			JDBCTemplate.close(pstmt);
 		}
 		
+		return result;
+	}
+
+	public int insertCafe(Connection conn, Cafe cafeInfo, String loginId) {
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+//		쿼리문에 user_id를 타 패키지 메소드
+		
+		String query = 
+"insert into tbl_cafe (cafe_no, cafe_name, cafe_phone, cafe_addr, cafe_biznum, cafe_introduce, cafe_start_hour, cafe_end_hour, cafe_status, cafe_intro_detail, host_id)"
++ "values (SEQ_TBL_CAFE.nextval, ?, ?, ?, ?, ?, ?, ?, default, ?, ?)";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, cafeInfo.getCafeName());
+			pstmt.setString(2, cafeInfo.getCafePhone());
+			pstmt.setString(3, cafeInfo.getCafeAddr());
+			pstmt.setString(4, cafeInfo.getCafeBiznum());
+			pstmt.setString(5, cafeInfo.getCafeIntroduce());
+			pstmt.setString(6, cafeInfo.getCafeStartHour());
+			pstmt.setString(7, cafeInfo.getCafeEndHour());
+			pstmt.setString(8, cafeInfo.getCafeIntroDetail());
+			pstmt.setString(9, loginId);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+				
 		return result;
 	}
 	
