@@ -5,8 +5,10 @@ import java.util.ArrayList;
 
 import kr.or.iei.cafe.model.dao.CafeDao;
 import kr.or.iei.cafe.model.vo.Cafe;
+import kr.or.iei.cafe.model.vo.History;
 import kr.or.iei.common.JDBCTemplate;
 import kr.or.iei.common.ListData;
+import kr.or.iei.member.model.vo.Member;
 
 public class CafeService {
 	
@@ -148,7 +150,67 @@ public class CafeService {
 		return result;
 	}
 
-	
-	
+	public int insertPayAndHistory(String ticketId, String ticketPrice, String ticketHour, String cafeNo, String seatNo, String userId) {
+	    Connection conn = JDBCTemplate.getConnection();
+	    int result = 0;
+
+	    try {
+	        // 1. 결제 테이블 업데이트하기
+	        int payResult = dao.insertPayHistory(conn, ticketPrice, userId);
+
+	        // 2. 결제가 성공했을 경우에만 이용내역 업데이트 시도
+	        int historyResult = 0;
+	        if (payResult > 0) {
+	            historyResult = dao.insertHistory(conn, ticketId, ticketPrice, ticketHour, cafeNo, seatNo, userId);
+	        }
+
+	        // 3. 두 작업 모두 성공하면 커밋, 아니면 롤백
+	        if (payResult > 0 && historyResult > 0) {
+	            JDBCTemplate.commit(conn);
+	            result = 1; // 성공
+	        } else {
+	            JDBCTemplate.rollback(conn);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JDBCTemplate.rollback(conn);
+	    } finally {
+	        JDBCTemplate.close(conn);
+	    }
+
+	    return result;
+	}
+
+	// 리뷰 이력이 있는지 select 하는 메소드
+	public Member isReviewHistory(String userId) {
+		Connection conn = JDBCTemplate.getConnection();
+		Member member = dao.isReviewHistory(conn, userId);
+		
+		return member;
+	}
+
+	public ArrayList<History> isSeatAvailable(String cafeNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<History> seatList = dao.isSeatAvailable(conn, cafeNo);
+		
+		if (seatList == null) {
+	        System.out.println("service에서 seatList가 null 입니다.");
+	        seatList = new ArrayList<>(); // null 방지용 빈 리스트 생성
+	    } else {
+	        for(History h : seatList) {
+	            System.out.println("service에서 사용중 좌석 번호: " + h.getHistorySeatNo());
+	        }
+	    }
+		
+		return seatList;
+	}
+
+	public History isUserAvailable(String loginId) {
+		Connection conn = JDBCTemplate.getConnection();
+		History history = dao.isUserAvailable(conn, loginId);
+		
+		return history;
+	}
 
 }

@@ -116,10 +116,14 @@
       <div class="info-box">
         <strong>금액:</strong> <span style="font-size:20px; font-weight:bold;">₩ ${ticket.ticketPrice}</span>
       </div>
-      <form action="/payment" method="post">
-        <input type="hidden" id="hiddenDate" name="reservationDate">
+      <form action="/payInfo/payProcess" method="post">
+        <input type="hidden" name="ticketPrice" value="${ticket.ticketPrice}">
+        <input type="hidden" name="ticketHour" value="${ticket.ticketHour}">
         <input type="hidden" name="ticketId" value="${ticket.ticketId}">
+        <input type="hidden" name="cafeNo" value="${cafe.cafeNo}">
         <input type="hidden" name="seatNo" value="${seatNo}">
+        <input type="hidden" name="userId" value="${loginCafe.loginId}">
+        
         <button type="submit" class="pay-button">결제하기</button>
       </form>
     </div>
