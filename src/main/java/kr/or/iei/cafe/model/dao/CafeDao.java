@@ -230,12 +230,13 @@ public class CafeDao {
 		return result;
 	}
 
+
 	// 결제내역 테이블 업데이트
 	public int insertPayHistory(Connection conn, String ticketPrice, String userId) {
+
 		PreparedStatement pstmt = null;
 		
 		int result = 0;
-		
 		// 일단 결제 수단을 자동으로 '카드'로 입력되어 설정
 		String query = "INSERT INTO TBL_PAY_HISTORY (\r\n"
 				+ "    PAY_ID, PAY_TIME, PAY_STATUS, PAY_AMOUNT, PAY_METHOD, PAY_USER_ID\r\n"
@@ -393,5 +394,45 @@ public class CafeDao {
 	    return history;
 	}
 
+
+	public int insertWait(Connection conn, String cafeNo) {
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		try {
+			 // tbl_cafe 업데이트
+	        pstmt = conn.prepareStatement(
+	            "UPDATE tbl_cafe SET cafe_status = 'Y' " +
+	            "WHERE cafe_no = ?"
+	        );
+	        pstmt.setString(1, cafeNo);
+	        result += pstmt.executeUpdate();
+	        
+
+	        // tbl_user 업데이트
+	        pstmt = conn.prepareStatement(
+	        		"UPDATE tbl_user SET user_status = 'Y' " +
+	        		"WHERE user_id = (SELECT host_id FROM tbl_cafe WHERE cafe_no = ?)"
+	        	);
+	        pstmt.setString(1, cafeNo);
+	        result += pstmt.executeUpdate();
+	       
+
+	        // tbl_host_request 업데이트
+	        pstmt = conn.prepareStatement(
+	        		"UPDATE tbl_host_request SET status = 'Y' " +
+	        		"WHERE host_no = (SELECT cafe_no FROM tbl_cafe WHERE cafe_no = ?)"
+	        	);
+	        	pstmt.setString(1, cafeNo);  // cafe_no가 String이면 OK
+	        	result += pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			
+			JDBCTemplate.close(conn);
+		}
+		return result;
+	}
 
 }

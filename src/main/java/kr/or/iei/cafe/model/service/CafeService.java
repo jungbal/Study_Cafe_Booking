@@ -2,6 +2,7 @@ package kr.or.iei.cafe.model.service;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Map;
 
 import kr.or.iei.cafe.model.dao.CafeDao;
 import kr.or.iei.cafe.model.vo.Cafe;
@@ -11,73 +12,73 @@ import kr.or.iei.common.ListData;
 import kr.or.iei.member.model.vo.Member;
 
 public class CafeService {
-	
-	private CafeDao dao;
-	
-	public CafeService() {
-		dao = new CafeDao();
-	}
-	
-	// 검색창 메소드
-	public ArrayList<Cafe> srchCafe(String srchStr) {
-		Connection conn = JDBCTemplate.getConnection();
-	      ArrayList<Cafe> list = dao.memberJoin(conn, srchStr);
-	      
-	      JDBCTemplate.close(conn);
-	      return list;
-	}
+   
+   private CafeDao dao;
+   
+   public CafeService() {
+      dao = new CafeDao();
+   }
+   
+   // 검색창 메소드
+   public ArrayList<Cafe> srchCafe(String srchStr) {
+      Connection conn = JDBCTemplate.getConnection();
+         ArrayList<Cafe> list = dao.memberJoin(conn, srchStr);
+         
+         JDBCTemplate.close(conn);
+         return list;
+   }
 
-	// 
-	public Cafe selectCafeByNo(String cafeNo) {
-		Connection conn = JDBCTemplate.getConnection();
-		Cafe cafe = dao.selectCafeByNo(conn, cafeNo);
-		JDBCTemplate.close(conn);
-		return cafe;
-	}
+   // 
+   public Cafe selectCafeByNo(String cafeNo) {
+      Connection conn = JDBCTemplate.getConnection();
+      Cafe cafe = dao.selectCafeByNo(conn, cafeNo);
+      JDBCTemplate.close(conn);
+      return cafe;
+   }
 
-	
-	
-	//정휘훈 파트 
-	public ListData<Cafe> selectAllCafe(int reqPage) {
-		
-		Connection conn = JDBCTemplate.getConnection();
-		
-		//한 페이지에서 보여줄 회원 수 
-		int viewNoticeCnt = 10;
-		
-		int end = viewNoticeCnt * reqPage;	// 10 * 회원 수 
-		int start = end - viewNoticeCnt + 1;	// 총 페이지 수 - 10 + 1
-		
-		ArrayList<Cafe> list = dao.selectAllCafe(conn,start,end);
-		
-		// 전체 회원 수 조회 (totCnt)
-		int totcnt = dao.selectTotalCount(conn);
-		
-		int totPage = 0;
-		
-		if(totPage % viewNoticeCnt > 0) {
-			totPage = totcnt / viewNoticeCnt + 1;
-		}else {
-			totPage = totcnt / viewNoticeCnt;
-		}
-		
-		// 페이지네이션 사이즈 10으로 지정 따라서 < 1 2 3 4 5 6 7 8 9 10>
-		int pageNaviSize = 5;
-		
-		//(총 페이지 수 -1 /10) * 10 + 1 = ex) 총페이지 수 (5-1) => 4 *10 = 40 + 1 = 41(pageNo) 
-		int pageNo = ((reqPage-1)/pageNaviSize)* pageNaviSize + 1;
-		
-		String pageNavi = "<ul class = 'pagination circle-style'>";
-		
-		
-		// 이전 버튼
-		if(pageNo != 1) {
-			pageNavi += "<li>";
-			pageNavi += "<a class='page-item' href = '/manager/cafeManage?reqPage=" +(pageNo -1)+"'>";
-			pageNavi += "<span class = 'material-icons'>chevron_left</span>";
-			pageNavi += "</a></li>";
-	}
-		for(int i=0; i<pageNaviSize; i++) {
+   
+   
+   //정휘훈 파트 
+   public ListData<Cafe> selectAllCafe(int reqPage) {
+      
+      Connection conn = JDBCTemplate.getConnection();
+      
+      //한 페이지에서 보여줄 회원 수 
+      int viewNoticeCnt = 10;
+      
+      int end = viewNoticeCnt * reqPage;   // 10 * 회원 수 
+      int start = end - viewNoticeCnt + 1;   // 총 페이지 수 - 10 + 1
+      
+      ArrayList<Cafe> list = dao.selectAllCafe(conn,start,end);
+      
+      // 전체 회원 수 조회 (totCnt)
+      int totcnt = dao.selectTotalCount(conn);
+      
+      int totPage = 0;
+      
+      if(totPage % viewNoticeCnt > 0) {
+         totPage = totcnt / viewNoticeCnt + 1;
+      }else {
+         totPage = totcnt / viewNoticeCnt;
+      }
+      
+      // 페이지네이션 사이즈 10으로 지정 따라서 < 1 2 3 4 5 6 7 8 9 10>
+      int pageNaviSize = 5;
+      
+      //(총 페이지 수 -1 /10) * 10 + 1 = ex) 총페이지 수 (5-1) => 4 *10 = 40 + 1 = 41(pageNo) 
+      int pageNo = ((reqPage-1)/pageNaviSize)* pageNaviSize + 1;
+      
+      String pageNavi = "<ul class = 'pagination circle-style'>";
+      
+      
+      // 이전 버튼
+      if(pageNo != 1) {
+         pageNavi += "<li>";
+         pageNavi += "<a class='page-item' href = '/manager/cafeManage?reqPage=" +(pageNo -1)+"'>";
+         pageNavi += "<span class = 'material-icons'>chevron_left</span>";
+         pageNavi += "</a></li>";
+   }
+      for(int i=0; i<pageNaviSize; i++) {
         pageNavi += "<li>";
         
         // 페이지 번호 작성 중, 사용자가 요청한 페이지 일 때 클래스를 다르게 지정하여 시각적인 효과
@@ -98,7 +99,7 @@ public class CafeService {
            break;
         }
      }
-	 // 다음 버튼
+    // 다음 버튼
     if(pageNo <= totPage) {
        pageNavi += "<li>";
        pageNavi += "<a class='page-item' href='/manager/cafeManage?reqPage="+ pageNo +"'>";
@@ -116,39 +117,41 @@ public class CafeService {
     ListData<Cafe> listData = new ListData<Cafe>();
     listData.setList(list);
     listData.setPageNavi(pageNavi);
-	
-	JDBCTemplate.close(conn);
-		
-	return listData;
-	}
+   
+   JDBCTemplate.close(conn);
+      
+   return listData;
+   }
 
-	public int selectCafeList(String cafeNo) {
-		Connection conn = JDBCTemplate.getConnection();
-		
-		
-		
-		//1. DB 유저 권한 수정
-		int rst = dao.updateRole(conn,cafeNo);
-		
-		int result = 0;
-		
-		if(rst > 0) {
-			//2. 수정 뒤 카페 삭제
-			 result = dao.deleteHost(conn,cafeNo);
-			
-			if(result > 0) {
-				JDBCTemplate.commit(conn);
-			}else {
-				JDBCTemplate.rollback(conn);
-			}
-		}else {
-			JDBCTemplate.rollback(conn);
-		}
-		
-		JDBCTemplate.close(conn);
-		
-		return result;
-	}
+   /*
+   public int selectCafeList(String cafeNo) {
+      Connection conn = JDBCTemplate.getConnection();
+      
+      
+      
+      //1. DB 유저 권한 수정
+      int rst = dao.updateRole(conn,cafeNo);
+      
+      int result = 0;
+      
+      if(rst > 0) {
+         //2. 수정 뒤 카페 삭제
+          result = dao.deleteHost(conn,cafeNo);
+         
+         if(result > 0) {
+            JDBCTemplate.commit(conn);
+         }else {
+            JDBCTemplate.rollback(conn);
+         }
+      }else {
+         JDBCTemplate.rollback(conn);
+      }
+      
+      JDBCTemplate.close(conn);
+      
+      return result;
+   }
+   */
 
 	public int insertPayAndHistory(String ticketId, String ticketPrice, String ticketHour, String cafeNo, String seatNo, String userId) {
 	    Connection conn = JDBCTemplate.getConnection();
@@ -212,5 +215,52 @@ public class CafeService {
 		
 		return history;
 	}
+
+   // 업체 관리 승인/반려 시 
+   public boolean updateCafeStatus(Map<String, String> updateMap) {
+       Connection conn = JDBCTemplate.getConnection();
+       boolean isAllSuccess = true;
+
+       for (Map.Entry<String, String> entry : updateMap.entrySet()) {
+           String cafeNo = entry.getKey();
+           String statusValue = entry.getValue();
+           int result = 0;
+
+           switch (statusValue) {
+               case "1": // 수정대기 승인
+                  result = dao.updateWait(conn, cafeNo);
+                   break;
+               case "2": // 등록대기 승인
+                   result = dao.insertWait(conn, cafeNo);
+                   break;
+               case "3": // 반려: 처리 안 함
+                   continue;
+               case "4": // 삭제 처리
+                   int rst = dao.updateRole(conn, cafeNo);
+                   if (rst > 0) {
+                       result = dao.deleteHost(conn, cafeNo);
+                   }
+                   break;
+               default: // 유효하지 않은 값
+                   isAllSuccess = false;
+                   break;
+           }
+
+           if (result == 0) {
+               System.err.println("처리 실패: cafeNo = " + cafeNo + ", status = " + statusValue);
+               isAllSuccess = false;
+               break;
+           }
+       }
+
+       if (isAllSuccess) {
+           JDBCTemplate.commit(conn);
+       } else {
+           JDBCTemplate.rollback(conn);
+       }
+
+       JDBCTemplate.close(conn);
+       return isAllSuccess;
+   }
 
 }
