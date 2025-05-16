@@ -17,31 +17,57 @@
 
 <br><br><br>
 <hr>
-<%-- 성우님 개발 --%>
 
-	<%--<c:if test="${empty sessionScope.loginCafe}">
-		<a href="/loginFrm">로그인</a>--%>
-		
 		<%-- "정원님 테스트용"--%>
+			<%-- 
 			<c:if test="${empty sessionScope.loginMember}">
-			 <a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a> 
-		
-		
-	</c:if>
+			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a> 
+			</c:if>
+			 --%>
+			 
+<%-- 로그인 안된 상태 --%>
+	<c:if test="${empty sessionScope.loginCafe}">
+		<a href="/loginFrm">로그인</a>
+		<a href="/joinFrm">회원가입</a>
+	</c:if>		 
+	
+<%-- 로그인 되어있는 상태 --%>
 	<c:if test="${not empty sessionScope.loginCafe}">
 		<a href="/LogoutServlet">로그아웃</a> 
+		<a href="#">마이페이지</a>
+		<a href="#">내 리뷰/Q&A</a><br>
+		
+	<%-- 일반이용자 메뉴 --%>
+		<c:if test="${3 == sessionScope.role}">
+			<%-- 여기서 분기 한 번 더 해야함 호스트 신청 한 상태면 수정만 나오게--%>
+			<a href="/applyCafe">호스트 신청</a>
+		</c:if>
+		
+	<%-- 호스트 메뉴 --%>
+		<c:if test="${2 == sessionScope.role}">
+			<a href="#">카페 관리</a><br>
+			<a href="#">카페 리뷰/Q&A</a>
+		</c:if>
+		
+	<%-- 관리자 메뉴 --%>
+		<c:if test="${1 == sessionScope.role}">
+			<a href="/manager/userManage?reqPage=1">이용자 관리</a><br>
+			<a href="/manager/cafeManage?reqPage=1">업체 관리</a><br>
+			<a href="/manger/cafeApplyChk">업체신청정보열람</a><br>
+			<a href="/manager/chkReport">신고접수열람</a>
+		</c:if>
+		
 	</c:if>
 	
-	<a href="/joinFrm">회원가입</a>
 
+
+	
+	
 
 <br><br><br>
 <hr>
 <a><관리자 페이지 메뉴></a><br> <%-- 휘훈님 개발 --%>
-<a href="/manager/userManage?reqPage=1">이용자 관리</a>
-<a href="/manager/cafeManage?reqPage=1">업체 관리</a>
-<a href="/manger/cafeApplyChk">업체신청정보열람</a>
-<a href="/manager/chkReport">신고접수열람</a>
+
 
 </body>
 </html>

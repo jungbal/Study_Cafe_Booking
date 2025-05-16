@@ -210,7 +210,7 @@ public class CafeDao {
 		
 		int result = 0;
 		
-		String query = "UPDATE tbl_user SET user_roll = '3' WHERE user_id IN (SELECT host_id FROM tbl_cafe WHERE cafe_no = ?)";
+		String query = "UPDATE tbl_user SET user_role = 3 WHERE user_id IN (SELECT host_id FROM tbl_cafe WHERE cafe_no = ?)";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
