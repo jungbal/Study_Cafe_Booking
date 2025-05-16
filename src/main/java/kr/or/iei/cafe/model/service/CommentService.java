@@ -36,4 +36,19 @@ public class CommentService {
 	      return result;
 	}
 
+	public int deleteComment(String commentId) {
+		Connection conn = JDBCTemplate.getConnection();
+		int result = dao.deleteComment(conn, commentId);
+				
+				
+		if(result>0) {
+	         JDBCTemplate.commit(conn);
+	      }else {
+	         JDBCTemplate.rollback(conn);
+	      }
+	      JDBCTemplate.close(conn);
+	      
+	      return result;
+	}
+
 }

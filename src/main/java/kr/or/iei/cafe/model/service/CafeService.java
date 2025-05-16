@@ -126,14 +126,16 @@ public class CafeService {
 		
 		
 		
-		//1. DB 카페 정보 삭제
-		int result = dao.deleteHost(conn,cafeNo);
+		//1. DB 유저 권한 수정
+		int rst = dao.updateRole(conn,cafeNo);
 		
-		if(result > 0) {
-			//2. 삭제 뒤 유저 권한 수정
-			int rst = dao.updateRole(conn,cafeNo);
+		int result = 0;
+		
+		if(rst > 0) {
+			//2. 수정 뒤 카페 삭제
+			 result = dao.deleteHost(conn,cafeNo);
 			
-			if(rst > 0) {
+			if(result > 0) {
 				JDBCTemplate.commit(conn);
 			}else {
 				JDBCTemplate.rollback(conn);

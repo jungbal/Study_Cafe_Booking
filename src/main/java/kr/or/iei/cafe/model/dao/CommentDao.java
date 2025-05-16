@@ -19,8 +19,9 @@ public class CommentDao {
 
 	    String query = "SELECT c.*, u.user_role "
 	                 + "FROM tbl_comment c "
-	                 + "LEFT JOIN tbl_user u ON c.comment_user_id = u.user_id "
-	                 + "WHERE c.comment_cafe_no = ? AND c.target_type = ?";
+	                 + "JOIN tbl_user u ON c.comment_user_id = u.user_id "
+	                 + "WHERE c.comment_cafe_no = ? AND c.target_type = ? "
+	                 + "order by comment_time desc";
 
 	    try {
 	        pstmt = conn.prepareStatement(query);
@@ -83,6 +84,27 @@ public class CommentDao {
 
 	    return result;
 	}
+
+	public int deleteComment(Connection conn, String commentId) {
+	    PreparedStatement pstmt = null;
+	    int result = 0;
+
+	    String query = "DELETE FROM tbl_comment WHERE comment_id = ?";
+
+	    try {
+	        pstmt = conn.prepareStatement(query);
+	        pstmt.setString(1, commentId);
+	        result = pstmt.executeUpdate();
+	        System.out.println("result : "+result);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        JDBCTemplate.close(pstmt);
+	    }
+
+	    return result;
+	}
+
 
 
 

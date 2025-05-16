@@ -10,22 +10,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.or.iei.cafe.model.service.CafeService;
 import kr.or.iei.cafe.model.service.CommentService;
-import kr.or.iei.cafe.model.vo.Cafe;
 import kr.or.iei.cafe.model.vo.Comment;
 
 /**
- * Servlet implementation class cafeQA
+ * Servlet implementation class DeleteCommentServlet
  */
-@WebServlet("/cafeDetail/qna")
-public class CafeQAServlet extends HttpServlet {
+@WebServlet("/cafeDetail/qa/deleteComment")
+public class DeleteQAServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CafeQAServlet() {
+    public DeleteQAServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,26 +32,33 @@ public class CafeQAServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 1. 인코딩 - 필터 : x
-		// 2. 값 추출 : cafeNo, RVQA(dao의 sql문에서 리뷰인지 Q&A 인지 구분하기 위해 QA 값을 담아 전달)
 		String cafeNo = request.getParameter("cafeNo");
-		String RVQA = request.getParameter("RVQA");
-		// 3. 로직 - cafeNo로 Q&A 리스트 조회
-		CommentService service = new CommentService();
-		ArrayList<Comment> qaList = service.selectComment(cafeNo, RVQA);
+		String commentId = request.getParameter("commentId");
+		System.out.println("commentId : " + commentId);
 		
-		// hostId값 가져오기 위해서 cafe 객체 가져오기
-		CafeService cafeService = new CafeService();
-		Cafe cafe = cafeService.selectCafeByNo(cafeNo);
-		// 4. 결과 처리
-			// 4.1. 이동할 JSP 페이지 지정
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/cafeQA.jsp");
-			// 4.2. 화면 구현에 필요한 데이터 등록 => 세션에 이미 데이터 구현되어 있음.. 받기만 하면 됨
-		request.setAttribute("qaList", qaList); 	
-		request.setAttribute("cafe", cafe);
-			//4.3. 페이지 이동
-		view.forward(request, response);
+		CommentService commentService = new CommentService();
+		int result = commentService.deleteComment(commentId);
+		
+		//4.결과 처리
+        //4.1 이동할 페이지 경로 지정
+     RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
+        //4.2 화면 구현에 필요한 데이터 등록
+     if(result>0) {
+        request.setAttribute("title", "성공");
+        request.setAttribute("msg", "삭제 완료되었습니다");
+        request.setAttribute("icon", "success");
+        
+     }else {
+        request.setAttribute("title", "실패");
+        request.setAttribute("msg", "삭제 중 오류가 발생했습니다");
+        request.setAttribute("icon", "error");
+        
+     }
+     request.setAttribute("loc", "/cafeDetail?cafeNo=" + cafeNo);
+     //4.3 페이지 이동
+     view.forward(request, response);
 	}
+		
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

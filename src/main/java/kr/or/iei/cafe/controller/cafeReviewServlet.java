@@ -20,13 +20,13 @@ import kr.or.iei.cafe.model.vo.Comment;
  * Servlet implementation class cafeReview
  */
 @WebServlet("/cafeDetail/review")
-public class cafeReviewServlet extends HttpServlet {
+public class CafeReviewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public cafeReviewServlet() {
+    public CafeReviewServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -54,6 +54,7 @@ public class cafeReviewServlet extends HttpServlet {
 			// 4.2. 화면 구현에 필요한 데이터 등록 
 		request.setAttribute("reviewList", reviewList); 
 		request.setAttribute("cafe", cafe);
+		
 		
 		view.forward(request, response);
 	}

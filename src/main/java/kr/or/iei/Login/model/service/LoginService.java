@@ -41,4 +41,11 @@ public class LoginService {
 		return cnt;
 	}
 
+	public int chkUserRole(String loginId) {
+		Connection conn = JDBCTemplate.getConnection();
+		int role = dao.chkUserRole(conn, loginId);
+		JDBCTemplate.close(conn);
+		return role;
+	}
+
 }
