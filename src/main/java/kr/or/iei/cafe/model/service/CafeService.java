@@ -8,7 +8,6 @@ import kr.or.iei.cafe.model.dao.CafeDao;
 import kr.or.iei.cafe.model.vo.Cafe;
 import kr.or.iei.common.JDBCTemplate;
 import kr.or.iei.common.ListData;
-import kr.or.iei.member.model.vo.Member;
 
 public class CafeService {
    

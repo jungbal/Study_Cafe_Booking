@@ -28,7 +28,6 @@ public class TicketService {
 		Connection conn = JDBCTemplate.getConnection();
 		Ticket ticket = dao.selectOneTicket(conn, ticketId);
 		JDBCTemplate.close(conn);
-		System.out.println(ticket.getTicketType());
 	      return ticket;
 	}
 

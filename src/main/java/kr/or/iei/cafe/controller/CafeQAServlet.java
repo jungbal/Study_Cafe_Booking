@@ -10,23 +10,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.or.iei.cafe.model.dao.CafeDao;
 import kr.or.iei.cafe.model.service.CafeService;
 import kr.or.iei.cafe.model.service.CommentService;
 import kr.or.iei.cafe.model.vo.Cafe;
 import kr.or.iei.cafe.model.vo.Comment;
 
 /**
- * Servlet implementation class cafeReview
+ * Servlet implementation class cafeQA
  */
-@WebServlet("/cafeDetail/review")
-public class cafeReviewServlet extends HttpServlet {
+@WebServlet("/cafeDetail/qna")
+public class CafeQAServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public cafeReviewServlet() {
+    public CafeQAServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,25 +35,23 @@ public class cafeReviewServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 1. 인코딩 - 필터 : x
-		// 2. 값 추출 : cafeNo, RVQA(dao의 sql문에서 리뷰인지 Q&A 인지 구분하기 위해 RV 값을 담아 전달)
+		// 2. 값 추출 : cafeNo, RVQA(dao의 sql문에서 리뷰인지 Q&A 인지 구분하기 위해 QA 값을 담아 전달)
 		String cafeNo = request.getParameter("cafeNo");
 		String RVQA = request.getParameter("RVQA");
-		// 3. 로직 - cafeNo로 리뷰 조회 (select * from tbl_comment where comment_cafe_no = ?)
+		// 3. 로직 - cafeNo로 Q&A 리스트 조회
 		CommentService service = new CommentService();
-		ArrayList<Comment> reviewList = service.selectComment(cafeNo, RVQA);
+		ArrayList<Comment> qaList = service.selectComment(cafeNo, RVQA);
 		
-			// hostId값 가져오기 위해서 cafe 객체 가져오기
+		// hostId값 가져오기 위해서 cafe 객체 가져오기
 		CafeService cafeService = new CafeService();
 		Cafe cafe = cafeService.selectCafeByNo(cafeNo);
-		
 		// 4. 결과 처리
-		
 			// 4.1. 이동할 JSP 페이지 지정
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/cafeReview.jsp");
-			// 4.2. 화면 구현에 필요한 데이터 등록 
-		request.setAttribute("reviewList", reviewList); 
+		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/cafeQA.jsp");
+			// 4.2. 화면 구현에 필요한 데이터 등록 => 세션에 이미 데이터 구현되어 있음.. 받기만 하면 됨
+		request.setAttribute("qaList", qaList); 	
 		request.setAttribute("cafe", cafe);
-		
+			//4.3. 페이지 이동
 		view.forward(request, response);
 	}
 
