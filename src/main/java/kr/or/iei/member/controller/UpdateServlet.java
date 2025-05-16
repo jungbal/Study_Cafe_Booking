@@ -2,16 +2,16 @@ package kr.or.iei.member.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import kr.or.iei.common.KhRenamePolicy;
 import kr.or.iei.member.model.service.MemberService;
@@ -29,7 +29,9 @@ public class UpdateServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		// 1. 파일 업로드 경로 설정
-		String savePath = getServletContext().getRealPath("/resources/upload");
+		String basePath = getServletContext().getRealPath("/resources/upload");
+		String today = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
+		String savePath = basePath + File.separator + today;
 		File folder = new File(savePath);
 		if (!folder.exists()) {
 			folder.mkdirs(); // 폴더 없으면 생성
@@ -52,19 +54,18 @@ public class UpdateServlet extends HttpServlet {
 		
 		
 
-		// 4. 파일 이름 처리
-		String userImage = mRequest.getFilesystemName("userImage");
+		String originalFile = mRequest.getFilesystemName("userImage");
+		String userImage = (originalFile != null) ? today + "/" + originalFile : null;
 
 		// 기존 로그인 정보
 		HttpSession session = request.getSession(false);
 		Member loginMember = (Member) session.getAttribute("loginMember");
 
-		
-		// 새 이미지 등록 시 기존 이미지 삭제
-		if (userImage != null && loginMember.getUserImage() != null) {
-		    File delFile = new File(savePath + "/" + loginMember.getUserImage());
+		// 기존 이미지 삭제 시, 날짜 포함된 경로로 삭제
+		if (originalFile != null && loginMember.getUserImage() != null) {
+		    File delFile = new File(basePath + File.separator + loginMember.getUserImage());
 		    if (delFile.exists()) {
-		        delFile.delete(); // 기존 이미지 삭제
+		        delFile.delete();
 		    }
 		}
 		
@@ -86,7 +87,8 @@ public class UpdateServlet extends HttpServlet {
 		m.setUserImage(userImage);
 
 		// 6. 서비스 호출
-		int result = new MemberService().updateMember(m);
+		MemberService service = new MemberService();
+		int result = service.updateMember(m);
 
 		// 7. 결과 처리
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
