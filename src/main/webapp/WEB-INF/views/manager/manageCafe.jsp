@@ -19,7 +19,7 @@
 		<section class = 'section notice-list-wrap'>
 			<div class = 'page-title'>업체 목록</div>
 			<div class = 'list-content'>
-			
+			<form action="/updateCafe" method = 'post'>
 				<table class = 'tbl tbl-hover'>
 					<tr>
 						<th style = "width:10%;">업체명</th>
@@ -44,24 +44,32 @@
 							</th>--%>
 							<th>
 								<c:choose>
+								<c:when test="${cafe.cafeManageStatus == '수정대기' ">
+									<select name = "${cafe.cafeNo}">
+										<option value = "agree">승인</option>
+										<option value = "2">반려</option>
+									</select>
+								</c:when>
+								<c:when test="${cafe.cafeManageStatus == '등록대기' ">
+									<select name = "${cafe.cafeNo}">
+										<option value = "agree">승인</option>
+										<option value = "4">반려</option>
+									</select>
+								</c:when>
 								<c:when test="${cafe.cafeManageStatus == '승인'}">
 								<form action="/deleteHost" method = 'post'>
 									<input type = 'hidden' name = "cafeNo" value = "${cafe.cafeNo}">
 									<button type = 'submit' >삭제</button>
 									</form>
 								</c:when>
-								<c:when test="${cafe.cafeManageStatus == '수정대기' || cafe.cafeManageStatus == '등록대기' }">
-									<select name = "${cafe.cafeNo}">
-										<option>승인</option>
-										<option>반려</option>
-									</select>
-								</c:when>
+								
 								</c:choose>
 							</th>
 						</tr>
 					</c:forEach>
 				</table>
 				<button type = 'submit'>저장</button>
+				</form>
 			</div>
 			<div id ='pageNavi'>${pageNavi}</div>
 			
