@@ -116,10 +116,14 @@
       <div class="info-box">
         <strong>금액:</strong> <span style="font-size:20px; font-weight:bold;">₩ ${ticket.ticketPrice}</span>
       </div>
-      <form action="/payment" method="post">
-        <input type="hidden" id="hiddenDate" name="reservationDate">
+      <form action="/payInfo/payProcess" method="post">
+        <input type="hidden" name="ticketPrice" value="${ticket.ticketPrice}">
+        <input type="hidden" name="ticketHour" value="${ticket.ticketHour}">
         <input type="hidden" name="ticketId" value="${ticket.ticketId}">
+        <input type="hidden" name="cafeNo" value="${cafe.cafeNo}">
         <input type="hidden" name="seatNo" value="${seatNo}">
+        <input type="hidden" name="userId" value="${loginCafe.loginId}">
+        
         <button type="submit" class="pay-button">결제하기</button>
       </form>
     </div>
@@ -162,7 +166,7 @@ console.log("Year:", yyyy); // 2025
 console.log("Month:", mm); // 05
 console.log("Day:", dd); // 14
 
-const formattedDate = yyyy-mm-dd;
+const formattedDate = yyyy+'-'+mm+'-'+dd;
 console.log("Formatted Date:", formattedDate); // 2025-05-14
 
 // Update the HTML content for both left and right date fields

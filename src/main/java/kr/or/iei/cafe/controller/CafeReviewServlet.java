@@ -15,6 +15,7 @@ import kr.or.iei.cafe.model.service.CafeService;
 import kr.or.iei.cafe.model.service.CommentService;
 import kr.or.iei.cafe.model.vo.Cafe;
 import kr.or.iei.cafe.model.vo.Comment;
+import kr.or.iei.member.model.vo.Member;
 
 /**
  * Servlet implementation class cafeReview
@@ -39,13 +40,17 @@ public class CafeReviewServlet extends HttpServlet {
 		// 2. 값 추출 : cafeNo, RVQA(dao의 sql문에서 리뷰인지 Q&A 인지 구분하기 위해 RV 값을 담아 전달)
 		String cafeNo = request.getParameter("cafeNo");
 		String RVQA = request.getParameter("RVQA");
+		String userId = request.getParameter("userId");
 		// 3. 로직 - cafeNo로 리뷰 조회 (select * from tbl_comment where comment_cafe_no = ?)
 		CommentService service = new CommentService();
 		ArrayList<Comment> reviewList = service.selectComment(cafeNo, RVQA);
 		
-			// hostId값 가져오기 위해서 cafe 객체 가져오기
+		// hostId값 가져오기 위해서 cafe 객체 가져오기
 		CafeService cafeService = new CafeService();
 		Cafe cafe = cafeService.selectCafeByNo(cafeNo);
+		
+		// 사용이력 테이블에서 해당 userId 조회 => 값이 존재하는 경우, 객체 반환 => null이 아닌 경우에만 jsp에서 댓글창 보여주기
+		Member member = cafeService.isReviewHistory(userId);
 		
 		// 4. 결과 처리
 		
@@ -54,7 +59,7 @@ public class CafeReviewServlet extends HttpServlet {
 			// 4.2. 화면 구현에 필요한 데이터 등록 
 		request.setAttribute("reviewList", reviewList); 
 		request.setAttribute("cafe", cafe);
-		
+		request.setAttribute("hasHistory", member != null);
 		
 		view.forward(request, response);
 	}

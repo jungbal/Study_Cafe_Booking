@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=여기에API키입력&libraries=services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=40357a867ee4bcc2fc977d204c502462&libraries=services"></script>
 <div class="cafeIntroDetail">
   <main>
     <section class="details">

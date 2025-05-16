@@ -4,12 +4,12 @@
 <div class="cafeReview">
   <h2>리뷰</h2>
 
-  <!-- 댓글 작성창: 로그인한 사용자만 가능 -->
-  <c:if test="${not empty loginCafe}">
+  <!-- 댓글 작성창: 이용 이력이 있는 사용자만 가능 -->
+  <c:if test="${hasHistory}">
     <div class="comment-form">
       <form action="/cafeDetail/review/updateComment" method="post">
         <input type="hidden" name="cafeNo" value="${cafe.cafeNo}" />
-        <input type="hidden" name="writerId" value="${loginCafe.loginId}" />
+        <input type="hidden" name="writerId" value="${loginCafe.loginId}" /> <%-- writerId는 세션에서 가져오거나 hasHistory 객체에서 꺼냄 --%>
         <textarea name="content" placeholder="댓글을 입력하세요" rows="3" cols="50"></textarea>
         <br />
         <button type="submit">댓글 작성</button>

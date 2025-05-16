@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <div class="cafeReview">
-  <h2>리뷰</h2>
+  <h2>Q&A</h2>
 
   <!-- 댓글 작성창: 로그인한 사용자만 가능 -->
   <c:if test="${not empty loginCafe}">

@@ -242,7 +242,21 @@ public class MemberDao {
 		
 		ArrayList<MemberReport> list = new ArrayList<MemberReport>();
 		
-		String query = "select * from (select ROWNUM RNUM, A.*from ( select * from tbl_user_report A ) A) where RNUM >=? and RNUM <=?";
+		String query = "SELECT *\r\n"
+				+ "FROM (\r\n"
+				+ "    SELECT \r\n"
+				+ "        ur.*, \r\n"
+				+ "        c.comment_id,\r\n"
+				+ "        cd.code_name,\r\n"
+				+ "        ROW_NUMBER() OVER (ORDER BY ur.report_id DESC) AS RNUM\r\n"
+				+ "    FROM \r\n"
+				+ "        tbl_user_report ur\r\n"
+				+ "    JOIN \r\n"
+				+ "        tbl_comment c ON ur.target_comment_id = c.comment_id\r\n"
+				+ "    JOIN \r\n"
+				+ "        tbl_code cd ON ur.report_code_id = cd.code_id\r\n"
+				+ ") A\r\n"
+				+ "WHERE RNUM >= ? AND RNUM <= ?";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -256,8 +270,9 @@ public class MemberDao {
 				MemberReport report = new MemberReport();
 				report.setReportId(rset.getString("report_id"));
 				report.setReporterId(rset.getString("reporter_id"));
-				report.setTargetCommentId(rset.getString("target_comment_id"));
-				report.setReportCodeId(rset.getString("report_code_id"));
+				report.setTargetCommentId(rset.getString("comment_id"));
+				report.setReportCodeId(rset.getString("code_name"));
+				
 				
 				list.add(report);
 			}

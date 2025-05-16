@@ -23,8 +23,8 @@
 					<c:forEach var = 'report' items = "${reportList}">
 						<tr>
 							<th>${report.reportId}</th>
-							<th>${report.reportId}</th>
-							<th>${member.}</th>
+							<th>${report.reporterId}</th>
+							<th>${report.targetCommentId}</th>
 							<th>${report.reportCodeId}</th>
 						</tr>
 					</c:forEach>
