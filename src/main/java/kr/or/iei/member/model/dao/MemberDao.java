@@ -79,7 +79,7 @@ public class MemberDao {
 	    return m;
 	}
 
-	//이정원
+	//이정원 회원정보수정
 	public int updateMember(Connection conn, Member updMember) {
 		PreparedStatement pstmt = null;
 
@@ -107,7 +107,7 @@ public class MemberDao {
 		return result;
 	}
 	
-	//이정원
+	//이정원 비밀번호 변경(회원정보수정)
 	public int updateMemberPw(Connection conn, String userId, String newMemberPw) {
 		PreparedStatement pstmt = null;
 		
@@ -132,7 +132,7 @@ public class MemberDao {
 		return result;
 	}
 	
-	//이정원
+	//이정원 프로필 이미지 수정(회원정보수정)
 	public int updateProfileImg(Connection conn, String userId, String filePath) {
         PreparedStatement pstmt = null;
         int result = 0;
@@ -150,7 +150,7 @@ public class MemberDao {
         }
         return result;
     }
-
+	
 	
 	//정휘훈 파트
 	public ArrayList<Member> selectAllUser(Connection conn, int start, int end) {

@@ -73,7 +73,6 @@ public class MemberService {
 	        return result;
 	    }
 	 
-
 	
 	//정휘훈 파트
 	public ListData<Member> selectAllUser(int reqPage) {
