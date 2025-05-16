@@ -35,7 +35,6 @@ public class SearchServlet extends HttpServlet {
 		//1. 인코딩 - 필터
 		//2. 값 추출 - 클라이언트가 검색창에 입력한 값
 		String srchStr = request.getParameter("srchStr");
-		System.out.println("srchStr : " + srchStr);
 		
 		//3. 로직 - 상세 정보 조회
 		CafeService service = new CafeService();

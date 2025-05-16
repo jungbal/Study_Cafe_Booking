@@ -35,13 +35,9 @@ public class InsertQAServlet extends HttpServlet {
 		// 1. 인코딩 - 필터 : x
 		// 2. 값 추출 : 
 		String cafeNo = request.getParameter("cafeNo");
-		 System.out.println("cafeNo : " + cafeNo);
 	    String writerId = request.getParameter("writerId");
-	    System.out.println("writerId : " + writerId);
 	    String content = request.getParameter("content");
-	    System.out.println("content : " + content);
 	    String parentId = request.getParameter("parentId"); // 답글일 경우만 존재
-	    System.out.println("parentId : " + parentId);
 	    String RVQA = "QA"; // 리뷰 타입이라고 알려주기 위한 변수 설정
 		
 	   

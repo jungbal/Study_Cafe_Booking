@@ -34,7 +34,6 @@ public class DeleteCommentServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String cafeNo = request.getParameter("cafeNo");
 		String commentId = request.getParameter("commentId");
-		System.out.println("commentId : " + commentId);
 		
 		CommentService commentService = new CommentService();
 		int result = commentService.deleteComment(commentId);

@@ -95,7 +95,6 @@ public class CommentDao {
 	        pstmt = conn.prepareStatement(query);
 	        pstmt.setString(1, commentId);
 	        result = pstmt.executeUpdate();
-	        System.out.println("result : "+result);
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    } finally {
