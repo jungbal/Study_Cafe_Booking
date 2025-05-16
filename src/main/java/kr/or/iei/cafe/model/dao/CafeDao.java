@@ -227,6 +227,86 @@ public class CafeDao {
 		
 		return result;
 	}
+
+	public int updateWait(Connection conn, String cafeNo) {
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		
+		
+		try {
+			 // tbl_cafe 업데이트
+	        pstmt = conn.prepareStatement(
+	            "UPDATE tbl_cafe SET cafe_status = 'Y' " +
+	            "WHERE cafe_no = ?"
+	        );
+	        pstmt.setString(1, cafeNo);
+	        result += pstmt.executeUpdate();
+	        
+
+	        // tbl_user 업데이트
+	        pstmt = conn.prepareStatement(
+	        		"UPDATE tbl_user SET user_status = 'Y' " +
+	        		"WHERE user_id = (SELECT host_id FROM tbl_cafe WHERE cafe_no = ?)"
+	        	);
+	        pstmt.setString(1, cafeNo);
+	        result += pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			
+			
+			JDBCTemplate.close(conn);
+		}
+		
+				
+		return result;
+	}
+
+	public int insertWait(Connection conn, String cafeNo) {
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		
+		
+		try {
+			 // tbl_cafe 업데이트
+	        pstmt = conn.prepareStatement(
+	            "UPDATE tbl_cafe SET cafe_status = 'Y' " +
+	            "WHERE cafe_no = ?"
+	        );
+	        pstmt.setString(1, cafeNo);
+	        result += pstmt.executeUpdate();
+	        
+
+	        // tbl_user 업데이트
+	        pstmt = conn.prepareStatement(
+	        		"UPDATE tbl_user SET user_status = 'Y' " +
+	        		"WHERE user_id = (SELECT host_id FROM tbl_cafe WHERE cafe_no = ?)"
+	        	);
+	        pstmt.setString(1, cafeNo);
+	        result += pstmt.executeUpdate();
+	       
+
+	        // tbl_host_request 업데이트
+	        pstmt = conn.prepareStatement(
+	        		"UPDATE tbl_host_request SET status = 'Y' " +
+	        		"WHERE host_no = (SELECT cafe_no FROM tbl_cafe WHERE cafe_no = ?)"
+	        	);
+	        	pstmt.setString(1, cafeNo);  // cafe_no가 String이면 OK
+	        	result += pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			
+			JDBCTemplate.close(conn);
+		}
+		return result;
+	}
 	
 	
 
