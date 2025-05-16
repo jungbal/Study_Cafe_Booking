@@ -162,7 +162,7 @@ console.log("Year:", yyyy); // 2025
 console.log("Month:", mm); // 05
 console.log("Day:", dd); // 14
 
-const formattedDate = yyyy-mm-dd;
+const formattedDate = yyyy+'-'+mm+'-'+dd;
 console.log("Formatted Date:", formattedDate); // 2025-05-14
 
 // Update the HTML content for both left and right date fields
