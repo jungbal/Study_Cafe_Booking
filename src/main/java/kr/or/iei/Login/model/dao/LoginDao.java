@@ -31,6 +31,7 @@ public class LoginDao {
 				
 				loginCafe.setLoginId(loginId);
 				loginCafe.setLoginPw(loginPw);
+				loginCafe.setLoginRole(rset.getString("user_role"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
