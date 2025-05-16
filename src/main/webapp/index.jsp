@@ -19,17 +19,23 @@
 <hr>
 
 		<%-- "정원님 테스트용"--%>
-			<%-- 
+			 
 			<c:if test="${empty sessionScope.loginMember}">
 			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a> 
 			</c:if>
-			 --%>
+			
+			<c:if test="${not empty sessionScope.loginMember}">
+			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a>
+			<a href="/LogoutServlet">로그아웃</a> 
+			<a href="/myPage/chkPwFrm">마이페이지</a>
+			</c:if>
+			 
 			 
 <%-- 로그인 안된 상태 --%>
-	<c:if test="${empty sessionScope.loginCafe}">
+	<%-- <c:if test="${empty sessionScope.loginCafe}">
 		<a href="/loginFrm">로그인</a>
 		<a href="/joinFrm">회원가입</a>
-	</c:if>		 
+	</c:if> --%>		 
 	
 <%-- 로그인 되어있는 상태 --%>
 	<c:if test="${not empty sessionScope.loginCafe}">
