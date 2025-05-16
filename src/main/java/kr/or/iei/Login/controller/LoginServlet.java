@@ -36,11 +36,16 @@ public class LoginServlet extends HttpServlet {
 		String loginPw = request.getParameter("loginPw");
 		
 		LoginService service = new LoginService();
-		Login loginCafe = service.cafeLogin(loginId, loginPw);
+//		cafeLogin : 로그인을 위한 메소드		
+		Login loginCafe = service.cafeLogin(loginId, loginPw); 
+//		chkUserRole : 일반,호스트,관리자 구분 메소드
+		int role = service.chkUserRole(loginId);
 		
 		RequestDispatcher view = null;
 		
-		if(loginCafe == null) {
+		
+		
+		if(loginCafe == null && role == 0) {
 			view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
 			
 			request.setAttribute("title", "알림");
@@ -52,6 +57,7 @@ public class LoginServlet extends HttpServlet {
 			
 			HttpSession session = request.getSession();
 			session.setAttribute("loginCafe", loginCafe);
+			session.setAttribute("role", role);
 			session.setMaxInactiveInterval(600);
 		}
 		view.forward(request, response);
