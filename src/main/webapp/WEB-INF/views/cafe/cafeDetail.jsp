@@ -165,6 +165,20 @@ tabButtons.forEach((btn, index) => {
     }
   });
 });
+
+//페이지 진입 시 URL 파라미터로 리뷰 탭 열기
+window.addEventListener("load", function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const tab = urlParams.get("tab");
+
+  if (tab === "review") {
+    document.getElementById("btn-review").click();
+  } else if (tab === "qna") {
+    document.getElementById("btn-qna").click();
+  } else {
+    document.getElementById("btn-info").click();
+  }
+});
 </script>
 
 </body>
