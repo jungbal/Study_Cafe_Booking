@@ -34,6 +34,23 @@
 .seat-box.selected {
   background-color: #4caf50;
   color: white;
+  }
+  
+.cafeImage {
+  width: 200px;       /* 적절한 너비 지정 */
+  height: auto;
+  margin: 0 auto 20px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.cafeImage img {
+  width: 100%;        /* 부모 너비에 맞춰 줄임 */
+  height: auto;       /* 비율 유지 */
+  display: block;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
   </style>
@@ -45,7 +62,7 @@
 
     <div class="cafe-media">
       <div class="cafeImage">
-        <img src="placeholder.jpg" alt="스터디카페 사진">
+        <img src="${cafe.cafeImagePath}" alt="${cafe.cafeName}">
       </div>
 
       <br><hr><br>

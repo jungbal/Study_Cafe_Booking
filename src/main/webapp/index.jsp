@@ -1,11 +1,51 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" 
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%-- <% // 메인 페이지 접속 시, 카페리스트 정보 가져오기 위해 설정
+    RequestDispatcher rd = request.getRequestDispatcher("/main");
+    rd.forward(request, response);
+%> --%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>메인 페이지</title>
+<style>
+    .cafe-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        justify-items: center;
+        padding: 20px;
+    }
+
+    .cafe-item {
+        width: 200px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        background-color: #fff;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .cafe-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .cafe-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .cafe-item p {
+        margin: 10px 0 0;
+        font-size: 14px;
+    }
+</style>
 </head>
 <body>
 
@@ -20,22 +60,24 @@
 
 		<%-- "정원님 테스트용"
 			 
+			 <%-- 
 			<c:if test="${empty sessionScope.loginMember}">
 			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a> 
 			</c:if>
 			
 			<c:if test="${not empty sessionScope.loginMember}">
 			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a>
-			<a href="/LogoutServlet">로그아웃</a> 
+			<a href="/LogoutServlet">로그아웃</a>
 			<a href="/myPage/chkPwFrm">마이페이지</a>
 			</c:if>
 			 --%>
 			 
 <%-- 로그인 안된 상태 --%>
-	<c:if test="${empty sessionScope.loginCafe}">
+
+	 <c:if test="${empty sessionScope.loginCafe}">
 		<a href="/loginFrm">로그인</a>
 		<a href="/joinFrm">회원가입</a>
-	</c:if>		 
+	</c:if>	 
 	
 <%-- 로그인 되어있는 상태 --%>
 	<c:if test="${not empty sessionScope.loginCafe}">
@@ -46,7 +88,7 @@
 	<%-- 일반이용자 메뉴 --%>
 		<c:if test="${3 == sessionScope.role}">
 			<%-- 여기서 분기 한 번 더 해야함 호스트 신청 한 상태면 수정만 나오게--%>
-			<a href="/applyCafe">호스트 신청</a>
+			<a href="/applyCafe">업체(호스트) 신청</a>
 		</c:if>
 		
 	<%-- 호스트 메뉴 --%>
@@ -64,11 +106,8 @@
 		</c:if>
 		
 	</c:if>
-	
 
 
-	
-	
 
 <br><br><br>
 <hr>
@@ -77,6 +116,20 @@
 <a href="/manager/cafeManage?reqPage=1">업체 관리</a>
 <a href="/manger/cafeApplyChk">업체신청정보열람</a>
 <a href="/manager/chkReport?reqPage=1">신고접수열람</a>
+
+<br><br><br>
+<hr>
+
+	<%-- 인기많은 카페 top6 (리뷰/Q&A 달린 기준) --%>
+<div class="cafe-list">
+    <c:forEach var="cafe" items="${cafeList}">
+        <div class="cafe-item">
+            <img src="${cafe.cafeImagePath}" alt="${cafe.cafeName}">
+            <p><strong>${cafe.cafeName}</strong></p>
+            <p>${cafe.cafeAddr}</p>
+        </div>
+    </c:forEach>
+</div>
 
 </body>
 </html>
