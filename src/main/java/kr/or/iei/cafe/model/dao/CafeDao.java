@@ -21,7 +21,17 @@ public class CafeDao {
 		ArrayList<Cafe> cafeList = new ArrayList<Cafe>();
 		
 		// 카페명과 카페 주소에서 동시에 검색어 찾기.
-		String query = "SELECT * FROM tbl_cafe WHERE cafe_name LIKE ? OR cafe_addr LIKE ?";
+		String query = "SELECT \r\n"
+				+ "    c.*, \r\n"
+				+ "    i.image_no, \r\n"
+				+ "    i.image_name, \r\n"
+				+ "    i.image_path\r\n"
+				+ "FROM \r\n"
+				+ "    tbl_cafe c\r\n"
+				+ "LEFT JOIN \r\n"
+				+ "    tbl_image i ON c.cafe_no = i.cafe_no\r\n"
+				+ "WHERE \r\n"
+				+ "    c.cafe_name LIKE ? OR c.cafe_addr LIKE ?";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -41,6 +51,9 @@ public class CafeDao {
 				cafe.setCafeStatus(rset.getString("cafe_status"));
 				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
 				cafe.setHostId(rset.getString("host_id"));
+				cafe.setCafeImageNo(rset.getString("image_no"));
+				cafe.setCafeImageName(rset.getString("image_name"));
+				cafe.setCafeImagePath(rset.getString("image_path"));
 				
 				cafeList.add(cafe);
 			}
@@ -64,7 +77,18 @@ public class CafeDao {
 		Cafe cafe = null;
 		
 		// cafe 테이블 전체 정보 select
-		String query = "SELECT * FROM tbl_cafe WHERE cafe_no = ?";
+		String query = "SELECT \r\n"
+				+ "    c.*, \r\n"
+				+ "    i.image_no, \r\n"
+				+ "    i.image_name, \r\n"
+				+ "    i.image_path\r\n"
+				+ "FROM \r\n"
+				+ "    tbl_cafe c\r\n"
+				+ "LEFT JOIN \r\n"
+				+ "    tbl_image i ON c.cafe_no = i.cafe_no\r\n"
+				+ "WHERE \r\n"
+				+ "    c.cafe_no = ?\r\n"
+				+ "";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -84,6 +108,9 @@ public class CafeDao {
 				cafe.setCafeStatus(rset.getString("cafe_status"));
 				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
 				cafe.setHostId(rset.getString("host_id"));
+				cafe.setCafeImageNo(rset.getString("image_no"));
+				cafe.setCafeImageName(rset.getString("image_name"));
+				cafe.setCafeImagePath(rset.getString("image_path"));
 			}
 			
 		} catch (SQLException e) {
@@ -381,11 +408,7 @@ public class CafeDao {
 	            // 필요한 컬럼을 여기에 세팅
 	            history.setHistorySeatNo(rset.getString("history_seat_no"));
 	            seatList.add(history);
-	            
-	            System.out.println("Added History seatNo: " + history.getHistorySeatNo());
 	        }
-	        
-	        System.out.println("seatList size after query: " + seatList.size());
 
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -493,6 +516,95 @@ public class CafeDao {
 		}finally {
 			
 			JDBCTemplate.close(conn);
+		}
+		return result;
+	}
+
+	// 메인 페이지에 보여질 카페 (리뷰 / Q&A 많은 순서대로 6개)
+	public ArrayList<Cafe> selectMainCafes(Connection conn) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		ArrayList<Cafe> cafeList = new ArrayList<Cafe>();
+		
+		String query = "SELECT * FROM (\r\n"
+				+ "    SELECT \r\n"
+				+ "        c.*,\r\n"
+				+ "        NVL(cm.comment_count, 0) AS comment_count,\r\n"
+				+ "        i.image_path\r\n"
+				+ "    FROM \r\n"
+				+ "        tbl_Cafe c\r\n"
+				+ "    LEFT JOIN (\r\n"
+				+ "        SELECT \r\n"
+				+ "            comment_cafe_no,\r\n"
+				+ "            COUNT(*) AS comment_count\r\n"
+				+ "        FROM \r\n"
+				+ "            tbl_comment\r\n"
+				+ "        GROUP BY \r\n"
+				+ "            comment_cafe_no\r\n"
+				+ "    ) cm ON c.cafe_no = cm.comment_cafe_no\r\n"
+				+ "    LEFT JOIN (\r\n"
+				+ "        SELECT \r\n"
+				+ "            cafe_no, image_path\r\n"
+				+ "        FROM (\r\n"
+				+ "            SELECT \r\n"
+				+ "                cafe_no, image_path,\r\n"
+				+ "                ROW_NUMBER() OVER (PARTITION BY cafe_no ORDER BY image_no) AS rn\r\n"
+				+ "            FROM tbl_image\r\n"
+				+ "        ) WHERE rn = 1\r\n"
+				+ "    ) i ON c.cafe_no = i.cafe_no\r\n"
+				+ "    ORDER BY \r\n"
+				+ "        cm.comment_count DESC NULLS LAST\r\n"
+				+ ") WHERE ROWNUM <= 6\r\n"
+				+ "";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Cafe cafe = new Cafe();
+				cafe.setCafeNo(rset.getString("cafe_No"));
+				cafe.setCafeName(rset.getString("cafe_name"));
+				cafe.setCafeAddr(rset.getString("cafe_addr"));
+				cafe.setCafeBiznum(rset.getString("cafe_biznum"));
+				cafe.setCafeIntroduce(rset.getString("cafe_introduce"));
+				cafe.setCafeStartHour(rset.getString("cafe_start_hour"));
+				cafe.setCafeEndHour(rset.getString("cafe_start_hour"));
+				cafe.setCafeStatus(rset.getString("cafe_status"));
+				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
+				cafe.setHostId(rset.getString("host_id"));
+				cafe.setCafeImagePath(rset.getString("image_path"));
+				
+				cafeList.add(cafe);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		// TODO Auto-generated method stub
+		return cafeList;
+	}
+	
+	// 호스트 신청 내역 테이블 insert
+	public int insertHostRequest(Connection conn, Cafe cafe) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		String query = "insert into tbl_host_request (apply_date, status, host_no)\r\n"
+				+ "values (sysdate, 'N', ?)";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, cafe.getHostId());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return result;
 	}
