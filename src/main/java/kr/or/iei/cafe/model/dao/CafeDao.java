@@ -264,7 +264,7 @@ public class CafeDao {
 		}
 		return result;
 	}
-			
+		
 
 	// 결제내역 테이블 업데이트
 	public int insertPayHistory(Connection conn, String ticketPrice, String userId) {
@@ -291,7 +291,6 @@ public class CafeDao {
 		}finally {
 			JDBCTemplate.close(pstmt);
 		}
-
 		
 		return result;
 	}
@@ -431,6 +430,35 @@ public class CafeDao {
 	}
 
 
+	public int updateWait(Connection conn, String cafeNo) {
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		try {
+			// tbl cafe 업데이트
+			pstmt=conn.prepareStatement(
+					"update tbl_cafe set cafe_status = 'Y' " + 
+					"where cafe_no =?"
+			);
+			pstmt.setString(1, cafeNo);
+			result += pstmt.executeUpdate();
+			
+			pstmt= conn.prepareStatement(
+					"update tbl_user set user_stauts = 'Y' " + 
+					"where user_id = (select host_id from tbl_cafe where cafe_no = ?)"
+					);
+			pstmt.setString(1, cafeNo);
+			result += pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(conn);
+		}
+		return result;
+	}
+
 	public int insertWait(Connection conn, String cafeNo) {
 		PreparedStatement pstmt = null;
 		
@@ -470,5 +498,6 @@ public class CafeDao {
 		}
 		return result;
 	}
+
 
 }

@@ -37,13 +37,21 @@ public class DeleteUserServlet extends HttpServlet {
 		MemberService service = new MemberService();
 		int result = service.deleteOneUser(userId);
 		//4. 결과 처리 
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/manager/manageUser.jsp");
+		RequestDispatcher view = null;
 		if(result > 0) {	//정상적으로 삭제 되었을 때
-			response.sendRedirect("/manager/userManage?reqPage=1");	
+			view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
+			request.setAttribute("title", "회원 삭제");
 			request.setAttribute("msg", "회원이 정상적으로 삭제되었습니다.");
-		}else { //삭제 실패 되었을 때
-			request.setAttribute("msg", "회원 삭제에 실패했습니다.");
+			request.setAttribute("icon", "success");
+			request.setAttribute("loc", "/manager/userManage?reqPage=1");
+			view.forward(request, response);
 			
+		}else { //삭제 실패 되었을 때
+			view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
+			request.setAttribute("title", "삭제 실패");
+			request.setAttribute("msg","회원 삭제 중, 오류가 발생하였습니다.");
+			request.setAttribute("icon", "error");
+			request.setAttribute("loc", "/WEB-INF/views/manager/manageUser.jsp");
 			view.forward(request, response);
 		}
 		
