@@ -16,5 +16,17 @@
     <button type="submit">저장</button>
     <button type="button" onclick="history.back()">취소</button>
   </form>
+  <c:if test="${updateSuccess}">
+  <script>
+  alert("리뷰가 수정되었습니다.");
+  if (window.opener && !window.opener.closed) {
+    // 부모창에서 review 탭 강제 활성화 함수 호출
+    window.opener.switchReviewQa(null, '${type}');
+    // 혹시 탭은 유지하고 리스트만 새로고침하고 싶다면 아래처럼
+    // window.opener.location.reload();
+  }
+  window.close(); // 팝업창 닫기
+</script>
+</c:if>
 </body>
 </html>
