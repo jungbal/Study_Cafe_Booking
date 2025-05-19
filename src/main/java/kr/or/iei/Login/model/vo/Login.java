@@ -13,5 +13,5 @@ public class Login {
 	private String loginId;
 	private String loginPw;
 	private String memberPhone;
-	private int userRole;
+	private String loginRole;
 }

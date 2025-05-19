@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import kr.or.iei.common.JDBCTemplate;
 import kr.or.iei.member.model.vo.Member;
+import kr.or.iei.member.model.vo.MemberReport;
 
 
 public class MemberDao {
@@ -78,7 +79,7 @@ public class MemberDao {
 	    return m;
 	}
 
-	//이정원
+	//이정원 회원정보수정
 	public int updateMember(Connection conn, Member updMember) {
 		PreparedStatement pstmt = null;
 
@@ -106,7 +107,7 @@ public class MemberDao {
 		return result;
 	}
 	
-	//이정원
+	//이정원 비밀번호 변경(회원정보수정)
 	public int updateMemberPw(Connection conn, String userId, String newMemberPw) {
 		PreparedStatement pstmt = null;
 		
@@ -131,7 +132,7 @@ public class MemberDao {
 		return result;
 	}
 	
-	//이정원
+	//이정원 프로필 이미지 수정(회원정보수정)
 	public int updateProfileImg(Connection conn, String userId, String filePath) {
         PreparedStatement pstmt = null;
         int result = 0;
@@ -149,7 +150,7 @@ public class MemberDao {
         }
         return result;
     }
-
+	
 	
 	//정휘훈 파트
 	public ArrayList<Member> selectAllUser(Connection conn, int start, int end) {
@@ -233,5 +234,56 @@ public class MemberDao {
 		}
 		
 		return result;
+	}
+
+	public ArrayList<MemberReport> selectReportList(Connection conn, int start, int end) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		ArrayList<MemberReport> list = new ArrayList<MemberReport>();
+		
+		String query = "SELECT *\r\n"
+				+ "FROM (\r\n"
+				+ "    SELECT \r\n"
+				+ "        ur.*, \r\n"
+				+ "        c.comment_id,\r\n"
+				+ "        cd.code_name,\r\n"
+				+ "        ROW_NUMBER() OVER (ORDER BY ur.report_id DESC) AS RNUM\r\n"
+				+ "    FROM \r\n"
+				+ "        tbl_user_report ur\r\n"
+				+ "    JOIN \r\n"
+				+ "        tbl_comment c ON ur.target_comment_id = c.comment_id\r\n"
+				+ "    JOIN \r\n"
+				+ "        tbl_code cd ON ur.report_code_id = cd.code_id\r\n"
+				+ ") A\r\n"
+				+ "WHERE RNUM >= ? AND RNUM <= ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			
+			pstmt.setInt(1, start);
+			pstmt.setInt(2, end);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				MemberReport report = new MemberReport();
+				report.setReportId(rset.getString("report_id"));
+				report.setReporterId(rset.getString("reporter_id"));
+				report.setTargetCommentId(rset.getString("comment_id"));
+				report.setReportCodeId(rset.getString("code_name"));
+				
+				
+				list.add(report);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return list;
+	
 	}
 }

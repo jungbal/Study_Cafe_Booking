@@ -7,36 +7,83 @@
 <head>
 <meta charset="UTF-8">
 <title>검색 결과</title>
+<style>
+    .list-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .cafe-link {
+        width: calc(33.333% - 20px);
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .cafe-card {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-sizing: border-box;
+        text-align: center;
+        transition: all 0.2s ease-in-out;
+        height: 100%;
+    }
+
+    .cafe-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transform: translateY(-3px);
+        cursor: pointer;
+    }
+
+    .cafe-image {
+        margin-bottom: 10px;
+        font-weight: bold;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .cafe-name {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .cafe-addr {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .no-result {
+        text-align: center;
+        padding: 50px 0;
+        font-size: 18px;
+        color: #888;
+        width: 100%;
+    }
+</style>
 </head>
 <body>
-<%--아직 db에 이미지 저장 안 해놨으므로 default 이미지 사진으로 해놓기--%>
 
-<div class="list-content">
-	<table class="tbl tbl-hover">
-		<tr>
-			<th style="width:55%">카페 이미지</th>
-			<th style="width:15%">카페명</th>
-			<th style="width:20%">카페주소</th>
-		</tr>
-
-		<c:choose>
-			<c:when test="${empty list}">
-				<tr>
-					<td colspan="3" style="text-align:center;">검색 결과가 없습니다.</td>
-				</tr>
-			</c:when>
-			<c:otherwise>
-				<c:forEach var="list" items="${list}">
-					<tr>
-						<td><a href='/cafeDetail?cafeNo=${list.cafeNo}'>카페이미지(예시)</a></td>
-						<td>${list.cafeName}</td>
-						<td>${list.cafeAddr}</td>
-					</tr>
-				</c:forEach>
-			</c:otherwise>
-		</c:choose>
-
-	</table>
+<div class="list-container">
+    <c:choose>
+        <c:when test="${empty list}">
+            <div class="no-result">검색 결과가 없습니다.</div>
+        </c:when>
+        <c:otherwise>
+            <c:forEach var="list" items="${list}">
+                <a class="cafe-link" href='/cafeDetail?cafeNo=${list.cafeNo}'>
+                    <div class="cafe-card">
+                        <div class="cafe-image">카페이미지(예시)</div>
+                        <div class="cafe-name">${list.cafeName}</div>
+                        <div class="cafe-addr">${list.cafeAddr}</div>
+                    </div>
+                </a>
+            </c:forEach>
+        </c:otherwise>
+    </c:choose>
 </div>
+
 </body>
 </html>

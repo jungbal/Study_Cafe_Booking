@@ -1,6 +1,8 @@
 package kr.or.iei.member.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,52 +12,59 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import kr.or.iei.comment.model.service.CommentService;
+import kr.or.iei.comment.model.vo.Comment;
+import kr.or.iei.member.model.service.PayService;
 import kr.or.iei.member.model.vo.Member;
+import kr.or.iei.member.model.vo.PayHistory;
 
-/**
- * Servlet implementation class MypageServlet
- */
 @WebServlet("/myPage/myInfo")
 public class MypageServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public MypageServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// 1. 인코딩 - 필터
-		// 2. 값 추출
-		// 3. 로직 - 회원정보! 세션에 등록되어 있으므로 조회 불필요
-		// 4. 결과 처리
-		// 4.1 이동할 JSP 페이지 지정
-		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/member/myPage.jsp");
+        HttpSession session = request.getSession(false);
+        Member loginMember = (Member) session.getAttribute("loginMember");
 
-		// 4.2 화면 구현에 필요한 데이터 등록
-		// 세션에 등록되어 있음.
+        if (loginMember == null) {
+            response.sendRedirect(request.getContextPath() + "/member/loginFrm");
+            return;
+        }
 
-		// 4.3 페이지 이동
-		view.forward(request, response);
+        String userId = loginMember.getUserId();
+        
+        // 탭 정보 파라미터 받기 (account, review, payment)
+        String tab = request.getParameter("tab");
+        if (tab == null || !(tab.equals("account") || tab.equals("review") || tab.equals("payment"))) {
+            tab = "account";// 기본값 account
+        }
+        // 탭 정보를 JSP에서 조건 분기로 사용하기 위해 request에 등록
+        request.setAttribute("tab", tab);
 
-	}
+        if (tab.equals("review")) {
+            CommentService service = new CommentService();
+            List<Comment> reviewList = service.selectMyCommentsByType(userId, "RV");
+            List<Comment> qnaList = service.selectMyCommentsByType(userId, "QNA");
+            request.setAttribute("reviewList", reviewList);
+            request.setAttribute("qnaList", qnaList);
+        }
+        
+        // 결제 내역 탭이라면 데이터 조회
+    	if ("payment".equals(tab) && loginMember != null) {
+    		PayService pService = new PayService();
+    		ArrayList<PayHistory> list = pService.selectPayHistoryByUser(userId);
+    		session.setAttribute("payList", list);
+    	}
+    	
+    	// myPage.jsp로 포워딩
+        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/member/myPage.jsp");
+        view.forward(request, response);
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
 }

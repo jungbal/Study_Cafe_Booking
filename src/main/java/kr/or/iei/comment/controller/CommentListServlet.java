@@ -20,19 +20,21 @@ import kr.or.iei.member.model.vo.Member;
 @WebServlet("/myPage/reply")
 public class CommentListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public CommentListServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public CommentListServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		Member loginMember = (Member) session.getAttribute("loginMember");
 
@@ -43,31 +45,26 @@ public class CommentListServlet extends HttpServlet {
 
 		String userId = loginMember.getUserId();
 		String type = request.getParameter("type"); // "RVW" 또는 "QNA"
-
-		if (type == null || (!type.equals("RV") && !type.equals("QNA"))) {
-			request.setAttribute("title", "잘못된 접근");
-			request.setAttribute("msg", "리뷰 또는 Q&A 유형이 올바르지 않습니다.");
-			request.setAttribute("icon", "error");
-			request.setAttribute("loc", "/");
-			request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp").forward(request, response);
-			return;
-		}
-
 		CommentService service = new CommentService();
-		List<Comment> commentList = service.selectMyCommentsByType(userId, type);
+		
+		// 리뷰와 Q&A 둘 다 가져오기
+		List<Comment> reviewList = service.selectMyCommentsByType(userId, "RV");
+		List<Comment> qnaList = service.selectMyCommentsByType(userId, "QNA");
 
-		request.setAttribute("commentList", commentList);
+		// 넘겨주기
+		request.setAttribute("reviewList", reviewList);
+		request.setAttribute("qnaList", qnaList);
 
-		String targetPage = type.equals("RV") ? "/WEB-INF/views/member/myReview.jsp"
-		                                       : "/WEB-INF/views/member/myQa.jsp";
-
-		request.getRequestDispatcher(targetPage).forward(request, response);
+		// 통합된 jsp 사용 (리뷰/Q&A 동일 페이지에서 분기)
+		request.getRequestDispatcher("/WEB-INF/views/member/reviewQa.jsp").forward(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}

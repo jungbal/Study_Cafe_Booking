@@ -1,0 +1,103 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .sub-tab-wrap { display: flex; margin-bottom: 20px; }
+    .sub-tab-btn {
+      padding: 10px 20px; border: 1px solid #ccc; cursor: pointer;
+    }
+    .sub-tab-btn.active { background-color: #2ecc71; color: white; }
+    .review-table, .qna-table { display: none; }
+    .tab-visible { display: table; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    tr.reply { background-color: #f9f9f9; color: #555; }
+    tr.reply td { padding-left: 40px; font-style: italic; }
+  </style>
+</head>
+<body>
+
+<div class="sub-tab-wrap">
+  <div class="sub-tab-btn active" onclick="switchReviewQa(event, 'review')">내 리뷰</div>
+  <div class="sub-tab-btn" onclick="switchReviewQa(event, 'qna')">내 Q&A</div>
+</div>
+
+<!-- 리뷰 테이블 -->
+<table class="review-table tab-visible" id="reviewTable">
+  <tr><th>카페명</th><th>내용</th><th>작성일</th><th>관리</th></tr>
+  <c:forEach var="c" items="${reviewList}">
+    <c:if test="${empty c.commentParent}">
+      <tr>
+        <td>${c.cafeName}</td>
+        <td>${c.content}</td>
+        <td>${c.commentTime}</td>
+        <td>
+          <a href="/comment/handle?action=update&commentId=${c.commentId}">수정</a> |
+          <a href="/comment/handle?action=delete&commentId=${c.commentId}">삭제</a>
+        </td>
+      </tr>
+      <!-- 이 부모 댓글에 달린 답글 출력 -->
+      <c:forEach var="reply" items="${reviewList}">
+        <c:if test="${reply.commentParent == c.commentId}">
+          <tr class="reply">
+            <td colspan="4">
+              ↳ <strong>답글:</strong> ${reply.content}
+              <span style="float:right;">${reply.commentTime}</span>
+            </td>
+          </tr>
+        </c:if>
+      </c:forEach>
+    </c:if>
+  </c:forEach>
+</table>
+
+<!-- Q&A 테이블 -->
+<table class="qna-table" id="qnaTable">
+  <tr><th>카페명</th><th>내용</th><th>작성일</th><th>관리</th></tr>
+  <c:forEach var="c" items="${qnaList}">
+    <c:if test="${empty c.commentParent}">
+      <tr>
+        <td>${c.cafeName}</td>
+        <td>${c.content}</td>
+        <td>${c.commentTime}</td>
+        <td>
+          <a href="/comment/handle?action=update&commentId=${c.commentId}">수정</a> |
+          <a href="/comment/handle?action=delete&commentId=${c.commentId}">삭제</a>
+        </td>
+      </tr>
+      <!-- 이 부모 댓글에 달린 답글 출력 -->
+      <c:forEach var="reply" items="${qnaList}">
+        <c:if test="${reply.commentParent == c.commentId}">
+          <tr class="reply">
+            <td colspan="4">
+              ↳ <strong>답글:</strong> ${reply.content}
+              <span style="float:right;">${reply.commentTime}</span>
+            </td>
+          </tr>
+        </c:if>
+      </c:forEach>
+    </c:if>
+  </c:forEach>
+</table>
+</table>
+
+<script>
+function switchReviewQa(event, type) {
+  document.querySelectorAll(".sub-tab-btn").forEach(btn => btn.classList.remove("active"));
+  event.target.classList.add("active");
+
+  document.getElementById("reviewTable").classList.remove("tab-visible");
+  document.getElementById("qnaTable").classList.remove("tab-visible");
+
+  if (type === 'review') {
+    document.getElementById("reviewTable").classList.add("tab-visible");
+  } else {
+    document.getElementById("qnaTable").classList.add("tab-visible");
+  }
+}
+</script>
+
+</body>
+</html>

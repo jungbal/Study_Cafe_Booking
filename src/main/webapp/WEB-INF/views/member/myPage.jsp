@@ -1,157 +1,70 @@
-<%@page import="kr.or.iei.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>마이페이지</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/sweetalert.min.js"></script>
-<style>
-	.mypage-container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-	.mypage-wrap {
-		width: 800px;
-	}
-	.my-info-wrap {
-		width: 80%;
-		margin: 0 auto;
-	}
-	.mypage-btn {
-		margin : 20px 0px;
-		text-align: center;
-	}
-	.mypage-btn>button {
-		width: 25%;
-		margin : 10px 10px;
-	}
-</style>
+  <meta charset="UTF-8">
+  <title>마이페이지</title>
+  <style>
+    .container {
+      display: flex;
+      max-width: 1000px;
+      margin: 0 auto;
+      min-height: 600px;
+    }
+    .sidebar {
+      width: 200px;
+      border-right: 1px solid #ccc;
+      padding: 20px;
+    }
+    .sidebar button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      font-size: 1rem;
+      background-color: #f5f5f5;
+      border: none;
+      cursor: pointer;
+    }
+    .sidebar button.active {
+      background-color: #3498db;
+      color: white;
+    }
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
-	<main class="content mypage-container">
-		<section class="section mypage-wrap">
-			<div class="page-title">마이페이지</div>
-			<div class="my-info-wrap">
-				<form id="updateForm" action="/myInfo/update" method="post" enctype="multipart/form-data">
-					<table class="tbl">
-						<tr>
-							<th>프로필 이미지</th>
-							<td>
-								<img id="preview" src="/resources/upload/${loginMember.userImage}" width="100" height="100" alt="프로필 이미지"><br>
-								<input type="file" id="profileImgInput" name="profileImg" accept="image/*">
-								<input type="hidden" name="originImage" value="${loginMember.userImage}">
-							</td>
-						</tr>
-						<tr>
-							<th>아이디</th>
-							<td>${loginMember.userId}
-								<input type="hidden" name="userId" value="${loginMember.userId}">
-							</td>
-						</tr>
-						<tr>
-							<th>비밀번호</th>
-							<td>
-								<button type="button" onclick="window.open('/member/pwChgFrm', '_blank', 'width=500,height=400');">
-									비밀번호 변경
-								</button>
-							</td>
-						</tr>
-						<tr>
-							<th>전화번호</th>
-							<td>
-								<input type="text" id="userPhone" name="userPhone" value="${loginMember.userPhone}" maxlength="13" placeholder="010-0000-0000">
-							</td>
-						</tr>
-						<tr>
-							<th>회원 상태</th>
-							<td>${loginMember.userStatus}</td>
-						</tr>
-						<tr>
-							<th>회원 등급</th>
-							<td>
-								<c:choose>
-									<c:when test="${loginMember.userRole == 1}">관리자</c:when>
-									<c:when test="${loginMember.userRole == 2}">호스트</c:when>
-									<c:otherwise>일반회원</c:otherwise>
-								</c:choose>
-							</td>
-						</tr>
-					</table>
-					<div class="mypage-btn">
-						<button type="button" onclick="updateValidate()" class="btn-primary lg">정보수정</button>
-						<c:if test="${loginMember.userRole ne 1}">
-							<button type="button" onclick="deleteMember()" class="btn-secondary lg">회원탈퇴</button>
-						</c:if>
-						<c:if test="${loginMember.userRole eq 1}">
-							<button type="button" class="btn-point lg" onclick="moveAdminPage()">관리자 페이지</button>
-						</c:if>
-					</div>
-				</form>
-			</div>
-		</section>
-	</main>
-	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
-</div>
+  <div class="container">
+    <!-- 사이드바 탭 버튼: 클릭 시 /myPage/myInfo?tab=review 등으로 요청 -->
+    <div class="sidebar">
+      <button class="tab-btn ${tab eq 'account' ? 'active' : ''}" onclick="switchTab('account')">계정 관리</button>
+      <button class="tab-btn ${tab eq 'review' ? 'active' : ''}" onclick="switchTab('review')">리뷰 / Q&A</button>
+      <button class="tab-btn ${tab eq 'payment' ? 'active' : ''}" onclick="switchTab('payment')">결제 내역</button>
+    </div>
 
-<script>
-	function updateValidate(){
-		const phoneRegExp = /^010-\d{3,4}-\d{4}$/;
-		const userPhone = $('#userPhone');
+    <!-- 우측 콘텐츠 -->
+    <div class="content">
+    <!-- 조건 분기로 JSP 파일 탭별로 불러오기 -->
+      <c:if test="${tab eq 'account'}">
+        <jsp:include page="accountInfo.jsp"/>
+      </c:if>
+      <c:if test="${tab eq 'review'}">
+        <jsp:include page="reviewQa.jsp"/>
+      </c:if>
+      <c:if test="${tab eq 'payment'}">
+        <jsp:include page="myPay.jsp"/>
+      </c:if>
+    </div>
+  </div>
 
-		if (!phoneRegExp.test($(userPhone).val())) {
-			swal({
-				title: "알림",
-				text: "전화번호는 - 포함 13자리로 입력해주세요.",
-				icon: "warning"
-			});
-			return;
-		}
-
-		swal({
-			title: "수정",
-			text: "회원 정보를 수정하시겠습니까?",
-			icon: "warning",
-			buttons: { cancel: "취소", confirm: "수정" }
-		}).then(function(val){
-			if(val){
-				$('#updateForm').submit();
-			}
-		});
-	}
-
-	function deleteMember(){
-		swal({
-			title: "탈퇴",
-			text: "정말 회원탈퇴를 하시겠습니까?",
-			icon: "warning",
-			buttons: { cancel: "취소", confirm: "탈퇴" }
-		}).then(function(val){
-			if(val){
-				location.href = '/member/delete?userId=' + $('input[name=userId]').val();
-			}
-		});
-	}
-
-	function moveAdminPage(){
-		location.href = '/member/admin';
-	}
-
-	document.getElementById('profileImgInput').addEventListener('change', function () {
-		const file = this.files[0];
-		if (file) {
-			const reader = new FileReader();
-			reader.onload = function(e) {
-				document.getElementById('preview').src = e.target.result;
-			};
-			reader.readAsDataURL(file);
-		}
-	});
-</script>
+  <script>
+    function switchTab(tabName) {
+      location.href = '/myPage/myInfo?tab=' + tabName;
+    }
+  </script>
 </body>
 </html>
