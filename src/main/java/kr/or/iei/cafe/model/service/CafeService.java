@@ -193,6 +193,7 @@ public class CafeService {
 		return member;
 	}
 
+
 	public ArrayList<History> isSeatAvailable(String cafeNo) {
 		Connection conn = JDBCTemplate.getConnection();
 		ArrayList<History> seatList = dao.isSeatAvailable(conn, cafeNo);
@@ -228,7 +229,7 @@ public class CafeService {
 
            switch (statusValue) {
                case "1": // 수정대기 승인
-                  result = dao.updateWait(conn, cafeNo);
+                //  result = dao.updateWait(conn, cafeNo);
                    break;
                case "2": // 등록대기 승인
                    result = dao.insertWait(conn, cafeNo);
@@ -262,5 +263,23 @@ public class CafeService {
        JDBCTemplate.close(conn);
        return isAllSuccess;
    }
+
+	// 업체(호스트) 신청
+	public int insertCafe(Cafe cafeInfo, String loginId) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = dao.insertCafe(conn, cafeInfo, loginId);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+
 
 }
