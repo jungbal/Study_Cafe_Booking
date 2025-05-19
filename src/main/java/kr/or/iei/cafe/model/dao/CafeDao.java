@@ -264,7 +264,6 @@ public class CafeDao {
 		}
 		return result;
 	}
-		
 
 	// 결제내역 테이블 업데이트
 	public int insertPayHistory(Connection conn, String ticketPrice, String userId) {
@@ -428,7 +427,6 @@ public class CafeDao {
 	    }
 	    return history;
 	}
-
 
 	public int updateWait(Connection conn, String cafeNo) {
 		PreparedStatement pstmt = null;
