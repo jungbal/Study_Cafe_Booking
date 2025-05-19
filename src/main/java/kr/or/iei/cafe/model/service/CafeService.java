@@ -279,6 +279,14 @@ public class CafeService {
 		
 		return result;
 	}
+	
+	public ArrayList<Cafe> selectMainCafes() {
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<Cafe> cafeList = dao.selectMainCafes(conn);
+		
+		return cafeList;
+	}
+
 
 
 
