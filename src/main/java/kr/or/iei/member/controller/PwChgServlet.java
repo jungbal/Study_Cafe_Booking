@@ -67,7 +67,7 @@ public class PwChgServlet extends HttpServlet {
 				request.setAttribute("icon", "success");
 				
 				//비밀번호 변경 성공 시, 팝업창 닫고 부모창에서 로그인 페이지 이동 처리
-				request.setAttribute("callback", "self.close(); window.opener.location.href=\"/member/loginFrm\";");
+				request.setAttribute("callback", "self.close(); window.opener.location.href=\"/loginFrm\";");
 				
 				//다시 로그인할 수 있도록 세션 파기
 				session.invalidate();

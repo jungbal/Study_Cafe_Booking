@@ -12,8 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.comment.model.service.CommentService;
 import kr.or.iei.comment.model.vo.Comment;
+import kr.or.iei.member.model.service.MemberService;
 import kr.or.iei.member.model.service.PayService;
 import kr.or.iei.member.model.vo.Member;
 import kr.or.iei.member.model.vo.PayHistory;
@@ -26,6 +28,19 @@ public class MypageServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
+        
+        // loginUser가 세션에 있다면 → loginMember로 변환해서 세션에 저장
+        if (session != null && session.getAttribute("loginUser") != null) {
+            Login loginUser = (Login) session.getAttribute("loginUser");
+            String userId = loginUser.getLoginId();
+
+            MemberService memberService = new MemberService();
+            Member member = memberService.selectOneMember(userId);
+
+            if (member != null) {
+                session.setAttribute("loginMember", member);
+            }
+        }
         Member loginMember = (Member) session.getAttribute("loginMember");
 
         if (loginMember == null) {

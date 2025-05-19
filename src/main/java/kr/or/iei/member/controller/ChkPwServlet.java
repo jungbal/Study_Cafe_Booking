@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.member.model.service.MemberService;
 import kr.or.iei.member.model.vo.Member;
 
@@ -41,6 +42,15 @@ public class ChkPwServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
+		// loginCafe 세션이 존재하고, 아직 loginMember 세션이 없다면
+		if (session != null && session.getAttribute("loginCafe") != null && session.getAttribute("loginMember") == null) {
+		    Login loginCafe = (Login) session.getAttribute("loginCafe");
+		    String userId = loginCafe.getLoginId();
+
+		    Member member = new MemberService().selectOneMember(userId);
+		    session.setAttribute("loginMember", member);
+		}
+		
 		Member loginMember = (Member) session.getAttribute("loginMember");
 
 		if (loginMember == null) {

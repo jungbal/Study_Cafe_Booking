@@ -50,10 +50,7 @@
     <!-- 2) 비밀번호 변경 버튼 -->
     <form action="${pageContext.request.contextPath}/member/pwChgFrm"
           method="get">
-      <button type="submit" class="primary" onclick="window.open(
-          '${pageContext.request.contextPath}/member/pwChgFrm',
-          'pwChg',
-          'width=450,height=300,scrollbars=yes');">
+      <button type="button" class="primary" onclick="openPwChangePopup()">
         비밀번호 변경
       </button>
     </form>
@@ -77,6 +74,14 @@ function previewFile(input) {
         }
         reader.readAsDataURL(file);
     }
+}
+
+function openPwChangePopup() {
+    window.open(
+        "/member/pwChgFrm",     // 열릴 JSP 경로
+        "pwChgPopup",            // 새 창 이름
+        "width=500,height=300,left=200,top=150"  // 창 속성
+    );
 }
 </script>
 </body>
