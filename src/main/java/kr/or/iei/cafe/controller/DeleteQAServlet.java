@@ -54,7 +54,7 @@ public class DeleteQAServlet extends HttpServlet {
         request.setAttribute("icon", "error");
         
      }
-     request.setAttribute("loc", "/cafeDetail?cafeNo=" + cafeNo);
+     request.setAttribute("loc", "/cafeDetail?cafeNo=" + cafeNo+"&tab=qna");
      //4.3 페이지 이동
      view.forward(request, response);
 	}

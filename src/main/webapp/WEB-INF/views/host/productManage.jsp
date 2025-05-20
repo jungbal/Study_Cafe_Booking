@@ -13,9 +13,10 @@
         margin-left: 10px;
     }
 </style>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
-
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 <h2>이용권 관리</h2>
 
 <c:choose>

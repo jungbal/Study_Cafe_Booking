@@ -6,9 +6,10 @@
 <meta charset="UTF-8">
 <title>업체(호스트) 신청</title>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
-
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 	<h1>업체 신청</h1>
 	
 	<form action= "/ApplyCafeServlet" method="post">

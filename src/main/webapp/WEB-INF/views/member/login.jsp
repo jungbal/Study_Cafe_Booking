@@ -18,8 +18,10 @@
 		margin-bottom: 15px;
 	}
 </style>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 	<div class="login-wrap">
 		<h2>로그인</h2>
 		<form action="/member/login" method="post">

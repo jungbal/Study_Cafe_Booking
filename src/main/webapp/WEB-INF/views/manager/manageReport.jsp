@@ -5,33 +5,43 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>신고 목록</title>
+
 </head>
-<body>
-	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
-	<main class = 'content'>
-		<section class = 'section notice-list-wrap'>
-			<div class = 'page-title'>신고 목록</div>
-			<div class = 'list-content'>
-				<table class = 'tbl tbl-hover'>
-					<tr>
-						<th style = 'width:10%;'>신고 번호</th>
-						<th style = 'width:10%;'>신고한 사용자ID</th>
-						<th style = 'width:10%;'>신고된 사용자ID</th>
-						<th style = 'width:10%;'>신고 사유</th>
-					</tr>
-					<c:forEach var = 'report' items = "${reportList}">
-						<tr>
-							<th>${report.reportId}</th>
-							<th>${report.reporterId}</th>
-							<th>${report.targetCommentId}</th>
-							<th>${report.reportCodeId}</th>
-						</tr>
-					</c:forEach>
-				</table>
-			</div>
-		</section>
-	</main>
-	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+<body class="bg-gray-100 text-gray-800">
+
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
+
+<main class="max-w-7xl mx-auto p-6">
+  <section class="bg-white shadow rounded-lg p-6">
+    <h1 class="text-2xl font-bold mb-6 border-b pb-2">신고 목록</h1>
+    
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-auto border-collapse border border-gray-200">
+        <thead>
+          <tr class="bg-gray-100 text-left">
+            <th class="border border-gray-300 px-4 py-2">신고 번호</th>
+            <th class="border border-gray-300 px-4 py-2">신고한 사용자ID</th>
+            <th class="border border-gray-300 px-4 py-2">신고된 사용자ID</th>
+            <th class="border border-gray-300 px-4 py-2">신고 사유</th>
+          </tr>
+        </thead>
+        <tbody>
+          <c:forEach var="report" items="${reportList}">
+            <tr class="hover:bg-gray-50">
+              <td class="border border-gray-300 px-4 py-2">${report.reportId}</td>
+              <td class="border border-gray-300 px-4 py-2">${report.reporterId}</td>
+              <td class="border border-gray-300 px-4 py-2">${report.targetCommentId}</td>
+              <td class="border border-gray-300 px-4 py-2">${report.reportCodeId}</td>
+            </tr>
+          </c:forEach>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+
 </body>
 </html>

@@ -71,7 +71,7 @@ public class InsertQAServlet extends HttpServlet {
         
      }
      
-     request.setAttribute("loc", "/cafeDetail?cafeNo=" + cafeNo);
+     request.setAttribute("loc", "/cafeDetail?cafeNo=" + cafeNo+"&tab=qna");
      //4.3 페이지 이동
      view.forward(request, response);
 	}

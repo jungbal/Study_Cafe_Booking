@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
-<head><title>결제 내역</title></head>
+<head><title>결제 내역</title>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
+</head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 	<h2>결제 내역</h2>
 	<table border="1">
 		<tr>

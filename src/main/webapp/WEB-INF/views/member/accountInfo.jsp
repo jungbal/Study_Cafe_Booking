@@ -16,8 +16,10 @@
     .danger { background: #e74c3c; color: #fff; }
     .primary { background: #3498db; color: #fff; }
   </style>
+  <link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
   <div class="mypage-container">
     <h2>회원정보 수정</h2>
     <form action="${pageContext.request.contextPath}/member/update" 
