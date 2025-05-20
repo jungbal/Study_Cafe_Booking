@@ -54,8 +54,10 @@
 }
 
   </style>
+  <link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
   <section class="cafe-header">
     <h1 class="cafeName">${cafe.cafeName}</h1>
     <p class="cafeAddr">${cafe.cafeAddr}</p>

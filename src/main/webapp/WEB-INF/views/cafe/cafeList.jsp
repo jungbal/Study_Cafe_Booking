@@ -72,9 +72,10 @@
 }
     
 </style>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
-
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 <div class="list-container">
     <c:choose>
         <c:when test="${empty list}">

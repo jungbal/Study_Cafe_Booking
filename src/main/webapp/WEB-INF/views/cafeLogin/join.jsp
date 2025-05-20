@@ -6,9 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
-
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 <h1>회원가입</h1>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
  <form action='/joinServlet' method='post' autocomplete="off">
