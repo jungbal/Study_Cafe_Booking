@@ -69,7 +69,7 @@
 
 
             <c:if test="${sessionScope.role == 2}">
-              <a href="#" class="hover:text-blue-600 text-center w-full">카페 관리</a>
+              <a href="/host/cafeInfoModi" class="hover:text-blue-600 text-center w-full">카페 관리</a>
               <a href="#" class="hover:text-blue-600 text-center w-full">카페 리뷰/Q&A</a>
             </c:if>
 

@@ -80,16 +80,17 @@ public class ChangeCafeServlet extends HttpServlet {
       
       
       RequestDispatcher view = null;
+      view=request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
       if(result > 0) {
-         view=request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
-         request.setAttribute("title", "업체 수정");
-         request.setAttribute("msg", "업체가 정상적으로 수정되었습니다.");
-         request.setAttribute("icon", "success");
-         request.setAttribute("loc", "/host/cafeInfoModi");
-         view.forward(request, response);
-         
+          request.setAttribute("title", "수정 성공");
+          request.setAttribute("msg", "업체가 수정되었습니다. ");
+          request.setAttribute("icon", "success");
+          System.out.println("리다이렉트 시도: " + request.getContextPath() + "/main");
+    	  response.sendRedirect(request.getContextPath() + "/main");
+    	  return;
+    	  
       }else {
-         view=request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
+        
          request.setAttribute("title", "수정 실패");
          request.setAttribute("msg", "업체 수정 중, 오류가 발생하였습니다. ");
          request.setAttribute("icon", "error");
