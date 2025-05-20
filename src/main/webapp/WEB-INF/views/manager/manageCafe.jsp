@@ -37,14 +37,14 @@
                      <th>${cafe.cafeManageStatus}</th>
                      <%-- <th>
                         <c:choose>
-                           <c:when test="${cafe.userStatus == 'N' && cafe.cafeStatus == 'N' && hostRequest.status == 'N'}">등록대기</c:when>
-                           <c:when test="${user.userStatus == 'N' && cafe.cafeStatus == 'N' && hostRequest.status == 'Y'}">수정대기</c:when>
-                           <c:when test="${user.userStatus == 'Y' && cafe.cafeStatus == 'Y' && hostRequest.status == 'Y'}">승인</c:when>
+                           <c:when test="${cafe.userStatus(유저 테이블) == 'Y' && cafe.cafeStatus(카페 테이블) == 'N' && hostRequest.status(호스트 신청내역) == 'N'}">등록대기</c:when>
+                           <c:when test="${user.userStatus(유저 테이블) == 'Y' && cafe.cafeStatus(카페 테이블) == 'N' && hostRequest.status(호스트 신청내역) == 'N'}">수정대기</c:when>
+                           <c:when test="${user.userStatus(유저 테이블) == 'Y' && cafe.cafeStatus(카페 테이블) == 'Y' && hostRequest.status(호스트 신청내역) == 'Y'}">승인</c:when>
                         </c:choose>
                      </th>--%>
                      <th>
                         <c:choose>
-                           <c:when test="${cafe.cafeManageStatus == '수정대기'}">
+                           <c:when test="${cafe.cafeManageStatus == '수정대기' }">
                               <select name="${cafe.cafeNo}">
                                  <option value="0">상태변경</option>
                                  <option value="1">승인</option>
@@ -71,6 +71,13 @@
                               </form>
                            </c:when>--%>
                         </c:choose> 
+                     </th>
+                     <th>
+                     	<c:choose>
+                     		<c:when test="${cafe.cafeManageStatus == '수정대기' || cafe.cafeManageStatus == '등록대기'}">
+                     			<button type = "button" onclick = "requestInfo('${cafe.cafeNo}')">신청정보 열람</button>
+                     		</c:when>
+                     	</c:choose>      
                      </th>
                   </tr>
                </c:forEach>
@@ -100,6 +107,10 @@ function submitCafeForm() {
     const jsonStr = JSON.stringify(statusMap);
     document.getElementById("selectedStatusJson").value = jsonStr;
     return true; // form 제출 계속
+}
+function requestInfo(cafeNo){
+	const url = "/admin/cafeRequestDetail?cafeNo=" + cafeNo;
+	window.open(url, "신청정보", "width=600,height=500,left=100,top=100");
 }
 </script>
 
