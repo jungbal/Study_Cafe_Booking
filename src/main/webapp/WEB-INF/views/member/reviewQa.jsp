@@ -16,6 +16,20 @@
     th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
     tr.reply { background-color: #f9f9f9; color: #555; }
     tr.reply td { padding-left: 40px; font-style: italic; }
+    .update-btn {
+  background: #c6e2ff;
+  border: 1;
+  border-color : #c6e2ff;
+  color: blue;
+  cursor: pointer;
+}
+button.delete-btn {
+  background: #ffe4e1;
+  border: 1;
+  border-color : #ffe4e1;
+  color: red;
+  cursor: pointer;
+}
   </style>
 <link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
@@ -36,9 +50,8 @@
         <td>${c.content}</td>
         <td>${c.commentTime}</td>
         <td>
-        ${c.commentId}
-          <a href="#" class="update-btn" data-id="${c.commentId}" data-type="review">수정</a> |
-          <a href="/comment/handle?action=delete&commentId=${c.commentId}">삭제</a>
+          <button class="update-btn" data-id="${c.commentId}" data-type="review">수정</button> |
+          <button type="button" class="delete-btn" data-id="${c.commentId}">삭제</button>
         </td>
       </tr>
       <!-- 이 부모 댓글에 달린 답글 출력 -->
@@ -66,8 +79,8 @@
         <td>${c.content}</td>
         <td>${c.commentTime}</td>
         <td>
-          <a href="#" class="update-btn" data-id="${c.commentId}" data-type="qna">수정</a> |
-          <a href="/comment/handle?action=delete&commentId=${c.commentId}">삭제</a>
+          <button class="update-btn" data-id="${c.commentId}" data-type="qna">수정</button> |
+          <button type="button" class="delete-btn" data-id="${c.commentId}">삭제</button>
         </td>
       </tr>
       <!-- 이 부모 댓글에 달린 답글 출력 -->
@@ -101,18 +114,24 @@ function switchReviewQa(event, type) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-	  document.querySelectorAll(".update-btn").forEach(btn => {
-	    btn.addEventListener("click", function (e) {
-	      e.preventDefault();
-	      const commentId = e.currentTarget.getAttribute("data-id");
-	      const type = e.currentTarget.getAttribute("data-type");
-	      const url = "/comment/handle?action=update&commentId=" + encodeURIComponent(commentId)
-	                + "&type=" + encodeURIComponent(type);
-	      window.open(url, "commentUpdatePopup", "width=600,height=400,left=300,top=200");
-	    });
+$(document).ready(function () {
+	  // 수정 버튼 클릭 시 팝업창 열기
+	  $(".update-btn").on("click", function (e) {
+	    e.preventDefault();
+	    const commentId = $(this).data("id");
+	    const type = $(this).data("type");
+	    const url = "/comment/handle?action=update&commentId=" + encodeURIComponent(commentId)
+	              + "&type=" + encodeURIComponent(type);
+	    window.open(url, "commentUpdatePopup", "width=600,height=400,left=300,top=200");
+	  });
+
+	// 삭제 버튼 클릭 시 확인 후 삭제 요청
+	  $(".delete-btn").on("click", function () {
+	    const commentId = $(this).data("id");
+	    if (confirm("정말 삭제하시겠습니까?")) {
+	      location.href = "/comment/handle?action=delete&commentId=" + encodeURIComponent(commentId);
+	    }
 	  });
 	});
-
 </script>
 </html>
