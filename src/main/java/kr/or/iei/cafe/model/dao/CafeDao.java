@@ -683,8 +683,49 @@ public class CafeDao {
 		}
 		
 
-	
-	
+	// 호스트 신청 내역 테이블 insert
+	public int insertHostRequest(Connection conn, Cafe cafe) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		String query = "insert into tbl_host_request (apply_date, status, host_no)\r\n"
+				+ "values (sysdate, 'N', ?)";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, cafe.getHostId());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
 
+	public String matchHostId(Connection conn, String loginId) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String hostId = null;
+		
+		String query = "select host_id from tbl_cafe where host_id = ? ";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, loginId);
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				 hostId = rset.getString("host_id");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return hostId;
+	}
 
 }

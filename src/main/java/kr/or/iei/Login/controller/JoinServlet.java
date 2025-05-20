@@ -55,7 +55,7 @@ public class JoinServlet extends HttpServlet {
 			request.setAttribute("title", "실패");
 			request.setAttribute("msg", "회원가입 중 오류가 발생하였습니다.");
 			request.setAttribute("icon", "error");
-			request.setAttribute("loc", "/");
+			request.setAttribute("loc", "/joinFrm");
 		}
 		view.forward(request, response);
 		

@@ -56,10 +56,17 @@
             <a href="/myPage/chkPwFrm" class="hover:text-blue-600 text-center w-full">마이페이지</a>
             <a href="#" class="hover:text-blue-600 text-center w-full">내 리뷰/Q&A</a>
 
-            <c:if test="${sessionScope.role == 3}">
-              <a href="/applyCafe" class="hover:text-blue-600 text-center w-full">업체(호스트) 신청</a>
-              <a href="/editCafeFrm" class="hover:text-blue-600 text-center w-full">업체(호스트) 수정</a>
-            </c:if>
+
+      <!-- 일반 이용자 -->
+      <c:if test="${sessionScope.role == 3}">
+      	<c:if test="${hostId ne sessionScope.loginCafe.loginId}">
+        	<a href="/applyCafe" class="hover:text-blue-600 text-center w-full">업체(호스트) 신청</a>
+        </c:if>
+        <c:if test="${hostId eq sessionScope.loginCafe.loginId}">
+        	<a href="/editCafeFrm" class="hover:text-blue-600 text-center w-full">업체(호스트) 수정</a>
+        </c:if>
+      </c:if>
+
 
             <c:if test="${sessionScope.role == 2}">
               <a href="#" class="hover:text-blue-600 text-center w-full">카페 관리</a>
