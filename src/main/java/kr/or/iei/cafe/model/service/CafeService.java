@@ -250,16 +250,21 @@ public class CafeService {
                    isAllSuccess = false;
                    break;
            }
-
+           
            if (result == 0) {
                System.err.println("처리 실패: cafeNo = " + cafeNo + ", status = " + statusValue);
                isAllSuccess = false;
                break;
            }
-       }
+
 
        if (isAllSuccess) {
-           JDBCTemplate.commit(conn);
+    	   int result1 = dao.insertHostRequest(conn, cafeNo);
+    	   if(result1>0) {
+    		   JDBCTemplate.commit(conn); 
+    	   }else {
+    		   JDBCTemplate.rollback(conn);
+    	   }
        } else {
            JDBCTemplate.rollback(conn);
        }
@@ -268,4 +273,5 @@ public class CafeService {
        return resultMap;
    }
 
+   }
 }
