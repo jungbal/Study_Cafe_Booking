@@ -606,7 +606,7 @@ public class CafeDao {
 				+ "    ) i ON c.cafe_no = i.cafe_no\r\n"
 				+ "    ORDER BY \r\n"
 				+ "        cm.comment_count DESC NULLS LAST\r\n"
-				+ ") WHERE ROWNUM <= 6\r\n"
+				+ ") WHERE ROWNUM <= 8\r\n"
 				+ "";
 		
 		try {

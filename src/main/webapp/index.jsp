@@ -61,28 +61,13 @@ body {
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
+
+<img src="/resources/cssImage/banner.jpg" alt="배너이미지" class="main-banner">
+	 
 <br><br><br>
 <hr>
 
-		<%-- "정원님 테스트용"
-			 
-<<<<<<< HEAD
-		<%-- 	<c:if test="${empty sessionScope.loginMember}">
-=======
-			 <%-- 
-			<c:if test="${empty sessionScope.loginMember}">
->>>>>>> 26ae708544f9a46520d340e9c112325502fd3277
-			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a> 
-			</c:if>
-			
-			<c:if test="${not empty sessionScope.loginMember}">
-			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a>
-			<a href="/LogoutServlet">로그아웃</a>
-			<a href="/myPage/chkPwFrm">마이페이지</a>
-			</c:if> --%> 
-			 
-
-	<%-- 인기많은 카페 top6 (리뷰/Q&A 달린 기준) --%> <!-- 클릭하면 카페 detail.jsp 로 이동 -->
+<%-- 인기많은 카페 top6 (리뷰/Q&A 달린 기준) --%> <!-- 클릭하면 카페 detail.jsp 로 이동 -->
 <div class="cafe-list">
     <c:forEach var="cafe" items="${cafeList}">
         <div class="cafe-item">
@@ -92,6 +77,6 @@ body {
         </div>
     </c:forEach>
 </div>
-
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 </body>
 </html>
