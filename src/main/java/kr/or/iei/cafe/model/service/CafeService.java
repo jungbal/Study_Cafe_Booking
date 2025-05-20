@@ -2,6 +2,7 @@ package kr.or.iei.cafe.model.service;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import kr.or.iei.cafe.model.dao.CafeDao;
@@ -217,9 +218,10 @@ public class CafeService {
 	}
 
    // 업체 관리 승인/반려 시 
-   public boolean updateCafeStatus(Map<String, String> updateMap) {
+   public Map<String, String> updateCafeStatus(Map<String, String> updateMap) {
        Connection conn = JDBCTemplate.getConnection();
-       boolean isAllSuccess = true;
+       boolean isAllSuccess = true;	//isAllSuccess(boolena 자료형)로 반환해주게 되면 어떤 작업이 성공했는지 실패했는지 알림창을 보여줄 구체적인 메시지 정보를 만들 수 없다.
+       Map<String, String> resultMap = new HashMap<String, String>();
 
        for (Map.Entry<String, String> entry : updateMap.entrySet()) {
            String cafeNo = entry.getKey();
@@ -229,9 +231,11 @@ public class CafeService {
            switch (statusValue) {
                case "1": // 수정대기 승인
                   result = dao.updateWait(conn, cafeNo);
+                  resultMap.put(cafeNo, result > 0 ? "수정 승인 완료" : "수정 승인 실패");
                    break;
                case "2": // 등록대기 승인
                    result = dao.insertWait(conn, cafeNo);
+                   resultMap.put(cafeNo, result > 0 ? "등록 승인 완료" : "등록 승인 실패");
                    break;
                case "3": // 반려: 처리 안 함
                    continue;
@@ -240,6 +244,7 @@ public class CafeService {
                    if (rst > 0) {
                        result = dao.deleteHost(conn, cafeNo);
                    }
+                   resultMap.put(cafeNo, result > 0 ? "삭제완료 " : "삭제 실패");
                    break;
                default: // 유효하지 않은 값
                    isAllSuccess = false;
@@ -260,7 +265,7 @@ public class CafeService {
        }
 
        JDBCTemplate.close(conn);
-       return isAllSuccess;
+       return resultMap;
    }
 
 }
