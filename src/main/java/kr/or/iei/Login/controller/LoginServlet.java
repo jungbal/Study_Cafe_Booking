@@ -100,7 +100,6 @@ public class LoginServlet extends HttpServlet {
 				request.setAttribute("hostId", hostId);
 		        
 		    }
-//>>>>>>> 60d7f3933aea2519ce2aee62af6eb8ccdf3a5dc7
 		}
 
 	/**
