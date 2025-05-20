@@ -61,12 +61,8 @@ body {
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
-<<<<<<< HEAD
-<!-- 검색 폼 -->
-<form action="/search" method="get">
-    <input type="text" name="srchStr" placeholder="검색어를 입력해주세요.">
-    <button type="submit">검색</button>
-</form>
+
+
 
 <br><br><br>
 <hr>
