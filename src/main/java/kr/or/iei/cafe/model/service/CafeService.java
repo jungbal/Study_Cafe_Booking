@@ -270,7 +270,9 @@ public class CafeService {
 		
 		int result = dao.insertCafe(conn, cafeInfo, loginId);
 		
-		if(result>0) {
+		int hostRequestResult = dao.insertHostRequest(conn, cafeInfo);
+		
+		if(result>0 && hostRequestResult>0) {
 			JDBCTemplate.commit(conn);
 		}else {
 			JDBCTemplate.rollback(conn);
@@ -287,6 +289,13 @@ public class CafeService {
 		return cafeList;
 	}
 
+
+	public Cafe selectOneCafe(String loginId) {
+		Connection conn = JDBCTemplate.getConnection();
+		Cafe cafeInfo = dao.selectOneCafe(conn, loginId);
+		JDBCTemplate.close(conn);
+		return cafeInfo;
+	}
 
 
 
