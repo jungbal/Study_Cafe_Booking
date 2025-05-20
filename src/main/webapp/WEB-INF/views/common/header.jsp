@@ -59,11 +59,11 @@
 
       <!-- 일반 이용자 -->
       <c:if test="${sessionScope.role == 3}">
-      	<c:if test="${hostId ne sessionScope.loginCafe.loginId}">
-        	<a href="/applyCafe" class="hover:text-blue-600 text-center w-full">업체(호스트) 신청</a>
+         <c:if test="${hostId ne sessionScope.loginCafe.loginId}">
+           <a href="/applyCafe" class="hover:text-blue-600 text-center w-full">업체(호스트) 신청</a>
         </c:if>
         <c:if test="${hostId eq sessionScope.loginCafe.loginId}">
-        	<a href="/editCafeFrm" class="hover:text-blue-600 text-center w-full">업체(호스트) 수정</a>
+           <a href="/editCafeFrm" class="hover:text-blue-600 text-center w-full">업체(호스트) 수정</a>
         </c:if>
       </c:if>
 
@@ -76,7 +76,7 @@
             <c:if test="${sessionScope.role == 1}">
               <a href="/manager/userManage?reqPage=1" class="hover:text-blue-600 text-center w-full">이용자 관리</a>
               <a href="/manager/cafeManage?reqPage=1" class="hover:text-blue-600 text-center w-full">업체 관리</a>
-              <a href="/manager/cafeApplyChk" class="hover:text-blue-600 text-center w-full">업체신청정보열람</a>
+             
               <a href="/manager/chkReport?reqPage=1" class="hover:text-blue-600 text-center w-full">신고접수열람</a>
             </c:if>
           </c:if>
