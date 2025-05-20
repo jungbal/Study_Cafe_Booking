@@ -9,8 +9,6 @@
 <title>메인 페이지</title>
 <style>
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9f9f9;
     margin: 0;
     padding: 0;
 }
@@ -81,14 +79,14 @@ body {
 
 <div class="cafe-list">
     <c:forEach var="cafe" items="${cafeList}">
-        <div class="cafe-item">
-            <img src="${cafe.cafeImagePath}" alt="${cafe.cafeName}">
-            <p><strong>${cafe.cafeName}</strong></p>
-            <p>${cafe.cafeAddr}</p>
-        </div>
+        <a class="cafe-link" href="/cafeDetail?cafeNo=${cafe.cafeNo}">
+            <div class="cafe-item">
+                <img src="${cafe.cafeImagePath}" alt="${cafe.cafeName}">
+                <p><strong>${cafe.cafeName}</strong></p>
+                <p class="cafe-addr">${cafe.cafeAddr}</p>
+            </div>
+        </a>
     </c:forEach>
-    
-    
 </div>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

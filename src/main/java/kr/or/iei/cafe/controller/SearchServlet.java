@@ -46,6 +46,7 @@ public class SearchServlet extends HttpServlet {
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/cafeList.jsp");
 			//4.2. 화면 구현에 필요한 데이터 등록 (카페 정보 리스트)
 		request.setAttribute("list", list);
+		request.setAttribute("srchStr", srchStr);
 			//4.3. 페이지 이동
 		view.forward(request, response);
 	}
