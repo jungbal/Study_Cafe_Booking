@@ -54,8 +54,10 @@
 }
 
   </style>
+  <link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
   <section class="cafe-header">
     <h1 class="cafeName">${cafe.cafeName}</h1>
     <p class="cafeAddr">${cafe.cafeAddr}</p>
@@ -112,7 +114,7 @@
               <button type="submit">이용권 선택하기</button>
             </c:when>
             <c:otherwise>
-              <p style="color: red; font-weight: bold;">이용권 정보가 등록되지 않은 업체입니다.</p>
+              <p style="color: red; font-weight: bold;">이용권 정보가 등록되지 않은 업체입니다. 호스트에게 문의해주세요.</p>
             </c:otherwise>
           </c:choose>
         </form>

@@ -1,31 +1,26 @@
 package kr.or.iei.cafe.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.cafe.model.service.CafeService;
 import kr.or.iei.cafe.model.vo.Cafe;
 
 /**
- * Servlet implementation class MainServlet
+ * Servlet implementation class CafeRequestDetailServlet
  */
-@WebServlet("/main")
-public class MainServlet extends HttpServlet {
+@WebServlet("/admin/cafeRequestDetail")
+public class CafeRequestDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MainServlet() {
+    public CafeRequestDetailServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,15 +29,15 @@ public class MainServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		String cafeNo = request.getParameter("cafeNo");
 		
-		CafeService cafeService = new CafeService();
-		ArrayList<Cafe> cafeList = cafeService.selectMainCafes();
+		CafeService service = new CafeService();
+		Cafe cafe = service.selectCafeByNo(cafeNo);
 		
-		request.setAttribute("cafeList", cafeList);
+		request.setAttribute("cafe", cafe);
+		request.getRequestDispatcher("/WEB-INF/views/manager/cafeRequestDetail.jsp").forward(request, response);
 		
-		RequestDispatcher view = request.getRequestDispatcher("/index.jsp");
-		view.forward(request, response);
+		
 	}
 
 	/**

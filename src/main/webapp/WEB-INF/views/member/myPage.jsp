@@ -36,8 +36,10 @@
       padding: 20px;
     }
   </style>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
   <div class="container">
     <!-- 사이드바 탭 버튼: 클릭 시 /myPage/myInfo?tab=review 등으로 요청 -->
     <div class="sidebar">

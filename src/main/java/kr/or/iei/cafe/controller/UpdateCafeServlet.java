@@ -46,19 +46,30 @@ public class UpdateCafeServlet extends HttpServlet {
         }
 
         CafeService service = new CafeService();
-        boolean isSuccess = service.updateCafeStatus(updateMap);
+        Map<String, String> resultMap = service.updateCafeStatus(updateMap);
 
-        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/manage/manageCafe.jsp");
-        if (isSuccess) {
-            
-            response.sendRedirect("/manager/cafeManage?reqPage=1");
-            
-        } else {
-            
-            view.forward(request, response);
+        
+        //결과 메시지 생성
+        StringBuilder msgBuilder = new StringBuilder();
+        boolean hasFailure = false;
+        for (Map.Entry<String, String> entry : resultMap.entrySet()) {
+            msgBuilder.append("카페번호").append(entry.getKey())
+                      .append(": ").append(entry.getValue()).append("\\n");
+            if (entry.getValue().contains("실패")) {
+                hasFailure = true;
+            }
         }
 
+        // 알림 메시지 설정
+        request.setAttribute("title", hasFailure ? "일부 실패" : "성공");
+        request.setAttribute("msg", msgBuilder.toString());
+        request.setAttribute("icon", hasFailure ? "error" : "success");
+        request.setAttribute("loc", "/manager/cafeManage?reqPage=1");
+
+        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
+        view.forward(request, response);
     }
+
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub

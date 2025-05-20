@@ -6,9 +6,10 @@
 <meta charset="UTF-8">
 <title>업체(호스트) 신청</title>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
-
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 	<h1>업체 신청</h1>
 	
 	<form action= "/ApplyCafeServlet" method="post">
@@ -90,7 +91,16 @@
 		</div>
 		
 		<div class="submit-wrap">
-			<button type="submit" class="submit-btn">신청</button> 
+			<button type="submit" class="submit-btn1">신청</button> 
+			
+			<%-- 신청은 됐는데 등업은 안된상태 ... DB에 정보존재 + role이 3인 유저만 보임 
+			tbl_cafe 에 host_Id가 현재 세션의 user_id랑 같을 경우 tbl_cafe의 정보를 
+			jsp에 출력(신청과 동일 form) 수정 버튼만 보여야함.  그리고 값을 지우고 입력하고 수정 버튼 누르면
+			DB에 내용이 update.
+			
+			DB정보를 어떻게 jsp에 출력하나 
+			
+			--%>
 		</div>
 	</form>
 	
@@ -98,12 +108,10 @@
 	<%-- 유효성 검사 --%>
 	
 	const chkObj = {
-			"cafeName" : false,
+			
 			"cafeAddr" : false,
 			"cafePhone" : false,
 			"cafeBiznum" : false,
-			"cafeIntroduce" : false,
-			"cafeIntroDetail" : false,
 			"cafeStartHour" : false,
 			"cafeEndHour" : false
 	};
@@ -113,6 +121,7 @@
 		const regExp = /^(?=.*[0-9])(?=.*[가-힣])[가-힣0-9\s\-]{10,}$/;
 		if(regExp.test($(this).val())){
 			$('#addrMsg').text('');
+			chkObj.cafeAddr = true;
 		}else{
 			$('#addrMsg').text('10글자 이상 입력해주세요.');
 		}
@@ -125,6 +134,7 @@
 		
 		if(regExp.test($(this).val())){
 			$('#phoneMsg').text('');
+			chkObj.cafePhone = true;
 		}else{
 			$('#phoneMsg').text('전화번호 형식이 올바르지 않습니다.');
 		}
@@ -134,9 +144,10 @@
 	cafeBiznum.on('input', function(){
 		const regExp = /^\d{3}-\d{2}-\d{5}$/;
 		if(regExp.test($(this).val())){
-			$('#biznumMsg').text('')
+			$('#biznumMsg').text('');
+			chkObj.cafeBiznum = true;
 		}else{
-			$('#biznumMsg').text('사업자 번호 형식이 올바르지 않습니다.')
+			$('#biznumMsg').text('사업자 번호 형식이 올바르지 않습니다.');
 		}
 	});
 	
@@ -145,9 +156,9 @@
 	cafeStartHour.on('input', function(){
 		const regExp = /^([01]\d|2[0-3]):[0-5]\d$/ ;
 		if(regExp.test($(this).val())){
-			$('#startHourMsg').text('')
+			$('#startHourMsg').text('');
 		}else{
-			$('#startHourMsg').text('영업 시간 형식이 올바르지 않습니다.')
+			$('#startHourMsg').text('영업 시간 형식이 올바르지 않습니다.');
 			
 		}
 	});
@@ -156,9 +167,9 @@
 	cafeEndHour.on('input', function(){
 		const regExp = /^([01]\d|2[0-3]):[0-5]\d$/ ;
 		if(regExp.test($(this).val())){
-			$('#endHourMsg').text('')
+			$('#endHourMsg').text('');
 		}else{
-			$('#endHourMsg').text('영업 시간 형식이 올바르지 않습니다.')
+			$('#endHourMsg').text('영업 시간 형식이 올바르지 않습니다.');
 		}
 	});
 

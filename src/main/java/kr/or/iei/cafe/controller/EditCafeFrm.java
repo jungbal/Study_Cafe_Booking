@@ -16,16 +16,16 @@ import kr.or.iei.cafe.model.service.CafeService;
 import kr.or.iei.cafe.model.vo.Cafe;
 
 /**
- * Servlet implementation class MainServlet
+ * Servlet implementation class EditCafe
  */
-@WebServlet("/main")
-public class MainServlet extends HttpServlet {
+@WebServlet("/editCafeFrm")
+public class EditCafeFrm extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MainServlet() {
+    public EditCafeFrm() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,14 +34,17 @@ public class MainServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		CafeService service = new CafeService();
 
+		 HttpSession session = request.getSession();
+		   Login loginCafe = (Login) session.getAttribute("loginCafe");
+		   String loginId = loginCafe.getLoginId();
 		
-		CafeService cafeService = new CafeService();
-		ArrayList<Cafe> cafeList = cafeService.selectMainCafes();
+		Cafe cafeInfo = service.selectOneCafe(loginId);
 		
-		request.setAttribute("cafeList", cafeList);
+		request.setAttribute("cafeInfo", cafeInfo);
 		
-		RequestDispatcher view = request.getRequestDispatcher("/index.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/editCafe.jsp");
 		view.forward(request, response);
 	}
 

@@ -31,9 +31,10 @@ button.delete-btn {
   cursor: pointer;
 }
   </style>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
-
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 <div class="sub-tab-wrap">
   <div class="sub-tab-btn active" onclick="switchReviewQa(event, 'review')">내 리뷰</div>
   <div class="sub-tab-btn" onclick="switchReviewQa(event, 'qna')">내 Q&A</div>

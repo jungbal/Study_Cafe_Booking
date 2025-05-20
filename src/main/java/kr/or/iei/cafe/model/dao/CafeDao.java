@@ -47,7 +47,7 @@ public class CafeDao {
 				cafe.setCafeBiznum(rset.getString("cafe_biznum"));
 				cafe.setCafeIntroduce(rset.getString("cafe_introduce"));
 				cafe.setCafeStartHour(rset.getString("cafe_start_hour"));
-				cafe.setCafeEndHour(rset.getString("cafe_start_hour"));
+				cafe.setCafeEndHour(rset.getString("cafe_end_hour"));
 				cafe.setCafeStatus(rset.getString("cafe_status"));
 				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
 				cafe.setHostId(rset.getString("host_id"));
@@ -132,20 +132,37 @@ public class CafeDao {
 		
 		ArrayList<Cafe> list = new ArrayList<Cafe>();
 		
-		String query = "select * from (select ROWNUM RNUM, A.* from (SELECT \r\n"
-				+ "    c.*,\r\n"
-				+ "    h.status AS host_request_status,\r\n"
-				+ "    CASE \r\n"
-				+ "        WHEN c.cafe_status = 'N' AND h.status = 'N' THEN '등록대기'\r\n"
-				+ "        WHEN c.cafe_status = 'N' AND h.status = 'Y' THEN '수정대기'\r\n"
-				+ "        WHEN c.cafe_status = 'Y' AND h.status = 'Y' THEN '승인'\r\n"
-				+ "        ELSE '기타'\r\n"
-				+ "    END AS cafe_manage_status\r\n"
-				+ "FROM tbl_cafe c\r\n"
-				+ "JOIN tbl_host_request h ON c.cafe_no = h.host_no\r\n"
-				+ "WHERE \r\n"
-				+ "    (c.cafe_status = 'N' AND h.status IN ('N', 'Y'))\r\n"
-				+ "    OR (c.cafe_status = 'Y' AND h.status = 'Y')) A) where RNUM >=? and RNUM <=?";
+		String query =  "SELECT * FROM ( " +
+		        "  SELECT ROWNUM RNUM, A.* FROM ( " +
+		        "    SELECT  " +
+		        "      sub.cafe_no, sub.cafe_name, sub.cafe_phone, sub.cafe_addr, " +
+		        "      sub.cafe_biznum, sub.cafe_introduce, sub.cafe_start_hour, sub.cafe_end_hour, " +
+		        "      sub.cafe_status, sub.cafe_intro_detail, sub.host_id, " +
+		        "      sub.status AS host_request_status, sub.apply_date, " +
+		        "      sub.user_role, sub.user_status, " +
+		        "      CASE " +
+		        "        WHEN sub.cafe_status = 'N' AND sub.status = 'N' AND sub.user_role = '3' AND sub.user_status = 'Y' THEN '등록대기' " +
+		        "        WHEN sub.cafe_status = 'N' AND sub.status = 'N' AND sub.user_role = '2' AND sub.user_status = 'Y' THEN '수정대기' " +
+		        "        WHEN sub.cafe_status = 'Y' AND sub.status = 'Y' THEN '승인' " +
+		        "      END AS cafe_manage_status " +
+		        "    FROM ( " +
+		        "      SELECT  " +
+		        "        c.cafe_no, c.cafe_name, c.cafe_phone, c.cafe_addr, " +
+		        "        c.cafe_biznum, c.cafe_introduce, c.cafe_start_hour, c.cafe_end_hour, " +
+		        "        c.cafe_status, c.cafe_intro_detail, c.host_id, " +
+		        "        h.status, h.apply_date, " +
+		        "        u.user_role, u.user_status, " +
+		        "        ROW_NUMBER() OVER (PARTITION BY c.cafe_no ORDER BY h.apply_date ASC) AS rn " +
+		        "      FROM tbl_cafe c " +
+		        "      JOIN tbl_host_request h ON c.cafe_no = h.host_no " +
+		        "      JOIN tbl_user u ON c.host_id = u.user_id " +
+		        "      WHERE (c.cafe_status = 'N' AND h.status = 'N' AND u.user_role = '3' AND u.user_status = 'Y') " +
+		        "         OR (c.cafe_status = 'N' AND h.status = 'N' AND u.user_role = '2' AND u.user_status = 'Y') " +
+		        "         OR (c.cafe_status = 'Y' AND h.status = 'Y') " +
+		        "    ) sub " +
+		        "    WHERE sub.rn = 1 " +
+		        "  ) A " +
+		        ") WHERE RNUM >= ? AND RNUM <= ?";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -354,17 +371,18 @@ public class CafeDao {
 	    return result;
 	}
 
-	// 리뷰 내역 있는지 확인
-	public Member isReviewHistory(Connection conn, String userId) {
+	// 해당 카페에 리뷰 내역 있는지 확인
+	public Member isReviewHistory(Connection conn, String userId, String cafeNo) {
 		PreparedStatement pstmt = null;
 	      ResultSet rset = null;
 	      Member reviewMember = null;
 	      
-	      String query = "select * from tbl_history where history_user_id = ?"; //and 연산자 사용하여 아이디와 비밀번호 둘 다 일치하는 회원정보 가져오기위해서 and.
+	      String query = "select * from tbl_history where history_user_id = ? and history_cafe_no = ?"; //and 연산자 사용하여 아이디와 비밀번호 둘 다 일치하는 회원정보 가져오기위해서 and.
 	      
 	      try {
 	         pstmt = conn.prepareStatement(query);
 	         pstmt.setString(1, userId);
+	         pstmt.setString(2, cafeNo);
 	         
 	         rset = pstmt.executeQuery();
 	         
@@ -466,8 +484,8 @@ public class CafeDao {
 			result += pstmt.executeUpdate();
 			
 			pstmt= conn.prepareStatement(
-					"update tbl_user set user_stauts = 'Y' " + 
-					"where user_id = (select host_id from tbl_cafe where cafe_no = ?)"
+					"update tbl_host_request set status= 'Y' " + 
+					"where host_no = ?"
 					);
 			pstmt.setString(1, cafeNo);
 			result += pstmt.executeUpdate();
@@ -494,22 +512,13 @@ public class CafeDao {
 	        result += pstmt.executeUpdate();
 	        
 
-	        // tbl_user 업데이트
-	        pstmt = conn.prepareStatement(
-	        		"UPDATE tbl_user SET user_status = 'Y' " +
-	        		"WHERE user_id = (SELECT host_id FROM tbl_cafe WHERE cafe_no = ?)"
-	        	);
-	        pstmt.setString(1, cafeNo);
-	        result += pstmt.executeUpdate();
-	       
-
 	        // tbl_host_request 업데이트
-	        pstmt = conn.prepareStatement(
-	        		"UPDATE tbl_host_request SET status = 'Y' " +
-	        		"WHERE host_no = (SELECT cafe_no FROM tbl_cafe WHERE cafe_no = ?)"
-	        	);
-	        	pstmt.setString(1, cafeNo);  // cafe_no가 String이면 OK
-	        	result += pstmt.executeUpdate();
+	        pstmt= conn.prepareStatement(
+					"update tbl_host_request set status= 'Y' " + 
+					"where host_no = ?"
+					);
+			pstmt.setString(1, cafeNo);
+			result += pstmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -519,6 +528,48 @@ public class CafeDao {
 		}
 		return result;
 	}
+
+
+	public Cafe selectOneCafe(Connection conn, String loginId) {
+		
+		PreparedStatement pstmt= null;
+		ResultSet rset = null;
+		Cafe cafeInfo = null;
+		
+		String query = "select* from tbl_cafe where host_id = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, loginId);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				cafeInfo = new Cafe();
+				
+				cafeInfo.setCafeName(rset.getString("cafe_name"));
+				cafeInfo.setCafeAddr(rset.getString("cafe_addr"));
+				cafeInfo.setCafePhone(rset.getString("cafe_phone"));
+				cafeInfo.setCafeBiznum(rset.getString("cafe_biznum"));
+				cafeInfo.setCafeIntroduce(rset.getString("cafe_introduce"));
+				cafeInfo.setCafeStartHour(rset.getString("cafe_start_hour"));
+				cafeInfo.setCafeEndHour(rset.getString("cafe_end_hour"));
+				cafeInfo.setCafeStatus(rset.getString("cafe_status"));
+				cafeInfo.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
+				
+			}
+		
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(rset);
+				JDBCTemplate.close(pstmt);
+			}
+					
+			return cafeInfo;
+		}
+
 
 	// 메인 페이지에 보여질 카페 (리뷰 / Q&A 많은 순서대로 6개)
 	public ArrayList<Cafe> selectMainCafes(Connection conn) {
@@ -555,7 +606,7 @@ public class CafeDao {
 				+ "    ) i ON c.cafe_no = i.cafe_no\r\n"
 				+ "    ORDER BY \r\n"
 				+ "        cm.comment_count DESC NULLS LAST\r\n"
-				+ ") WHERE ROWNUM <= 6\r\n"
+				+ ") WHERE ROWNUM <= 8\r\n"
 				+ "";
 		
 		try {
@@ -586,11 +637,52 @@ public class CafeDao {
 			JDBCTemplate.close(rset);
 			JDBCTemplate.close(pstmt);
 		}
-		
-		// TODO Auto-generated method stub
 		return cafeList;
 	}
+
+
+	public int insertHostRqst(Connection conn, Cafe cafeInfo) {
+		PreparedStatement pstmt= null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rset = null;
+		int hostRqstResult = 0;
+		
+		String query = "insert into tbl_host_request(apply_no, apply_date, status, reject_id, host_no) "
+				+ "values(SEQ_TBL_HOST_REQUEST.nextval, sysdate, default, null, ?)";
+				
+		
+		String sql = "SELECT SEQ_TBL_CAFE.CURRVAL FROM dual";
 	
+		
+		String cafeNo = cafeInfo.getCafeNo();
+		
+		try {
+			pstmt2 = conn.prepareStatement(sql);
+			rset = pstmt2.executeQuery();
+				if (rset.next()) {
+				    cafeNo = rset.getString(1);
+				    cafeInfo.setCafeNo(cafeNo); 
+				}
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, cafeNo);
+			hostRqstResult = pstmt.executeUpdate();
+			
+		
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+			JDBCTemplate.close(pstmt2);
+			JDBCTemplate.close(rset);
+		}
+		
+		return hostRqstResult;
+
+		}
+		
+
 	// 호스트 신청 내역 테이블 insert
 	public int insertHostRequest(Connection conn, Cafe cafe) {
 		PreparedStatement pstmt = null;
@@ -609,5 +701,31 @@ public class CafeDao {
 		return result;
 	}
 
+	public String matchHostId(Connection conn, String loginId) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String hostId = null;
+		
+		String query = "select host_id from tbl_cafe where host_id = ? ";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, loginId);
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				 hostId = rset.getString("host_id");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return hostId;
+	}
 
 }

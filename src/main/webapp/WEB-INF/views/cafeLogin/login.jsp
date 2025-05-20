@@ -5,8 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <title>로그인</title>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 	<main>
 		<section class="login-contatiner">
