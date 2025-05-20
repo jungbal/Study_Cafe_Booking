@@ -22,5 +22,10 @@ public class Cafe {
 	
 	// 카페 관리 상태 나타내는 변수 추가.
 	private String cafeManageStatus;
+	
+	// 카페 이미지 나타내는 변수 추가
+	private String cafeImageNo;
+	private String cafeImagePath;
+	private String cafeImageName;
 
 }

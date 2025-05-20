@@ -50,7 +50,7 @@ public class CafeReviewServlet extends HttpServlet {
 		Cafe cafe = cafeService.selectCafeByNo(cafeNo);
 		
 		// 사용이력 테이블에서 해당 userId 조회 => 값이 존재하는 경우, 객체 반환 => null이 아닌 경우에만 jsp에서 댓글창 보여주기
-		Member member = cafeService.isReviewHistory(userId);
+		Member member = cafeService.isReviewHistory(userId, cafeNo);
 		
 		// 4. 결과 처리
 		

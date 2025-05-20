@@ -9,6 +9,7 @@
 
 </head>
 <body>
+<h1>회원가입</h1>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
  <form action='/joinServlet' method='post' autocomplete="off">
  	<div class="input-wrap">
@@ -154,17 +155,13 @@
 	$(memberPwRe).on('input', checkPw);
 	
 	function checkPw(){
-		$(pwMessage).removeClass('invalid');
-		$(pwMessage).removeClass('valid');
 		
 		//입력한 비밀번호와 값이 같은지만 검증
 		if($(memberPw).val() == $(memberPwRe).val()){
 			$(pwMessage).text('');
-			$(pwMessage).addClass('valid');
 			checkObj.memberPwRe = true;
 		}else{
 			$(pwMessage).text('비밀번호가 일치하지 않습니다.');
-			$(pwMessage).addClass('invalid');
 			checkObj.memberPwRe = false;
 		}
 	}
@@ -179,11 +176,9 @@
 		
 		if(regExp.test($(this).val())){
 			$(phoneMessage).text('');
-			$(phoneMessage).addClass('valid');
 			checkObj.memberPhone = true;
 		}else{
 			$(phoneMessage).text('전화번호 형식이 올바르지 않습니다.');
-			$(phoneMessage).addClass('invalid');
 			checkObj.memberPhone = false;
 		}
 	});

@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     .sub-tab-wrap { display: flex; margin-bottom: 20px; }
     .sub-tab-btn {
@@ -34,7 +35,8 @@
         <td>${c.content}</td>
         <td>${c.commentTime}</td>
         <td>
-          <a href="/comment/handle?action=update&commentId=${c.commentId}">수정</a> |
+        ${c.commentId}
+          <a href="#" class="update-btn" data-id="${c.commentId}" data-type="review">수정</a> |
           <a href="/comment/handle?action=delete&commentId=${c.commentId}">삭제</a>
         </td>
       </tr>
@@ -63,7 +65,7 @@
         <td>${c.content}</td>
         <td>${c.commentTime}</td>
         <td>
-          <a href="/comment/handle?action=update&commentId=${c.commentId}">수정</a> |
+          <a href="#" class="update-btn" data-id="${c.commentId}" data-type="qna">수정</a> |
           <a href="/comment/handle?action=delete&commentId=${c.commentId}">삭제</a>
         </td>
       </tr>
@@ -81,8 +83,8 @@
     </c:if>
   </c:forEach>
 </table>
-</table>
 
+</body>
 <script>
 function switchReviewQa(event, type) {
   document.querySelectorAll(".sub-tab-btn").forEach(btn => btn.classList.remove("active"));
@@ -97,7 +99,19 @@ function switchReviewQa(event, type) {
     document.getElementById("qnaTable").classList.add("tab-visible");
   }
 }
-</script>
 
-</body>
+document.addEventListener("DOMContentLoaded", function () {
+	  document.querySelectorAll(".update-btn").forEach(btn => {
+	    btn.addEventListener("click", function (e) {
+	      e.preventDefault();
+	      const commentId = e.currentTarget.getAttribute("data-id");
+	      const type = e.currentTarget.getAttribute("data-type");
+	      const url = "/comment/handle?action=update&commentId=" + encodeURIComponent(commentId)
+	                + "&type=" + encodeURIComponent(type);
+	      window.open(url, "commentUpdatePopup", "width=600,height=400,left=300,top=200");
+	    });
+	  });
+	});
+
+</script>
 </html>

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import com.oreilly.servlet.MultipartRequest;
 
+import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.common.KhRenamePolicy;
 import kr.or.iei.member.model.service.MemberService;
 import kr.or.iei.member.model.vo.Member;
@@ -59,6 +60,15 @@ public class UpdateServlet extends HttpServlet {
 
 		// 기존 로그인 정보
 		HttpSession session = request.getSession(false);
+		
+		/// loginCafe 세션이 존재하고, 아직 loginMember 세션이 없다면
+		if (session != null && session.getAttribute("loginCafe") != null && session.getAttribute("loginMember") == null) {
+		    Login loginCafe = (Login) session.getAttribute("loginCafe");
+		    String loginId = loginCafe.getLoginId();
+
+		    Member member = new MemberService().selectOneMember(loginId);
+		    session.setAttribute("loginMember", member);
+		}
 		Member loginMember = (Member) session.getAttribute("loginMember");
 
 		// 기존 이미지 삭제 시, 날짜 포함된 경로로 삭제

@@ -187,12 +187,13 @@ public class CafeService {
 	}
 
 	// 리뷰 이력이 있는지 select 하는 메소드
-	public Member isReviewHistory(String userId) {
+	public Member isReviewHistory(String userId, String cafeNo) {
 		Connection conn = JDBCTemplate.getConnection();
-		Member member = dao.isReviewHistory(conn, userId);
+		Member member = dao.isReviewHistory(conn, userId, cafeNo);
 		
 		return member;
 	}
+
 
 	public ArrayList<History> isSeatAvailable(String cafeNo) {
 		Connection conn = JDBCTemplate.getConnection();
@@ -230,8 +231,12 @@ public class CafeService {
 
            switch (statusValue) {
                case "1": // 수정대기 승인
+
                   result = dao.updateWait(conn, cafeNo);
                   resultMap.put(cafeNo, result > 0 ? "수정 승인 완료" : "수정 승인 실패");
+
+                //  result = dao.updateWait(conn, cafeNo);
+
                    break;
                case "2": // 등록대기 승인
                    result = dao.insertWait(conn, cafeNo);
@@ -272,6 +277,33 @@ public class CafeService {
        JDBCTemplate.close(conn);
        return resultMap;
    }
-
    }
+
+
+	// 업체(호스트) 신청
+	public int insertCafe(Cafe cafeInfo, String loginId) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = dao.insertCafe(conn, cafeInfo, loginId);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+	
+	public ArrayList<Cafe> selectMainCafes() {
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<Cafe> cafeList = dao.selectMainCafes(conn);
+		
+		return cafeList;
+	}
+
+
+
+
 }

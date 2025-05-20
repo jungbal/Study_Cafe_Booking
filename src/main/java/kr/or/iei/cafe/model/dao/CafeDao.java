@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.cafe.model.vo.Cafe;
 import kr.or.iei.cafe.model.vo.History;
 import kr.or.iei.common.JDBCTemplate;
@@ -20,7 +21,17 @@ public class CafeDao {
 		ArrayList<Cafe> cafeList = new ArrayList<Cafe>();
 		
 		// 카페명과 카페 주소에서 동시에 검색어 찾기.
-		String query = "SELECT * FROM tbl_cafe WHERE cafe_name LIKE ? OR cafe_addr LIKE ?";
+		String query = "SELECT \r\n"
+				+ "    c.*, \r\n"
+				+ "    i.image_no, \r\n"
+				+ "    i.image_name, \r\n"
+				+ "    i.image_path\r\n"
+				+ "FROM \r\n"
+				+ "    tbl_cafe c\r\n"
+				+ "LEFT JOIN \r\n"
+				+ "    tbl_image i ON c.cafe_no = i.cafe_no\r\n"
+				+ "WHERE \r\n"
+				+ "    c.cafe_name LIKE ? OR c.cafe_addr LIKE ?";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -40,6 +51,9 @@ public class CafeDao {
 				cafe.setCafeStatus(rset.getString("cafe_status"));
 				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
 				cafe.setHostId(rset.getString("host_id"));
+				cafe.setCafeImageNo(rset.getString("image_no"));
+				cafe.setCafeImageName(rset.getString("image_name"));
+				cafe.setCafeImagePath(rset.getString("image_path"));
 				
 				cafeList.add(cafe);
 			}
@@ -63,7 +77,18 @@ public class CafeDao {
 		Cafe cafe = null;
 		
 		// cafe 테이블 전체 정보 select
-		String query = "SELECT * FROM tbl_cafe WHERE cafe_no = ?";
+		String query = "SELECT \r\n"
+				+ "    c.*, \r\n"
+				+ "    i.image_no, \r\n"
+				+ "    i.image_name, \r\n"
+				+ "    i.image_path\r\n"
+				+ "FROM \r\n"
+				+ "    tbl_cafe c\r\n"
+				+ "LEFT JOIN \r\n"
+				+ "    tbl_image i ON c.cafe_no = i.cafe_no\r\n"
+				+ "WHERE \r\n"
+				+ "    c.cafe_no = ?\r\n"
+				+ "";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -83,6 +108,9 @@ public class CafeDao {
 				cafe.setCafeStatus(rset.getString("cafe_status"));
 				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
 				cafe.setHostId(rset.getString("host_id"));
+				cafe.setCafeImageNo(rset.getString("image_no"));
+				cafe.setCafeImageName(rset.getString("image_name"));
+				cafe.setCafeImagePath(rset.getString("image_path"));
 			}
 			
 		} catch (SQLException e) {
@@ -235,6 +263,39 @@ public class CafeDao {
 		return result;
 	}
 
+	public int insertCafe(Connection conn, Cafe cafeInfo, String loginId) {
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+//		쿼리문에 user_id를 타 패키지 메소드
+		
+		String query = 
+"insert into tbl_cafe (cafe_no, cafe_name, cafe_phone, cafe_addr, cafe_biznum, cafe_introduce, cafe_start_hour, cafe_end_hour, cafe_status, cafe_intro_detail, host_id)"
++ "values (SEQ_TBL_CAFE.nextval, ?, ?, ?, ?, ?, ?, ?, default, ?, ?)";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, cafeInfo.getCafeName());
+			pstmt.setString(2, cafeInfo.getCafePhone());
+			pstmt.setString(3, cafeInfo.getCafeAddr());
+			pstmt.setString(4, cafeInfo.getCafeBiznum());
+			pstmt.setString(5, cafeInfo.getCafeIntroduce());
+			pstmt.setString(6, cafeInfo.getCafeStartHour());
+			pstmt.setString(7, cafeInfo.getCafeEndHour());
+			pstmt.setString(8, cafeInfo.getCafeIntroDetail());
+			pstmt.setString(9, loginId);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
 
 	// 결제내역 테이블 업데이트
 	public int insertPayHistory(Connection conn, String ticketPrice, String userId) {
@@ -298,17 +359,18 @@ public class CafeDao {
 	    return result;
 	}
 
-	// 리뷰 내역 있는지 확인
-	public Member isReviewHistory(Connection conn, String userId) {
+	// 해당 카페에 리뷰 내역 있는지 확인
+	public Member isReviewHistory(Connection conn, String userId, String cafeNo) {
 		PreparedStatement pstmt = null;
 	      ResultSet rset = null;
 	      Member reviewMember = null;
 	      
-	      String query = "select * from tbl_history where history_user_id = ?"; //and 연산자 사용하여 아이디와 비밀번호 둘 다 일치하는 회원정보 가져오기위해서 and.
+	      String query = "select * from tbl_history where history_user_id = ? and history_cafe_no = ?"; //and 연산자 사용하여 아이디와 비밀번호 둘 다 일치하는 회원정보 가져오기위해서 and.
 	      
 	      try {
 	         pstmt = conn.prepareStatement(query);
 	         pstmt.setString(1, userId);
+	         pstmt.setString(2, cafeNo);
 	         
 	         rset = pstmt.executeQuery();
 	         
@@ -352,11 +414,7 @@ public class CafeDao {
 	            // 필요한 컬럼을 여기에 세팅
 	            history.setHistorySeatNo(rset.getString("history_seat_no"));
 	            seatList.add(history);
-	            
-	            System.out.println("Added History seatNo: " + history.getHistorySeatNo());
 	        }
-	        
-	        System.out.println("seatList size after query: " + seatList.size());
 
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -459,7 +517,96 @@ public class CafeDao {
 		return result;
 	}
 
+
+	// 메인 페이지에 보여질 카페 (리뷰 / Q&A 많은 순서대로 6개)
+	public ArrayList<Cafe> selectMainCafes(Connection conn) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		ArrayList<Cafe> cafeList = new ArrayList<Cafe>();
+		
+		String query = "SELECT * FROM (\r\n"
+				+ "    SELECT \r\n"
+				+ "        c.*,\r\n"
+				+ "        NVL(cm.comment_count, 0) AS comment_count,\r\n"
+				+ "        i.image_path\r\n"
+				+ "    FROM \r\n"
+				+ "        tbl_Cafe c\r\n"
+				+ "    LEFT JOIN (\r\n"
+				+ "        SELECT \r\n"
+				+ "            comment_cafe_no,\r\n"
+				+ "            COUNT(*) AS comment_count\r\n"
+				+ "        FROM \r\n"
+				+ "            tbl_comment\r\n"
+				+ "        GROUP BY \r\n"
+				+ "            comment_cafe_no\r\n"
+				+ "    ) cm ON c.cafe_no = cm.comment_cafe_no\r\n"
+				+ "    LEFT JOIN (\r\n"
+				+ "        SELECT \r\n"
+				+ "            cafe_no, image_path\r\n"
+				+ "        FROM (\r\n"
+				+ "            SELECT \r\n"
+				+ "                cafe_no, image_path,\r\n"
+				+ "                ROW_NUMBER() OVER (PARTITION BY cafe_no ORDER BY image_no) AS rn\r\n"
+				+ "            FROM tbl_image\r\n"
+				+ "        ) WHERE rn = 1\r\n"
+				+ "    ) i ON c.cafe_no = i.cafe_no\r\n"
+				+ "    ORDER BY \r\n"
+				+ "        cm.comment_count DESC NULLS LAST\r\n"
+				+ ") WHERE ROWNUM <= 6\r\n"
+				+ "";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Cafe cafe = new Cafe();
+				cafe.setCafeNo(rset.getString("cafe_No"));
+				cafe.setCafeName(rset.getString("cafe_name"));
+				cafe.setCafeAddr(rset.getString("cafe_addr"));
+				cafe.setCafeBiznum(rset.getString("cafe_biznum"));
+				cafe.setCafeIntroduce(rset.getString("cafe_introduce"));
+				cafe.setCafeStartHour(rset.getString("cafe_start_hour"));
+				cafe.setCafeEndHour(rset.getString("cafe_start_hour"));
+				cafe.setCafeStatus(rset.getString("cafe_status"));
+				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
+				cafe.setHostId(rset.getString("host_id"));
+				cafe.setCafeImagePath(rset.getString("image_path"));
+				
+				cafeList.add(cafe);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		// TODO Auto-generated method stub
+		return cafeList;
+	}
 	
+	// 호스트 신청 내역 테이블 insert
+	public int insertHostRequest(Connection conn, Cafe cafe) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		String query = "insert into tbl_host_request (apply_date, status, host_no)\r\n"
+				+ "values (sysdate, 'N', ?)";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, cafe.getHostId());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 
 
 }

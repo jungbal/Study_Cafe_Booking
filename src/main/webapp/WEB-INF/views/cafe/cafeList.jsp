@@ -61,7 +61,16 @@
         font-size: 18px;
         color: #888;
         width: 100%;
+        
     }
+    .cafe-card img {
+    width: 100%;
+    height: 180px; /* 원하는 높이로 조절 */
+    object-fit: cover; /* 비율 유지하며 자르기 */
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+    
 </style>
 </head>
 <body>
@@ -75,7 +84,8 @@
             <c:forEach var="list" items="${list}">
                 <a class="cafe-link" href='/cafeDetail?cafeNo=${list.cafeNo}'>
                     <div class="cafe-card">
-                        <div class="cafe-image">카페이미지(예시)</div>
+                    <img src="${list.cafeImagePath}" alt="${list.cafeName}">
+                        <!-- <div class="cafe-image"></div> -->
                         <div class="cafe-name">${list.cafeName}</div>
                         <div class="cafe-addr">${list.cafeAddr}</div>
                     </div>
