@@ -87,18 +87,22 @@ public class LoginServlet extends HttpServlet {
 		        view.forward(request, response);
 		    } else {
 		        // 로그인 성공 시 redirect 처리 (view 변수 선언 금지)
+		    	 cafeservice = new CafeService();
+					String hostId = cafeservice.matchHostId(loginId);
+		    	
 		        HttpSession session = request.getSession();
 		        session.setAttribute("loginCafe", loginCafe);
 		        session.setAttribute("role", role);
+		        session.setAttribute("hostId", hostId);
 		        session.setMaxInactiveInterval(600); // 10분 세션 유지
 
 		        response.sendRedirect(request.getContextPath() + "/main");
 		        // redirect 이후엔 절대 forward 호출 금지!
 		        
-		        cafeservice = new CafeService();
-				String hostId = cafeservice.matchHostId(loginId);
-				request.setAttribute("hostId", hostId);
+		       
+//				request.setAttribute("hostId", hostId);
 		        
+				
 		    }
 //>>>>>>> 60d7f3933aea2519ce2aee62af6eb8ccdf3a5dc7
 		}
