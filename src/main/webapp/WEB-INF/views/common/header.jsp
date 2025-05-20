@@ -80,7 +80,6 @@
       <c:if test="${sessionScope.role == 1}">
         <a href="/manager/userManage?reqPage=1" class="hover:text-blue-600 text-center w-full">이용자 관리</a>
         <a href="/manager/cafeManage?reqPage=1" class="hover:text-blue-600 text-center w-full">업체 관리</a>
-        <a href="/manager/cafeApplyChk" class="hover:text-blue-600 text-center w-full">업체신청정보열람</a>
         <a href="/manager/chkReport?reqPage=1" class="hover:text-blue-600 text-center w-full">신고접수열람</a>
       </c:if>
     </c:if>
