@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
@@ -7,93 +6,38 @@
 <head>
 <meta charset="UTF-8">
 <title>검색 결과</title>
-<style>
-    .list-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        padding: 20px;
-    }
-
-    .cafe-link {
-        width: calc(33.333% - 20px);
-        text-decoration: none;
-        color: inherit;
-    }
-
-    .cafe-card {
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        padding: 15px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        box-sizing: border-box;
-        text-align: center;
-        transition: all 0.2s ease-in-out;
-        height: 100%;
-    }
-
-    .cafe-card:hover {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        transform: translateY(-3px);
-        cursor: pointer;
-    }
-
-    .cafe-image {
-        margin-bottom: 10px;
-        font-weight: bold;
-        font-size: 16px;
-        color: #333;
-    }
-
-    .cafe-name {
-        font-size: 18px;
-        margin-bottom: 5px;
-    }
-
-    .cafe-addr {
-        font-size: 14px;
-        color: #666;
-    }
-
-    .no-result {
-        text-align: center;
-        padding: 50px 0;
-        font-size: 18px;
-        color: #888;
-        width: 100%;
-        
-    }
-    .cafe-card img {
-    width: 100%;
-    height: 180px; /* 원하는 높이로 조절 */
-    object-fit: cover; /* 비율 유지하며 자르기 */
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-    
-</style>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
-<body>
+<body class="bg-gray-100">
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
-<div class="list-container">
+
+<div class="max-w-screen-xl mx-auto px-4 py-10">
+  <div class="bg-white/70 rounded-xl shadow p-6 mb-8">
+  	<h1 class="text-5xl font-semibold text-gray-500">검색 결과</h1>
+  </div>
+  <hr class="mb-8">
+
+  <div class="flex flex-wrap gap-6 justify-center">
     <c:choose>
-        <c:when test="${empty list}">
-            <div class="no-result">검색 결과가 없습니다.</div>
-        </c:when>
-        <c:otherwise>
-            <c:forEach var="list" items="${list}">
-                <a class="cafe-link" href='/cafeDetail?cafeNo=${list.cafeNo}'>
-                    <div class="cafe-card">
-                    <img src="${list.cafeImagePath}" alt="${list.cafeName}">
-                        <!-- <div class="cafe-image"></div> -->
-                        <div class="cafe-name">${list.cafeName}</div>
-                        <div class="cafe-addr">${list.cafeAddr}</div>
-                    </div>
-                </a>
-            </c:forEach>
-        </c:otherwise>
+      <c:when test="${empty list}">
+        <div class="w-full text-center text-gray-500 text-lg py-20">검색 결과가 없습니다.</div>
+      </c:when>
+      <c:otherwise>
+        <c:forEach var="list" items="${list}">
+          <a href="/cafeDetail?cafeNo=${list.cafeNo}" class="block w-full sm:w-[47%] lg:w-[30%] hover:no-underline">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300 h-full">
+              <img src="${list.cafeImagePath}" alt="${list.cafeName}" class="w-full h-48 object-cover rounded-t-xl">
+              <div class="p-4 text-center">
+                <h2 class="text-lg font-bold text-gray-800 mb-1">${list.cafeName}</h2>
+                <p class="text-sm text-gray-500">${list.cafeAddr}</p>
+              </div>
+            </div>
+          </a>
+        </c:forEach>
+      </c:otherwise>
     </c:choose>
+  </div>
 </div>
 
 </body>

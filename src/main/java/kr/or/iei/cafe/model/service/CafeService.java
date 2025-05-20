@@ -248,15 +248,15 @@ public class CafeService {
        }
 
        if (isAllSuccess) {
-    	  JDBCTemplate.commit(conn);
-       } else {
-           JDBCTemplate.rollback(conn);
-       }
 
-       JDBCTemplate.close(conn);
-       return resultMap;
-   }
-
+    		   JDBCTemplate.commit(conn); 
+    	   }else {
+    		   JDBCTemplate.rollback(conn);
+    	   }
+	       JDBCTemplate.close(conn);
+	       return resultMap;
+	   }
+       
 
 	// 업체(호스트) 신청
 	public int insertCafe(Cafe cafeInfo, String loginId) {
@@ -289,6 +289,14 @@ public class CafeService {
 		Cafe cafeInfo = dao.selectOneCafe(conn, loginId);
 		JDBCTemplate.close(conn);
 		return cafeInfo;
+	}
+
+	public String matchHostId(String loginId) {
+
+		Connection conn = JDBCTemplate.getConnection();
+		String hostId = dao.matchHostId(conn, loginId);
+		JDBCTemplate.close(conn);
+		return hostId;
 	}
 
 

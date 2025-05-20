@@ -9,7 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.cafe.model.service.CafeService;
 import kr.or.iei.cafe.model.vo.Cafe;
 
@@ -32,6 +34,7 @@ public class MainServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		
 		CafeService cafeService = new CafeService();
 		ArrayList<Cafe> cafeList = cafeService.selectMainCafes();

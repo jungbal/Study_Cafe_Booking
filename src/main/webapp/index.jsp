@@ -4,12 +4,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <title>메인 페이지</title>
 <style>
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9f9f9;
     margin: 0;
     padding: 0;
 }
@@ -66,25 +65,30 @@ body {
 
 
 
+
 <img src="/resources/cssImage/banner.jpg" alt="배너이미지" class="main-banner">
 	 
+
 
 <br><br><br>
 <hr>
 
+
 <%-- 인기많은 카페 top6 (리뷰/Q&A 달린 기준) --%> <!-- 클릭하면 카페 detail.jsp 로 이동 -->
+
 
 <div class="cafe-list">
     <c:forEach var="cafe" items="${cafeList}">
-        <div class="cafe-item">
-            <img src="${cafe.cafeImagePath}" alt="${cafe.cafeName}">
-            <p><strong>${cafe.cafeName}</strong></p>
-            <p>${cafe.cafeAddr}</p>
-        </div>
+        <a class="cafe-link" href="/cafeDetail?cafeNo=${cafe.cafeNo}">
+            <div class="cafe-item">
+                <img src="${cafe.cafeImagePath}" alt="${cafe.cafeName}">
+                <p><strong>${cafe.cafeName}</strong></p>
+                <p class="cafe-addr">${cafe.cafeAddr}</p>
+            </div>
+        </a>
     </c:forEach>
-    
-    
 </div>
+
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 </body>
 </html>

@@ -75,6 +75,8 @@ public class ChkPwServlet extends HttpServlet {
 				response.sendRedirect(request.getContextPath() + "/host/cafeInfoModi");
 			}else if(loginMember.getUserRole()==3) {
 				response.sendRedirect(request.getContextPath() + "/myPage/myInfo?tab=account");
+			}else if(loginMember.getUserRole()==1) { // 수정 : 관리자일 경우 리다이렉트 주소 추가
+				response.sendRedirect(request.getContextPath() + "/myPage/myInfo?tab=account");
 			}
 		} else {
 			request.setAttribute("title", "비밀번호 오류");
