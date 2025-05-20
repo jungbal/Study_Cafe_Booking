@@ -5,12 +5,91 @@
 <head>
 <meta charset="UTF-8">
 <title>업체(신청서식) 수정</title>
+<style>
+	body {
+  margin: 0;
+  padding: 0;
+  background-color: #f0f4f8;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 140px);
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
+
+form {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  width: 500px;
+  box-sizing: border-box;
+}
+
+.input-wrap {
+  margin-bottom: 20px;
+}
+
+.input-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 6px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+p {
+  font-size: 13px;
+  color: #dc3545;
+  margin-top: 6px;
+  margin-left: 2px;
+}
+
+.submit-wrap {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.submit-btn1 {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn1:hover {
+  background-color: #0056b3;
+}
+</style>
 <link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
-	<h1>업체(신청서식)수정</h1>
 	
+	<main>
 	<form action= "#" method="post">
 		<div class="input-wrap">
 			<div class="input-title">
@@ -101,7 +180,8 @@
 		<div class="submit-wrap">
 			<button type="submit" class="submit-btn1">수정</button> 
 		</div>
-</form>		
+</form>	
+</main>	
 		<script>
 		const chkObj = {
 				

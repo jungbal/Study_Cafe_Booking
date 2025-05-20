@@ -101,7 +101,6 @@ main {
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
-<h1>회원가입</h1>
 
 <main>
  <form action='/joinServlet' method='post' autocomplete="off"> 
@@ -155,7 +154,7 @@ main {
  </main> 
   
   <script>
-  // 아이디 유효성 검사
+  <%-- 아이디 유효성 검사 --%> 
   const checkObj = {
 			"memberId"	: false,
 			"memberPw"  : false,
@@ -180,7 +179,7 @@ main {
 	  }
   });
   
-  // 아이디 중복 체크
+  <%-- 아이디 중복 체크 --%> 
   const idDuplChkBtn = $('#idDuplChkBtn');
   
   idDuplChkBtn.on('click', function(){
@@ -221,7 +220,7 @@ main {
 			}
 		});
   });
-	//비밀번호 유효성 검사
+	<%-- 비밀번호 유효성 검사 --%>
 	const memberPw = $('#memberPw');
 	const pwMessage = $('#pwMessage');
 	const memberPwRe = $('#memberPwRe');
@@ -246,7 +245,7 @@ main {
 		}
 	});
 	
-	//비밀번호 확인 유효성 검사
+	<%-- 비밀번호 확인 유효성 검사 --%>
 	$(memberPwRe).on('input', checkPw);
 	
 	function checkPw(){
@@ -261,7 +260,7 @@ main {
 		}
 	}
 	
-	//전화번호 유효성 검사
+	<%-- 전화번호 유효성 검사 --%>
 	const memberPhone = $('#memberPhone');
 	const phoneMessage = $('#phoneMessage');
 	
