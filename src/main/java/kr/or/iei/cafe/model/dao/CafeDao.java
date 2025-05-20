@@ -530,6 +530,47 @@ public class CafeDao {
 	}
 
 
+	public Cafe selectOneCafe(Connection conn, String loginId) {
+		
+		PreparedStatement pstmt= null;
+		ResultSet rset = null;
+		Cafe cafeInfo = null;
+		
+		String query = "select* from tbl_cafe where host_id = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, loginId);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				cafeInfo = new Cafe();
+				
+				cafeInfo.setCafeName(rset.getString("cafe_name"));
+				cafeInfo.setCafeAddr(rset.getString("cafe_addr"));
+				cafeInfo.setCafePhone(rset.getString("cafe_phone"));
+				cafeInfo.setCafeBiznum(rset.getString("cafe_biznum"));
+				cafeInfo.setCafeIntroduce(rset.getString("cafe_introduce"));
+				cafeInfo.setCafeStartHour(rset.getString("cafe_start_hour"));
+				cafeInfo.setCafeEndHour(rset.getString("cafe_end_hour"));
+				cafeInfo.setCafeStatus(rset.getString("cafe_status"));
+				cafeInfo.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
+				
+			}
+		
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(rset);
+				JDBCTemplate.close(pstmt);
+			}
+					
+			return cafeInfo;
+		}
+
+
 	// 메인 페이지에 보여질 카페 (리뷰 / Q&A 많은 순서대로 6개)
 	public ArrayList<Cafe> selectMainCafes(Connection conn) {
 		PreparedStatement pstmt = null;
@@ -596,10 +637,52 @@ public class CafeDao {
 			JDBCTemplate.close(rset);
 			JDBCTemplate.close(pstmt);
 		}
-		
-		// TODO Auto-generated method stub
 		return cafeList;
 	}
+
+
+	public int insertHostRqst(Connection conn, Cafe cafeInfo) {
+		PreparedStatement pstmt= null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rset = null;
+		int hostRqstResult = 0;
+		
+		String query = "insert into tbl_host_request(apply_no, apply_date, status, reject_id, host_no) "
+				+ "values(SEQ_TBL_HOST_REQUEST.nextval, sysdate, default, null, ?)";
+				
+		
+		String sql = "SELECT SEQ_TBL_CAFE.CURRVAL FROM dual";
+	
+		
+		String cafeNo = cafeInfo.getCafeNo();
+		
+		try {
+			pstmt2 = conn.prepareStatement(sql);
+			rset = pstmt2.executeQuery();
+				if (rset.next()) {
+				    cafeNo = rset.getString(1);
+				    cafeInfo.setCafeNo(cafeNo); 
+				}
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, cafeNo);
+			hostRqstResult = pstmt.executeUpdate();
+			
+		
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+			JDBCTemplate.close(pstmt2);
+			JDBCTemplate.close(rset);
+		}
+		
+		return hostRqstResult;
+
+		}
+		
+
 	
 	
 
