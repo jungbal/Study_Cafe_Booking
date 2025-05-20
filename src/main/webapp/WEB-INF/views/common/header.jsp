@@ -54,8 +54,7 @@
           <c:if test="${not empty sessionScope.loginCafe}">
             <a href="/LogoutServlet" class="hover:text-blue-600 text-center w-full">로그아웃</a>
             <a href="/myPage/chkPwFrm" class="hover:text-blue-600 text-center w-full">마이페이지</a>
-            <a href="#" class="hover:text-blue-600 text-center w-full">내 리뷰/Q&A</a>
-
+		
 
       <!-- 일반 이용자 -->
       <c:if test="${sessionScope.role == 3}">
@@ -72,7 +71,6 @@
 
             <c:if test="${sessionScope.role == 2}">
               <a href="/host/cafeInfoModi" class="hover:text-blue-600 text-center w-full">카페 관리</a>
-              <a href="#" class="hover:text-blue-600 text-center w-full">카페 리뷰/Q&A</a>
             </c:if>
 
             <c:if test="${sessionScope.role == 1}">
