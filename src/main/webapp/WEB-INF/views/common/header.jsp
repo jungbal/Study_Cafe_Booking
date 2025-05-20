@@ -28,25 +28,25 @@
 
     <!-- 우측: 검색 폼 + 메뉴 -->
     <div class="w-full flex items-center py-4 bg-white shadow-sm max-w-screen-xl mx-auto px-4">
-	  <!-- 검색 폼: 가운데 정렬 + flex-grow로 공간 차지 -->
-	  <form action="/search" method="get" class="flex items-center gap-2 max-w-md w-full mx-auto">
-	    <input type="text" name="srchStr" placeholder="검색어를 입력해주세요."
-	           class="px-4 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-10 w-full" />
-	    <button type="submit"
-	      class="px-4 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 h-10 flex items-center justify-center">
-	      <span class="whitespace-nowrap">검색</span>
-	    </button>
-	  </form>
-	
-	  <!-- 햄버거 메뉴 버튼을 오른쪽 끝으로 배치 -->
-	  <button onclick="toggleMenu()" class="text-gray-700 hover:text-blue-600 focus:outline-none ml-4">
-	    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
-	         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-	      <path stroke-linecap="round" stroke-linejoin="round"
-	            d="M4 6h16M4 12h16M4 18h16"></path>
-	    </svg>
-	  </button>
-	</div>
+     <!-- 검색 폼: 가운데 정렬 + flex-grow로 공간 차지 -->
+     <form action="/search" method="get" class="flex items-center gap-2 max-w-md w-full mx-auto">
+       <input type="text" name="srchStr" placeholder="검색어를 입력해주세요."
+              class="px-4 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-10 w-full" />
+       <button type="submit"
+         class="px-4 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 h-10 flex items-center justify-center">
+         <span class="whitespace-nowrap">검색</span>
+       </button>
+     </form>
+   
+     <!-- 햄버거 메뉴 버튼을 오른쪽 끝으로 배치 -->
+     <button onclick="toggleMenu()" class="text-gray-700 hover:text-blue-600 focus:outline-none ml-4">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+         <path stroke-linecap="round" stroke-linejoin="round"
+               d="M4 6h16M4 12h16M4 18h16"></path>
+       </svg>
+     </button>
+   </div>
 
 
   <!-- 토글 메뉴 (드롭다운) -->
