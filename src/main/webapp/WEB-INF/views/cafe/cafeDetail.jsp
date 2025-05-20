@@ -6,6 +6,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body class="bg-gray-50 text-gray-800">
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>

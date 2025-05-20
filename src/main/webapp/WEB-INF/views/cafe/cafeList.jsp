@@ -14,8 +14,11 @@
 
 <div class="max-w-screen-xl mx-auto px-4 py-10">
   <div class="bg-white/70 rounded-xl shadow p-6 mb-8">
-  	<h1 class="text-5xl font-semibold text-gray-500">검색 결과</h1>
-  </div>
+	<h1 class="text-5xl font-semibold text-gray-500">
+  		<span class="text-blue-500">"${srchStr}"</span> 검색 결과
+	</h1>
+</div>
+
   <hr class="mb-8">
 
   <div class="flex flex-wrap gap-6 justify-center">

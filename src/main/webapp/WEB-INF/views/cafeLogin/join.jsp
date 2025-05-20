@@ -6,13 +6,106 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
+<style>
+	body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f4f8;
+}
+
+form {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  width: 400px;
+}
+
+.input-wrap {
+  margin-bottom: 18px;
+}
+
+.input-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 6px;
+}
+
+.input-item {
+   display: block;
+}
+
+.input-item input {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+}
+
+.input-item input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.input-msg {
+  font-size: 13px;
+  color: #dc3545; /* 붉은색으로 에러 메시지 표시 */
+  margin-top: 6px;
+  margin-left: 2px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  height: 40px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-primary.lg {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 0;
+}
+
+.join-button-box {
+  margin-top: 30px;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width : 100%;
+  min-height: calc(100vh - 140px); /* 헤더+푸터 높이 빼줌 */
+  padding-top: 70px; /* 헤더 높이 */
+  padding-bottom: 70px; /* 푸터 높이 */
+}
+
+</style>
+
 <link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 <h1>회원가입</h1>
-<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
- <form action='/joinServlet' method='post' autocomplete="off">
+
+<main>
+ <form action='/joinServlet' method='post' autocomplete="off"> 
+ <div class="form-wrap">
  	<div class="input-wrap">
 	     <div class="input-title">
 	      	<label for="memberId">아이디</label>
@@ -54,11 +147,12 @@
      	  <p id="phoneMessage" class="input-msg"></p>
      </div>
      
-      <div class="join-button-box">
-      	 <button type="submit" class="btn-primary lg">회원가입</button>
-      </div>
-     
-  </form>
+     <div class="join-button-box">
+      	<button type="submit" class="btn-primary lg">회원가입</button>
+     </div>
+ </div>    
+ </form>
+ </main> 
   
   <script>
   // 아이디 유효성 검사
