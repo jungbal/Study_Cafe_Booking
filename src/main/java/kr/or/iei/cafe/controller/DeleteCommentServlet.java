@@ -53,7 +53,7 @@ public class DeleteCommentServlet extends HttpServlet {
         request.setAttribute("icon", "error");
         
      }
-     request.setAttribute("loc", "/cafeDetail?cafeNo=" + cafeNo);
+     request.setAttribute("loc", "/cafeDetail?cafeNo=" + cafeNo+"&tab=review");
      //4.3 페이지 이동
      view.forward(request, response);
 	}

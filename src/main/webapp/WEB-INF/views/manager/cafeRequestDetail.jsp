@@ -6,8 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>신청 정보</title>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 	<h2>카페 신청 정보</h2>
 	<table>
 		<tr>

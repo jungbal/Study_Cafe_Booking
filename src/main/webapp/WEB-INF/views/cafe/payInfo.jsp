@@ -75,9 +75,10 @@
 }
   
 </style>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
-
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 <main>
   <h1 style="text-align:center;">결제하기</h1>
   <div class="container">

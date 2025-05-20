@@ -3,12 +3,19 @@
   <display-name>semi_stdcafe</display-name>
   <welcome-file-list>
   <welcome-file>main</welcome-file>
-   <!--  <welcome-file>index.html</welcome-file>
+
+  
+    <!-- <welcome-file>index.html</welcome-file>
+
     <welcome-file>index.jsp</welcome-file>
     <welcome-file>index.htm</welcome-file>
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.jsp</welcome-file>
+
     <welcome-file>default.htm</welcome-file>-->
+
+    <welcome-file>default.htm</welcome-file> 
+
   </welcome-file-list>
   
   <!-- 필터 등록 -->

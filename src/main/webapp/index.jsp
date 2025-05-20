@@ -1,54 +1,67 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" 
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%-- <% // 메인 페이지 접속 시, 카페리스트 정보 가져오기 위해 설정
-    RequestDispatcher rd = request.getRequestDispatcher("/main");
-    rd.forward(request, response);
-%> --%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>메인 페이지</title>
 <style>
-    .cafe-list {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-        justify-items: center;
-        padding: 20px;
-    }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
 
-    .cafe-item {
-        width: 200px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 15px;
-        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        background-color: #fff;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
+.cafe-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 24px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-    .cafe-item:hover {
-        transform: translateY(-5px);
-        box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
-    }
+.cafe-item {
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    width: 100%;
+    max-width: 300px;
+}
 
-    .cafe-item img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 8px;
-    }
+.cafe-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
 
-    .cafe-item p {
-        margin: 10px 0 0;
-        font-size: 14px;
-    }
+.cafe-item img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.cafe-item p {
+    margin: 10px 16px;
+    font-size: 15px;
+    color: #333;
+}
+
+.cafe-item p strong {
+    font-size: 16px;
+    color: #222;
+}
+
 </style>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
+<<<<<<< HEAD
 <!-- 검색 폼 -->
 <form action="/search" method="get">
     <input type="text" name="srchStr" placeholder="검색어를 입력해주세요.">
@@ -61,6 +74,30 @@
 		
 
 	<%-- 인기많은 카페 top6 (리뷰/Q&A 달린 기준) --%>
+
+<br><br><br>
+<hr>
+
+		<%-- "정원님 테스트용"
+			 
+
+		<%-- 	<c:if test="${empty sessionScope.loginMember}">
+
+			 <%-- 
+			<c:if test="${empty sessionScope.loginMember}">
+>>>>>>> 26ae708544f9a46520d340e9c112325502fd3277
+			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a> 
+			</c:if>
+			
+			<c:if test="${not empty sessionScope.loginMember}">
+			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a>
+			<a href="/LogoutServlet">로그아웃</a>
+			<a href="/myPage/chkPwFrm">마이페이지</a>
+			</c:if> --%> 
+			 
+
+	<%-- 인기많은 카페 top6 (리뷰/Q&A 달린 기준) --%> <!-- 클릭하면 카페 detail.jsp 로 이동 -->
+
 <div class="cafe-list">
     <c:forEach var="cafe" items="${cafeList}">
         <div class="cafe-item">

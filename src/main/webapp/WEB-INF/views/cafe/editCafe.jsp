@@ -5,9 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <title>업체(신청서식) 수정</title>
-<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 	<h1>업체(신청서식)수정</h1>
 	
 	<form action= "#" method="post">
@@ -100,7 +101,7 @@
 		<div class="submit-wrap">
 			<button type="submit" class="submit-btn1">수정</button> 
 		</div>
-		
+</form>		
 		<script>
 		const chkObj = {
 				
