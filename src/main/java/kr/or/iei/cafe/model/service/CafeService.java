@@ -186,9 +186,9 @@ public class CafeService {
 	}
 
 	// 리뷰 이력이 있는지 select 하는 메소드
-	public Member isReviewHistory(String userId) {
+	public Member isReviewHistory(String userId, String cafeNo) {
 		Connection conn = JDBCTemplate.getConnection();
-		Member member = dao.isReviewHistory(conn, userId);
+		Member member = dao.isReviewHistory(conn, userId, cafeNo);
 		
 		return member;
 	}

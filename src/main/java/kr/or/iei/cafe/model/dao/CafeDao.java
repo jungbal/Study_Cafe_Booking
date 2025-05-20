@@ -354,17 +354,18 @@ public class CafeDao {
 	    return result;
 	}
 
-	// 리뷰 내역 있는지 확인
-	public Member isReviewHistory(Connection conn, String userId) {
+	// 해당 카페에 리뷰 내역 있는지 확인
+	public Member isReviewHistory(Connection conn, String userId, String cafeNo) {
 		PreparedStatement pstmt = null;
 	      ResultSet rset = null;
 	      Member reviewMember = null;
 	      
-	      String query = "select * from tbl_history where history_user_id = ?"; //and 연산자 사용하여 아이디와 비밀번호 둘 다 일치하는 회원정보 가져오기위해서 and.
+	      String query = "select * from tbl_history where history_user_id = ? and history_cafe_no = ?"; //and 연산자 사용하여 아이디와 비밀번호 둘 다 일치하는 회원정보 가져오기위해서 and.
 	      
 	      try {
 	         pstmt = conn.prepareStatement(query);
 	         pstmt.setString(1, userId);
+	         pstmt.setString(2, cafeNo);
 	         
 	         rset = pstmt.executeQuery();
 	         
