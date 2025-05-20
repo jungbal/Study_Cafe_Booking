@@ -690,6 +690,30 @@ public class CafeDao {
 		return result;
 	}
 
-
-
+	public String matchHostId(Connection conn, String loginId) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String hostId = null;
+		
+		String query = "select host_id from tbl_cafe where host_id = ? ";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, loginId);
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				 hostId = rset.getString("host_id");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return hostId;
+	}
 }

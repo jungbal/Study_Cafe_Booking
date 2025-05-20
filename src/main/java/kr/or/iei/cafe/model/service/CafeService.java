@@ -264,20 +264,20 @@ public class CafeService {
 
 
        if (isAllSuccess) {
-    	   int result1 = dao.insertHostRequest(conn, cafeNo);
-    	   if(result1>0) {
+//    	   int result1 = dao.insertHostRequest(conn, cafeNo);
+//    	   if(result1>0) {
     		   JDBCTemplate.commit(conn); 
     	   }else {
     		   JDBCTemplate.rollback(conn);
     	   }
-       } else {
+//       } else {
            JDBCTemplate.rollback(conn);
        }
 
        JDBCTemplate.close(conn);
        return resultMap;
    }
-   }
+//   } 오류발생으로 프로그램 실행을 위해 잠시 주석처리함 현재행 포함 4줄
 
 
 	// 업체(호스트) 신청
@@ -311,6 +311,14 @@ public class CafeService {
 		Cafe cafeInfo = dao.selectOneCafe(conn, loginId);
 		JDBCTemplate.close(conn);
 		return cafeInfo;
+	}
+
+	public String matchHostId(String loginId) {
+
+		Connection conn = JDBCTemplate.getConnection();
+		String hostId = dao.matchHostId(conn, loginId);
+		JDBCTemplate.close(conn);
+		return hostId;
 	}
 
 

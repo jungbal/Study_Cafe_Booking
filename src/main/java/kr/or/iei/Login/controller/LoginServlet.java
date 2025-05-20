@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import kr.or.iei.Login.model.service.LoginService;
 import kr.or.iei.Login.model.vo.Login;
+import kr.or.iei.cafe.model.service.CafeService;
 
 /**
  * Servlet implementation class loginServlet
@@ -36,7 +37,8 @@ public class LoginServlet extends HttpServlet {
 		String loginPw = request.getParameter("loginPw");
 		
 		LoginService service = new LoginService();
-//		cafeLogin : 로그인을 위한 메소드		
+		CafeService cafeservice = null;
+		
 		Login loginCafe = service.cafeLogin(loginId, loginPw); 
 //		chkUserRole : 일반,호스트,관리자 구분 메소드
 		int role = service.chkUserRole(loginId);
@@ -57,6 +59,12 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("loginCafe", loginCafe);
 			session.setAttribute("role", role);
 			session.setMaxInactiveInterval(600);
+			
+			cafeservice = new CafeService();
+			
+			String hostId = cafeservice.matchHostId(loginId);
+			
+			request.setAttribute("hostId", hostId);
 		}
 		view.forward(request, response);
 	}

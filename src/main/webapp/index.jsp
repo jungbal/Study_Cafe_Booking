@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <title>메인 페이지</title>
 <style>
@@ -48,7 +49,7 @@
 </style>
 </head>
 <body>
-
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 <!-- 검색 폼 -->
 <form action="/search" method="get">
     <input type="text" name="srchStr" placeholder="검색어를 입력해주세요.">
@@ -82,17 +83,7 @@
 		<a href="/loginFrm">로그인</a>
 		<a href="/joinFrm">회원가입</a>
 	</c:if> 	 
-=======
-			</c:if>
-			 --%>
-			 
-<%-- 로그인 안된 상태 --%>
 
-	 <c:if test="${empty sessionScope.loginCafe}">
-		<a href="/loginFrm">로그인</a>
-		<a href="/joinFrm">회원가입</a>
-	</c:if>	 
->>>>>>> 26ae708544f9a46520d340e9c112325502fd3277
 	
 <%-- 로그인 되어있는 상태 --%>
 	<c:if test="${not empty sessionScope.loginCafe}">
@@ -102,12 +93,13 @@
 		
 	<%-- 일반이용자 메뉴 --%>
 		<c:if test="${3 == sessionScope.role}">
-			<%-- 여기서 분기 한 번 더 해야함 호스트 신청 한 상태면 수정만 나오게
-			호스트 신청을 했다면 로그인한 세션 아이디와 호스트 신청내역 id가 같은 
-			  --%>
-			<a href="/applyCafe">업체(호스트) 신청</a>
 			
-			<a href="/editCafeFrm">업체(호스트) 수정</a>
+			<c:if test="${hostId eq sessionScope.loginCafe.loginId}">
+			  <a href="/editCafeFrm">업체(호스트) 수정</a>
+			</c:if>
+			<c:if test="${hostId ne sessionScope.loginCafe.loginId}">
+			  <a href="/applyCafe">업체(호스트) 신청</a>
+			</c:if>
 			
 		</c:if>
 		
@@ -150,6 +142,8 @@
         </div>
     </c:forEach>
 </div>
+
+
 
 </body>
 </html>
