@@ -20,5 +20,9 @@ public class Cafe {
 	private String cafeIntroDetail;
 	private String hostId;
 	
+	
+	private String cafeImageNo;
+	private String cafeImagePath;
+	private String cafeImageName;
 
 }

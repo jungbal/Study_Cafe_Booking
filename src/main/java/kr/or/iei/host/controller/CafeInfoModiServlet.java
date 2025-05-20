@@ -14,7 +14,8 @@ import javax.servlet.http.HttpSession;
 
 import kr.or.iei.comment.model.service.CommentService;
 import kr.or.iei.comment.model.vo.Comment;
-import kr.or.iei.host.model.service.CafeService;
+
+import kr.or.iei.host.model.service.HostService;
 import kr.or.iei.host.model.vo.Cafe;
 import kr.or.iei.member.model.service.PayService;
 import kr.or.iei.member.model.vo.Member;
@@ -73,7 +74,7 @@ public class CafeInfoModiServlet extends HttpServlet {
     	}
     	
     	// myPage.jsp로 포워딩
-    	CafeService service = new CafeService();
+    	HostService service = new HostService();
     	Cafe cafe = service.selectCafeByNo(userId);
     	
     	request.setAttribute("cafe", cafe);

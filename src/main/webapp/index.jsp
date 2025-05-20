@@ -60,8 +60,12 @@
 
 		<%-- "정원님 테스트용"
 			 
+<<<<<<< HEAD
+		<%-- 	<c:if test="${empty sessionScope.loginMember}">
+=======
 			 <%-- 
 			<c:if test="${empty sessionScope.loginMember}">
+>>>>>>> 26ae708544f9a46520d340e9c112325502fd3277
 			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a> 
 			</c:if>
 			
@@ -69,8 +73,16 @@
 			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a>
 			<a href="/LogoutServlet">로그아웃</a>
 			<a href="/myPage/chkPwFrm">마이페이지</a>
-			</c:if>
-			 --%>
+<<<<<<< HEAD
+			</c:if> --%> 
+			 
+			 
+<%-- 로그인 안된 상태 --%>
+	 <c:if test="${empty sessionScope.loginCafe}">
+		<a href="/loginFrm">로그인</a>
+		<a href="/joinFrm">회원가입</a>
+	</c:if> 	 
+
 			 
 <%-- 로그인 안된 상태 --%>
 
@@ -78,6 +90,7 @@
 		<a href="/loginFrm">로그인</a>
 		<a href="/joinFrm">회원가입</a>
 	</c:if>	 
+>>>>>>> 26ae708544f9a46520d340e9c112325502fd3277
 	
 <%-- 로그인 되어있는 상태 --%>
 	<c:if test="${not empty sessionScope.loginCafe}">
@@ -87,8 +100,13 @@
 		
 	<%-- 일반이용자 메뉴 --%>
 		<c:if test="${3 == sessionScope.role}">
-			<%-- 여기서 분기 한 번 더 해야함 호스트 신청 한 상태면 수정만 나오게--%>
+			<%-- 여기서 분기 한 번 더 해야함 호스트 신청 한 상태면 수정만 나오게
+			호스트 신청을 했다면 로그인한 세션 아이디와 호스트 신청내역 id가 같은 
+			  --%>
 			<a href="/applyCafe">업체(호스트) 신청</a>
+			
+			<a href="/editCafeFrm">업체(호스트) 수정</a>
+			
 		</c:if>
 		
 	<%-- 호스트 메뉴 --%>
