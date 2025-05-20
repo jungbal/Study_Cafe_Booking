@@ -112,7 +112,7 @@
               <button type="submit">이용권 선택하기</button>
             </c:when>
             <c:otherwise>
-              <p style="color: red; font-weight: bold;">이용권 정보가 등록되지 않은 업체입니다.</p>
+              <p style="color: red; font-weight: bold;">이용권 정보가 등록되지 않은 업체입니다. 호스트에게 문의해주세요.</p>
             </c:otherwise>
           </c:choose>
         </form>
