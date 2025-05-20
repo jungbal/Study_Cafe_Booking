@@ -48,7 +48,7 @@
 </style>
 </head>
 <body>
-
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 <!-- 검색 폼 -->
 <form action="/search" method="get">
     <input type="text" name="srchStr" placeholder="검색어를 입력해주세요.">
@@ -58,85 +58,7 @@
 <br><br><br>
 <hr>
 
-		<%-- "정원님 테스트용"
-			 
-<<<<<<< HEAD
-		<%-- 	<c:if test="${empty sessionScope.loginMember}">
-=======
-			 <%-- 
-			<c:if test="${empty sessionScope.loginMember}">
->>>>>>> 26ae708544f9a46520d340e9c112325502fd3277
-			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a> 
-			</c:if>
-			
-			<c:if test="${not empty sessionScope.loginMember}">
-			<a href="${pageContext.request.contextPath}/member/loginFrm">로그인</a>
-			<a href="/LogoutServlet">로그아웃</a>
-			<a href="/myPage/chkPwFrm">마이페이지</a>
-<<<<<<< HEAD
-			</c:if> --%> 
-			 
-			 
-<%-- 로그인 안된 상태 --%>
-	 <c:if test="${empty sessionScope.loginCafe}">
-		<a href="/loginFrm">로그인</a>
-		<a href="/joinFrm">회원가입</a>
-	</c:if> 	 
-
-			 
-<%-- 로그인 안된 상태 --%>
-
-	 <c:if test="${empty sessionScope.loginCafe}">
-		<a href="/loginFrm">로그인</a>
-		<a href="/joinFrm">회원가입</a>
-	</c:if>	 
->>>>>>> 26ae708544f9a46520d340e9c112325502fd3277
-	
-<%-- 로그인 되어있는 상태 --%>
-	<c:if test="${not empty sessionScope.loginCafe}">
-		<a href="/LogoutServlet">로그아웃</a> 
-		<a href="/myPage/chkPwFrm">마이페이지</a>
-		<a href="#">내 리뷰/Q&A</a><br>
 		
-	<%-- 일반이용자 메뉴 --%>
-		<c:if test="${3 == sessionScope.role}">
-			<%-- 여기서 분기 한 번 더 해야함 호스트 신청 한 상태면 수정만 나오게
-			호스트 신청을 했다면 로그인한 세션 아이디와 호스트 신청내역 id가 같은 
-			  --%>
-			<a href="/applyCafe">업체(호스트) 신청</a>
-			
-			<a href="/editCafeFrm">업체(호스트) 수정</a>
-			
-		</c:if>
-		
-	<%-- 호스트 메뉴 --%>
-		<c:if test="${2 == sessionScope.role}">
-			<a href="#">카페 관리</a><br>
-			<a href="#">카페 리뷰/Q&A</a>
-		</c:if>
-		
-	<%-- 관리자 메뉴 --%>
-		<c:if test="${1 == sessionScope.role}">
-			<a href="/manager/userManage?reqPage=1">이용자 관리</a><br>
-			<a href="/manager/cafeManage?reqPage=1">업체 관리</a><br>
-			<a href="/manger/cafeApplyChk">업체신청정보열람</a><br>
-			<a href="/manager/chkReport">신고접수열람</a>
-		</c:if>
-		
-	</c:if>
-
-
-
-<br><br><br>
-<hr>
-<a><관리자 페이지 메뉴></a><br> <%-- 휘훈님 개발 --%>
-<a href="/manager/userManage?reqPage=1">이용자 관리</a>
-<a href="/manager/cafeManage?reqPage=1">업체 관리</a>
-<a href="/manger/cafeApplyChk">업체신청정보열람</a>
-<a href="/manager/chkReport?reqPage=1">신고접수열람</a>
-
-<br><br><br>
-<hr>
 
 	<%-- 인기많은 카페 top6 (리뷰/Q&A 달린 기준) --%>
 <div class="cafe-list">
@@ -147,7 +69,9 @@
             <p>${cafe.cafeAddr}</p>
         </div>
     </c:forEach>
+    
+    
 </div>
-
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 </body>
 </html>
