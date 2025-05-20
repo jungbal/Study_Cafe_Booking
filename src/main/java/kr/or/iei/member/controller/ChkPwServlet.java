@@ -72,7 +72,7 @@ public class ChkPwServlet extends HttpServlet {
 		if (checked != null) {
 			 // 비밀번호 확인 성공 시 → 계정관리 탭으로 진입
 			if(loginMember.getUserRole()==2) {
-				response.sendRedirect(request.getContextPath() + "/host/cafeInfoModi");
+				response.sendRedirect(request.getContextPath() + "/myPage/myInfo?tab=account");
 			}else if(loginMember.getUserRole()==3) {
 				response.sendRedirect(request.getContextPath() + "/myPage/myInfo?tab=account");
 			}else if(loginMember.getUserRole()==1) { // 수정 : 관리자일 경우 리다이렉트 주소 추가
