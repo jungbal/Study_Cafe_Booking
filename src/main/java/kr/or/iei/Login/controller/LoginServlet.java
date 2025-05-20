@@ -32,34 +32,32 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String loginId = request.getParameter("loginId");
-		String loginPw = request.getParameter("loginPw");
-		
-		LoginService service = new LoginService();
-//		cafeLogin : 로그인을 위한 메소드		
-		Login loginCafe = service.cafeLogin(loginId, loginPw); 
-//		chkUserRole : 일반,호스트,관리자 구분 메소드
-		int role = service.chkUserRole(loginId);
-		
-		RequestDispatcher view = null;
-		
-		if(loginCafe == null || role == 0) {
-			view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
-			
-			request.setAttribute("title", "알림");
-			request.setAttribute("msg", "아이디 또는 비밀번호를 확인하세요");
-			request.setAttribute("icon", "error");
-			request.setAttribute("loc", "/loginFrm");
-		}else {
-			view = request.getRequestDispatcher("/index.jsp");
-			
-			HttpSession session = request.getSession();
-			session.setAttribute("loginCafe", loginCafe);
-			session.setAttribute("role", role);
-			session.setMaxInactiveInterval(600);
+		 String loginId = request.getParameter("loginId");
+		    String loginPw = request.getParameter("loginPw");
+
+		    LoginService service = new LoginService();
+		    Login loginCafe = service.cafeLogin(loginId, loginPw);
+		    int role = service.chkUserRole(loginId);
+
+		    if (loginCafe == null || role == 0) {
+		        // 로그인 실패 시만 forward 처리
+		        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
+		        request.setAttribute("title", "알림");
+		        request.setAttribute("msg", "아이디 또는 비밀번호를 확인하세요");
+		        request.setAttribute("icon", "error");
+		        request.setAttribute("loc", "/loginFrm");
+		        view.forward(request, response);
+		    } else {
+		        // 로그인 성공 시 redirect 처리 (view 변수 선언 금지)
+		        HttpSession session = request.getSession();
+		        session.setAttribute("loginCafe", loginCafe);
+		        session.setAttribute("role", role);
+		        session.setMaxInactiveInterval(600); // 10분 세션 유지
+
+		        response.sendRedirect(request.getContextPath() + "/main");
+		        // redirect 이후엔 절대 forward 호출 금지!
+		    }
 		}
-		view.forward(request, response);
-	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
