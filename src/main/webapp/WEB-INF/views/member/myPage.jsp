@@ -36,7 +36,7 @@
       padding: 20px;
     }
   </style>
-<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
+ <link type="text/css" rel="stylesheet" href="/resources/css/mypage.css" />
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
