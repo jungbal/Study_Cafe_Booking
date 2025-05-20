@@ -61,7 +61,11 @@ public class ChkPwServlet extends HttpServlet {
 		
 		if (checked != null) {
 			 // 비밀번호 확인 성공 시 → 계정관리 탭으로 진입
-			response.sendRedirect(request.getContextPath() + "/myPage/myInfo?tab=account");
+			if(loginMember.getUserRole()==2) {
+				response.sendRedirect(request.getContextPath() + "/host/cafeInfoModi");
+			}else if(loginMember.getUserRole()==3) {
+				response.sendRedirect(request.getContextPath() + "/myPage/myInfo?tab=account");
+			}
 		} else {
 			request.setAttribute("title", "비밀번호 오류");
 			request.setAttribute("msg", "비밀번호가 일치하지 않습니다.");
