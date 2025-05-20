@@ -41,70 +41,66 @@ public class CafeService {
    
    //정휘훈 파트 
    public ListData<Cafe> selectAllCafe(int reqPage) {
-	    
 	    Connection conn = JDBCTemplate.getConnection();
-	    
-	    int viewNoticeCnt = 10;  // 한 페이지당 보여줄 글 수
-	    
+
+	    int viewNoticeCnt = 10; // 한 페이지당 보여줄 글 수
 	    int end = viewNoticeCnt * reqPage;
 	    int start = end - viewNoticeCnt + 1;
-	    
+
 	    ArrayList<Cafe> list = dao.selectAllCafe(conn, start, end);
-	    
+
 	    // 전체 글 수 조회
 	    int totCnt = dao.selectTotalCount(conn);
-	    
-	    // 전체 페이지 수 계산 (전체 글 수 / 한 페이지당 글 수)
 	    int totPage = (totCnt % viewNoticeCnt == 0) ? (totCnt / viewNoticeCnt) : (totCnt / viewNoticeCnt + 1);
-	    
-	    int pageNaviSize = 5;  // 페이지 내비게이션에 표시할 페이지 번호 개수
-	    
-	    // 현재 내비 시작 페이지 번호 계산 (1, 6, 11, ...)
+
+	    int pageNaviSize = 5;
 	    int pageNo = ((reqPage - 1) / pageNaviSize) * pageNaviSize + 1;
-	    
+
 	    StringBuilder pageNavi = new StringBuilder();
-	    pageNavi.append("<ul class='pagination circle-style'>");
-	    
-	    // 이전 버튼 표시 (첫 페이지가 아니면)
-	    if(pageNo != 1) {
+	    pageNavi.append("<ul class='flex justify-center items-center space-x-2 mt-4'>");
+
+	    // 이전 버튼
+	    if (pageNo != 1) {
 	        pageNavi.append("<li>");
-	        pageNavi.append("<a class='page-item' href='/manager/cafeManage?reqPage=").append(pageNo - 1).append("'>");
-	        pageNavi.append("<span class='material-icons'>chevron_left</span>");
-	        pageNavi.append("</a></li>");
+	        pageNavi.append("<a href='/manager/cafeManage?reqPage=")
+	                .append(pageNo - 1)
+	                .append("' class='px-3 py-1 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 transition'>&larr;</a>");
+	        pageNavi.append("</li>");
 	    }
-	    
-	    // 페이지 번호 출력
-	    for(int i = 0; i < pageNaviSize && pageNo <= totPage; i++) {
+
+	    // 페이지 번호들
+	    for (int i = 0; i < pageNaviSize && pageNo <= totPage; i++) {
 	        pageNavi.append("<li>");
-	        
-	        if(pageNo == reqPage) {
-	            pageNavi.append("<a class='page-item active-page' href='/manager/cafeManage?reqPage=").append(pageNo).append("'>");
+	        if (pageNo == reqPage) {
+	            pageNavi.append("<a href='/manager/cafeManage?reqPage=")
+	                    .append(pageNo)
+	                    .append("' class='px-3 py-1 rounded-md border border-blue-500 bg-blue-500 text-white font-semibold'>");
 	        } else {
-	            pageNavi.append("<a class='page-item' href='/manager/cafeManage?reqPage=").append(pageNo).append("'>");
+	            pageNavi.append("<a href='/manager/cafeManage?reqPage=")
+	                    .append(pageNo)
+	                    .append("' class='px-3 py-1 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 transition'>");
 	        }
-	        
 	        pageNavi.append(pageNo);
 	        pageNavi.append("</a></li>");
-	        
 	        pageNo++;
 	    }
-	    
-	    // 다음 버튼 표시 (더 다음 페이지가 있으면)
-	    if(pageNo <= totPage) {
+
+	    // 다음 버튼
+	    if (pageNo <= totPage) {
 	        pageNavi.append("<li>");
-	        pageNavi.append("<a class='page-item' href='/manager/cafeManage?reqPage=").append(pageNo).append("'>");
-	        pageNavi.append("<span class='material-icons'>chevron_right</span>");
-	        pageNavi.append("</a></li>");
+	        pageNavi.append("<a href='/manager/cafeManage?reqPage=")
+	                .append(pageNo)
+	                .append("' class='px-3 py-1 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 transition'>&rarr;</a>");
+	        pageNavi.append("</li>");
 	    }
-	    
+
 	    pageNavi.append("</ul>");
-	    
+
 	    ListData<Cafe> listData = new ListData<>();
 	    listData.setList(list);
 	    listData.setPageNavi(pageNavi.toString());
-	    
+
 	    JDBCTemplate.close(conn);
-	    
 	    return listData;
 	}
 
