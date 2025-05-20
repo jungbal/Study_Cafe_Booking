@@ -68,6 +68,8 @@ body {
 <hr>
 
 <%-- 인기많은 카페 top6 (리뷰/Q&A 달린 기준) --%> <!-- 클릭하면 카페 detail.jsp 로 이동 -->
+
+
 <div class="cafe-list">
     <c:forEach var="cafe" items="${cafeList}">
         <div class="cafe-item">
@@ -76,6 +78,8 @@ body {
             <p>${cafe.cafeAddr}</p>
         </div>
     </c:forEach>
+    
+    
 </div>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 </body>

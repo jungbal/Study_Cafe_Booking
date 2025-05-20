@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap" rel="stylesheet">
+
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
     function toggleMenu() {
@@ -12,6 +14,7 @@
 
 <header class="w-full bg-white shadow-md fixed top-0 left-0 z-50">
   <div class="max-w-screen-xl mx-auto px-4 py-3 flex items-center justify-between">
+  
     <!-- 좌측: 로고 -->
     <div class="flex items-center space-x-2 whitespace-nowrap cursor-pointer select-none">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -80,6 +83,7 @@
       </c:if>
     </c:if>
   </div>
+</div>
 </div>
 </header>
 
