@@ -1,51 +1,55 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<div class="cafeReview">
-  <h2>Q&A</h2>
+<div class="cafeReview max-w-4xl mx-auto p-4 bg-white rounded shadow">
+
+  <h2 class="text-2xl font-semibold mb-6 text-gray-800">Q&A</h2>
 
   <!-- 댓글 작성창: 로그인한 사용자만 가능 -->
   <c:if test="${not empty loginCafe}">
-    <div class="comment-form">
-      <form action="/cafeDetail/qa/updateComment" method="post">
+    <div class="comment-form mb-6">
+      <form action="/cafeDetail/qa/updateComment" method="post" class="space-y-3">
         <input type="hidden" name="cafeNo" value="${cafe.cafeNo}" />
         <input type="hidden" name="writerId" value="${loginCafe.loginId}" />
-        <textarea name="content" placeholder="댓글을 입력하세요" rows="3" cols="50"></textarea>
-        <br />
-        <button type="submit">댓글 작성</button>
+        <textarea name="content" placeholder="댓글을 입력하세요" rows="3"
+          class="w-full p-2 border rounded resize-none focus:outline-blue-500"></textarea>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">댓글 작성</button>
       </form>
     </div>
   </c:if>
 
-  <div class="review-list">
+  <div class="review-list space-y-8">
     <c:forEach var="qa" items="${qaList}">
       <c:if test="${empty qa.commentParent}">
-        <div class="comment" style="margin-bottom: 20px;">
+        <div class="comment border-b border-gray-200 pb-4">
           <input type="hidden" value="${qa.commentId}" />
-          <p><strong>${qa.commentUserId}</strong> (${qa.commentTime})</p>
-          <p>${qa.content}</p>
+          <p class="text-gray-800 font-semibold">
+            <strong>${qa.commentUserId}</strong> <span class="text-sm text-gray-500">(${qa.commentTime})</span>
+          </p>
+          <p class="mt-1 text-gray-700 whitespace-pre-wrap">${qa.content}</p>
 
           <!-- 삭제 버튼: 관리자만 가능 -->
           <c:if test="${not empty loginCafe and loginCafe.loginRole == 1}">
-            <form action="/cafeDetail/qa/deleteComment" method="post" style="display: inline;">
+            <form action="/cafeDetail/qa/deleteComment" method="post" class="inline-block mt-2">
               <input type="hidden" name="commentId" value="${qa.commentId}" />
               <input type="hidden" name="cafeNo" value="${cafe.cafeNo}" />
-              <button type="submit">삭제</button>
+              <button type="submit" class="text-red-600 hover:underline">삭제</button>
             </form>
           </c:if>
 
           <!-- 답글 달기: 로그인한 카페 사장만 가능 -->
           <c:if test="${not empty loginCafe and loginCafe.loginId eq cafe.hostId}">
-            <button type="button" onclick="toggleReplyForm('${qa.commentId}')">답글 달기</button>
+            <button type="button" onclick="toggleReplyForm('${qa.commentId}')"
+              class="ml-4 text-blue-600 hover:underline focus:outline-none">답글 달기</button>
 
-            <div class="reply-form" id="reply-form-${qa.commentId}" style="display: none; margin-top: 10px;">
-              <form action="/cafeDetail/qa/updateComment" method="post">
+            <div id="reply-form-${qa.commentId}" class="reply-form mt-3 hidden">
+              <form action="/cafeDetail/qa/updateComment" method="post" class="space-y-2">
                 <input type="hidden" name="parentId" value="${qa.commentId}" />
                 <input type="hidden" name="cafeNo" value="${cafe.cafeNo}" />
                 <input type="hidden" name="writerId" value="${loginCafe.loginId}" />
-                <textarea name="content" placeholder="답글을 입력하세요" rows="2" cols="45"></textarea>
-                <br />
-                <button type="submit">답글 작성</button>
+                <textarea name="content" placeholder="답글을 입력하세요" rows="2"
+                  class="w-full p-2 border rounded resize-none focus:outline-blue-500"></textarea>
+                <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">답글 작성</button>
               </form>
             </div>
           </c:if>
@@ -53,17 +57,19 @@
           <!-- 답글 목록 -->
           <c:forEach var="reply" items="${qaList}">
             <c:if test="${reply.userRole == '2' and reply.commentParent == qa.commentId}">
-              <div class="reply" style="margin-left: 30px; margin-top: 10px;">
+              <div class="reply ml-8 mt-4 border-l-2 border-blue-400 pl-4">
                 <input type="hidden" value="${reply.commentId}" />
-                <p><strong>${reply.commentUserId}</strong> (${reply.commentTime})</p>
-                <p>${reply.content}</p>
+                <p class="text-gray-800 font-semibold">
+                  <strong>${reply.commentUserId}</strong> <span class="text-sm text-gray-500">(${reply.commentTime})</span>
+                </p>
+                <p class="mt-1 text-gray-700 whitespace-pre-wrap">${reply.content}</p>
 
                 <!-- 답글 삭제 버튼: 관리자만 가능 -->
                 <c:if test="${not empty loginCafe and loginCafe.loginRole == 1}">
-                  <form action="/cafeDetail/qa/deleteComment" method="post" style="display: inline;">
+                  <form action="/cafeDetail/qa/deleteComment" method="post" class="inline-block mt-2">
                     <input type="hidden" name="commentId" value="${reply.commentId}" />
                     <input type="hidden" name="cafeNo" value="${cafe.cafeNo}" />
-                    <button type="submit">삭제</button>
+                    <button type="submit" class="text-red-600 hover:underline">삭제</button>
                   </form>
                 </c:if>
               </div>
@@ -75,10 +81,9 @@
   </div>
 </div>
 
-<!-- JavaScript: 답글 입력창 토글 -->
 <script>
   function toggleReplyForm(commentId) {
     const form = document.getElementById('reply-form-' + commentId);
-    form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+    form.classList.toggle('hidden');
   }
 </script>
