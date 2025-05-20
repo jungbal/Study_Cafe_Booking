@@ -12,11 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.comment.model.service.CommentService;
 import kr.or.iei.comment.model.vo.Comment;
 
 import kr.or.iei.host.model.service.HostService;
 import kr.or.iei.host.model.vo.Cafe;
+import kr.or.iei.member.model.service.MemberService;
 import kr.or.iei.member.model.service.PayService;
 import kr.or.iei.member.model.vo.Member;
 import kr.or.iei.member.model.vo.PayHistory;
@@ -26,7 +28,7 @@ import kr.or.iei.member.model.vo.PayHistory;
  */
 @WebServlet("/host/cafeInfoModi")
 public class CafeInfoModiServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -36,13 +38,26 @@ public class CafeInfoModiServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession(false);
-        Member loginMember = (Member) session.getAttribute("loginMember");
+   /**
+    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+    */
+   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      // Member 세션 가져오기
+      //HttpSession session = request.getSession(false);
+        //Member loginMember = (Member) session.getAttribute("loginMember");
+      HttpSession session = request.getSession(false);
+      
+      if (session != null && session.getAttribute("loginCafe") != null && session.getAttribute("loginMember") == null) {
+          Login loginCafe = (Login) session.getAttribute("loginCafe");
+          String userId = loginCafe.getLoginId();
 
+          Member loginMember = new MemberService().selectOneMember(userId);
+          session.setAttribute("loginMember", loginMember);
+          
+      }
+      
+      Member loginMember = (Member) session.getAttribute("loginMember");
+      
         if (loginMember == null) {
             response.sendRedirect(request.getContextPath() + "/member/loginFrm");
             return;
@@ -67,28 +82,28 @@ public class CafeInfoModiServlet extends HttpServlet {
         }
         
         // 결제 내역 탭이라면 데이터 조회
-    	if ("payment".equals(tab) && loginMember != null) {
-    		PayService pService = new PayService();
-    		ArrayList<PayHistory> list = pService.selectPayHistoryByUser(userId);
-    		session.setAttribute("payList", list);
-    	}
-    	
-    	// myPage.jsp로 포워딩
-    	HostService service = new HostService();
-    	Cafe cafe = service.selectCafeByNo(userId);
-    	
-    	request.setAttribute("cafe", cafe);
-    	
+       if ("payment".equals(tab) && loginMember != null) {
+          PayService pService = new PayService();
+          ArrayList<PayHistory> list = pService.selectPayHistoryByUser(userId);
+          session.setAttribute("payList", list);
+       }
+       
+       // myPage.jsp로 포워딩
+       HostService service = new HostService();
+       Cafe cafe = service.selectCafeByNo(userId);
+       
+       request.setAttribute("cafe", cafe);
+       
         RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/host/cafeInfoModi.jsp");
         view.forward(request, response);
-	}
+   }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+   /**
+    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+    */
+   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      // TODO Auto-generated method stub
+      doGet(request, response);
+   }
 
 }
