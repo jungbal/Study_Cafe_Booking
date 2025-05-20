@@ -261,22 +261,16 @@ public class CafeService {
                isAllSuccess = false;
                break;
            }
-
+       }
 
        if (isAllSuccess) {
-    	   int result1 = dao.insertHostRequest(conn, cafeNo);
-    	   if(result1>0) {
-    		   JDBCTemplate.commit(conn); 
-    	   }else {
-    		   JDBCTemplate.rollback(conn);
-    	   }
+    	  JDBCTemplate.commit(conn);
        } else {
            JDBCTemplate.rollback(conn);
        }
 
        JDBCTemplate.close(conn);
        return resultMap;
-   }
    }
 
 
