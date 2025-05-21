@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<footer class="bg-blue-900 bg-opacity-70 text-slate-50 py-6 text-center text-base leading-relaxed">
+<footer class="bg-blue-900 bg-opacity-70 text-slate-50 py-10 text-center text-base leading-relaxed">
   <div>
     <p class="mb-3 font-semibold text-lg">&copy; 엄마가딸에게</p>
   </div>
