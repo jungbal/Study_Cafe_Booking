@@ -66,7 +66,7 @@ public class ApplyCafeServlet extends HttpServlet {
 			request.setAttribute("title", "알림");
 			request.setAttribute("msg", "업체(호스트) 신청이 완료되었습니다.");
 			request.setAttribute("icon", "success");
-			request.setAttribute("loc", "/index.jsp");
+			request.setAttribute("loc", "/main");
 			
 		}else { // 업체 신청이 안됐을 때
 			view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
