@@ -764,5 +764,43 @@ public class CafeDao {
 	    return payId;
 	}
 
+	public int editResult(Connection conn, String loginId, Cafe cafeInfo) {
+		int editResult = 0;
+		PreparedStatement pstmt = null;
+		String query = "update tbl_cafe set "
+				+ "cafe_name = ?, "
+				+ "cafe_phone = ?, "
+				+ "cafe_addr = ?, "
+				+ "cafe_biznum = ?, "
+				+ "cafe_introduce = ?, "
+				+ "cafe_start_hour = ?, "
+				+ "cafe_end_hour = ?, "
+				+ "cafe_intro_detail = ? "
+				+ "where host_id = ? ";
+		
+		try {
+			
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, cafeInfo.getCafeName());
+			pstmt.setString(2, cafeInfo.getCafePhone());
+			pstmt.setString(3, cafeInfo.getCafeAddr());
+			pstmt.setString(4, cafeInfo.getCafeBiznum());
+			pstmt.setString(5, cafeInfo.getCafeIntroduce());
+			pstmt.setString(6, cafeInfo.getCafeStartHour());
+			pstmt.setString(7, cafeInfo.getCafeEndHour());
+			pstmt.setString(8, cafeInfo.getCafeIntroDetail());
+			pstmt.setString(9, loginId);
+			
+			editResult = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return editResult;
+	}
+
 
 }
