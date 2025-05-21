@@ -493,41 +493,43 @@ public class CafeDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			JDBCTemplate.close(conn);
+			JDBCTemplate.close(pstmt);
 		}
 		return result;
 	}
 
 	public int insertWait(Connection conn, String cafeNo) {
-		PreparedStatement pstmt = null;
-		
-		int result = 0;
-		try {
-			 // tbl_cafe 업데이트
+	    PreparedStatement pstmt = null;
+	    int result = 0;
+
+	    try {
+	        // 1. tbl_cafe 승인 처리
 	        pstmt = conn.prepareStatement(
-	            "UPDATE tbl_cafe SET cafe_status = 'Y' " +
-	            "WHERE cafe_no = ?"
+	            "UPDATE tbl_cafe SET cafe_status = 'Y' WHERE cafe_no = ?"
 	        );
 	        pstmt.setString(1, cafeNo);
 	        result += pstmt.executeUpdate();
-	        
+	        pstmt.close();
 
-	        // tbl_host_request 업데이트
-	        pstmt= conn.prepareStatement(
-					"update tbl_host_request set status= 'Y' " + 
-					"where host_no = ?"
-					);
-			pstmt.setString(1, cafeNo);
-			result += pstmt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			
-			JDBCTemplate.close(conn);
-		}
-		return result;
+	        // 2. tbl_host_request 승인 처리
+	        pstmt = conn.prepareStatement(
+	            "UPDATE tbl_host_request SET status = 'Y' WHERE host_no = ?"
+	        );
+	        pstmt.setString(1, cafeNo);
+	        result += pstmt.executeUpdate();
+	        pstmt.close();
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        JDBCTemplate.close(pstmt);
+	        // ❗conn은 서비스에서 닫습니다
+	    }
+
+	    return result;
 	}
+
+
 
 
 	public Cafe selectOneCafe(Connection conn, String loginId) {
@@ -727,5 +729,45 @@ public class CafeDao {
 		
 		return hostId;
 	}
+	public int updateUserStatus(Connection conn, String loginId) {
+	    PreparedStatement pstmt = null;
+	    int result = 0;
+
+	    String sql = "UPDATE tbl_user SET user_status = 'Y' WHERE user_id = ?";
+
+	    try {
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, loginId);
+	        result = pstmt.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        JDBCTemplate.close(pstmt);
+	    }
+
+	    return result;
+	}
+
+	//권한 바꾸기 일반사용자 -> 호스트
+	public int updateUserRoleToHost(Connection conn, String cafeNo) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		String query = "update tbl_user set user_role = 2 where user_id in (select host_id from tbl_cafe where cafe_no = ?)";
+		
+		try {
+			pstmt=conn.prepareStatement(query);
+			pstmt.setString(1, cafeNo);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+
 
 }
