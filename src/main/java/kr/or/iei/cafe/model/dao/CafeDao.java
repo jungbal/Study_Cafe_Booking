@@ -247,7 +247,7 @@ public class CafeDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			JDBCTemplate.close(conn);
+			JDBCTemplate.close(pstmt);
 		}
 		return result;
 	}
@@ -539,7 +539,25 @@ public class CafeDao {
 		ResultSet rset = null;
 		Cafe cafeInfo = null;
 		
-		String query = "select* from tbl_cafe where host_id = ?";
+		String query = "SELECT *\r\n"
+				+ "FROM (\r\n"
+				+ "    SELECT \r\n"
+				+ "        c.*,\r\n"
+				+ "        hr.status AS apply_status,\r\n"
+				+ "        cd.code_name AS reject_reason,\r\n"
+				+ "        hr.apply_date,\r\n"
+				+ "        ROW_NUMBER() OVER (PARTITION BY c.cafe_no ORDER BY hr.apply_date DESC) AS rn\r\n"
+				+ "    FROM \r\n"
+				+ "        tbl_cafe c\r\n"
+				+ "    JOIN \r\n"
+				+ "        tbl_host_request hr ON c.cafe_no = hr.host_no\r\n"
+				+ "    LEFT JOIN \r\n"
+				+ "        tbl_code cd ON hr.reject_id = cd.code_id\r\n"
+				+ "    WHERE \r\n"
+				+ "        c.host_id = ?\r\n"
+				+ ") sub\r\n"
+				+ "WHERE rn = 1\r\n"
+				+ "ORDER BY apply_date DESC;";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -559,6 +577,8 @@ public class CafeDao {
 				cafeInfo.setCafeEndHour(rset.getString("cafe_end_hour"));
 				cafeInfo.setCafeStatus(rset.getString("cafe_status"));
 				cafeInfo.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
+				cafeInfo.setCafeApplyStatus(rset.getString("apply_status"));
+				cafeInfo.setCafeRejectReason(rset.getString("reject_reason"));
 				
 			}
 		

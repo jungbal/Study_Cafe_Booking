@@ -171,6 +171,8 @@ p {
 		<div class="input-wrap">
 			<div class="input-title">
 				<label for="status">심사 현황</label>
+				<input type="text" id="cafeRejectReason" name="cafeRejectReason" value="${cafeInfo.cafeRejectReason}">
+				<input type="text" id="cafeApplyStatus" name="cafeApplyStatus" value="${cafeInfo.cafeApplyStatus}">
 			</div>
 			<div>
 				<p id="status"></p>
