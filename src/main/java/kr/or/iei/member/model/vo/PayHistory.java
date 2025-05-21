@@ -17,4 +17,12 @@ public class PayHistory {
 	private String payAmount;
 	private String payMethod;
 	private String payUserId;
+	
+	// 추가 (마이페이지 결제내역 스터디카페명, 좌석 추가)
+	private String payCafeName;
+	private String payHistorySeatNo;
+	private String payHistoryStart;
+	private String payHistoryEnd;
+	
+	
 }

@@ -53,7 +53,8 @@ public class LoginServlet extends HttpServlet {
 			// 로그인 성공 → 세션에 등록
 			HttpSession session = request.getSession();
 			session.setAttribute("loginMember", loginMember);
-			response.sendRedirect(request.getContextPath() + "/index.jsp");
+			//response.sendRedirect(request.getContextPath() + "/index.jsp");
+			response.sendRedirect(request.getContextPath() + "/main"); // 수정 (김은서)
 		} else {
 			// 로그인 실패
 			view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
