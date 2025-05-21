@@ -276,25 +276,28 @@ public class CafeService {
        
 
 
-	// 업체(호스트) 신청
 	public int insertCafe(Cafe cafeInfo, String loginId) {
-		Connection conn = JDBCTemplate.getConnection();
-		
-		int result = dao.insertCafe(conn, cafeInfo, loginId);
-		
-		int hostRequestResult = dao.insertHostRqst(conn, cafeInfo);
-		
-		// tbl_image 테이블에 기본 이미지 insert 하는 메소드 추가
-		int insertImageResult = dao.insertDefaultImage(conn, cafeInfo);
-		
-		if(result>0 && hostRequestResult>0 && insertImageResult > 0) {
-			JDBCTemplate.commit(conn);
-		}else {
-			JDBCTemplate.rollback(conn);
-		}
-		JDBCTemplate.close(conn);
-		
-		return result;
+	    Connection conn = JDBCTemplate.getConnection();
+
+	    int result = dao.insertCafe(conn, cafeInfo, loginId);
+	    int hostRequestResult = dao.insertHostRqst(conn, cafeInfo);
+	    int insertImageResult = dao.insertDefaultImage(conn, cafeInfo);
+
+	    // ✅ 추가된 승인 처리
+	    int updateUserStatusResult = 0;
+	    if (result > 0 && hostRequestResult > 0 && insertImageResult > 0) {
+	        updateUserStatusResult = dao.updateUserStatus(conn, loginId);
+	    }
+
+	    if (result > 0 && hostRequestResult > 0 && insertImageResult > 0 && updateUserStatusResult > 0) {
+	        JDBCTemplate.commit(conn);
+	    } else {
+	        JDBCTemplate.rollback(conn);
+	    }
+
+	    JDBCTemplate.close(conn);
+
+	    return result;
 	}
 	
 
