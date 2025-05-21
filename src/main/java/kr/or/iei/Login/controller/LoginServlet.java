@@ -33,37 +33,7 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//<<<<<<< HEAD
-//		String loginId = request.getParameter("loginId");
-//		String loginPw = request.getParameter("loginPw");
-//		
-//		LoginService service = new LoginService();
-//		CafeService cafeservice = null;
-//		
-//		Login loginCafe = service.cafeLogin(loginId, loginPw); 
-//		int role = service.chkUserRole(loginId);
-//		
-//		RequestDispatcher view = null;
-//		
-//		if(loginCafe == null || role == 0) {
-//			view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
-//			
-//			request.setAttribute("title", "알림");
-//			request.setAttribute("msg", "아이디 또는 비밀번호를 확인하세요");
-//			request.setAttribute("icon", "error");
-//			request.setAttribute("loc", "/loginFrm");
-//		}else {
-//			view = request.getRequestDispatcher("/index.jsp");
-//			
-//			HttpSession session = request.getSession();
-//			session.setAttribute("loginCafe", loginCafe);
-//			session.setAttribute("role", role);
-//			session.setMaxInactiveInterval(600);
-//			
-//			cafeservice = new CafeService();
-//			String hostId = cafeservice.matchHostId(loginId);
-//			request.setAttribute("hostId", hostId);
-//=======
+
 		 	String loginId = request.getParameter("loginId");
 		    String loginPw = request.getParameter("loginPw");
 
@@ -98,9 +68,6 @@ public class LoginServlet extends HttpServlet {
 
 		        response.sendRedirect(request.getContextPath() + "/main");
 		        // redirect 이후엔 절대 forward 호출 금지!
-		        
-		       
-//				request.setAttribute("hostId", hostId);
 		        
 				
 		    }
