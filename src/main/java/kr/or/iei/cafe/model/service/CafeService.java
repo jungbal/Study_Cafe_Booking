@@ -275,34 +275,7 @@ public class CafeService {
 
        
 
-<<<<<<< HEAD
-// 업체(호스트) 신청
-public int insertCafe(Cafe cafeInfo, String loginId) {
-    Connection conn = JDBCTemplate.getConnection();
-    
-    int result = dao.insertCafe(conn, cafeInfo, loginId);
-    int hostRequestResult = dao.insertHostRqst(conn, cafeInfo);
-    int updateUserStatusResult = 0;
-    
-    // 두 작업 성공 시 user_status 업데이트 시도
-    if(result > 0 && hostRequestResult > 0) {
-        updateUserStatusResult = dao.updateUserStatus(conn, loginId);
-        
-        if(updateUserStatusResult > 0) {
-            JDBCTemplate.commit(conn);
-        } else {
-            JDBCTemplate.rollback(conn);
-        }
-    } else {
-        JDBCTemplate.rollback(conn);
-    }
 
-    JDBCTemplate.close(conn);
-    
-    return (result > 0 && hostRequestResult > 0 && updateUserStatusResult > 0) ? 1 : 0;
-}
-
-=======
 	// 업체(호스트) 신청
 	public int insertCafe(Cafe cafeInfo, String loginId) {
 		Connection conn = JDBCTemplate.getConnection();
@@ -324,7 +297,7 @@ public int insertCafe(Cafe cafeInfo, String loginId) {
 		return result;
 	}
 	
->>>>>>> master
+
 	public ArrayList<Cafe> selectMainCafes() {
 		Connection conn = JDBCTemplate.getConnection();
 		ArrayList<Cafe> cafeList = dao.selectMainCafes(conn);
