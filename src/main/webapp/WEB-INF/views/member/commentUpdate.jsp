@@ -5,6 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <title>댓글 수정</title>
+  <link type="text/css" rel="stylesheet" href="/resources/css/mypage.css" />
 </head>
 <body>
   <h2>댓글 수정</h2>

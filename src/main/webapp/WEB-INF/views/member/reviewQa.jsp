@@ -4,34 +4,7 @@
 <html>
 <head>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <style>
-    .sub-tab-wrap { display: flex; margin-bottom: 20px; }
-    .sub-tab-btn {
-      padding: 10px 20px; border: 1px solid #ccc; cursor: pointer;
-    }
-    .sub-tab-btn.active { background-color: #2ecc71; color: white; }
-    .review-table, .qna-table { display: none; }
-    .tab-visible { display: table; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-    tr.reply { background-color: #f9f9f9; color: #555; }
-    tr.reply td { padding-left: 40px; font-style: italic; }
-    .update-btn {
-  background: #c6e2ff;
-  border: 1;
-  border-color : #c6e2ff;
-  color: blue;
-  cursor: pointer;
-}
-button.delete-btn {
-  background: #ffe4e1;
-  border: 1;
-  border-color : #ffe4e1;
-  color: red;
-  cursor: pointer;
-}
-  </style>
-<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/resources/css/mypage.css" />
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>

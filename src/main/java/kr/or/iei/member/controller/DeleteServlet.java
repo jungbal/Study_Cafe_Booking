@@ -2,10 +2,16 @@ package kr.or.iei.member.controller;
 
 import java.io.File;
 import java.io.IOException;
-import javax.servlet.*;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.member.model.service.MemberService;
 import kr.or.iei.member.model.vo.Member;
 //이정원 - 마이페이지 회원 탈퇴
@@ -16,15 +22,30 @@ public class DeleteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String userId = request.getParameter("userId");
 
 		// 1. 세션에서 사용자 정보 가져오기 (파일 경로 확인용)
 		HttpSession session = request.getSession(false);
 		Member loginMember = (session != null) ? (Member) session.getAttribute("loginMember") : null;
-		String userImage = (loginMember != null) ? loginMember.getUserImage() : null;
+		Login loginCafe = (session != null) ? (Login) session.getAttribute("loginCafe") : null;
+		
+		String userId = null;
+		String userImage = null;
+		
+		MemberService service = new MemberService();
+		
+		if (loginMember != null) {
+			userId = loginMember.getUserId();
+			userImage = loginMember.getUserImage();
+		} else if (loginCafe != null) {
+			userId = loginCafe.getLoginId();
+			// 필요하다면 loginCafe의 이미지 경로도 추출할 수 있도록 DB에서 Member 조회
+			Member member = service.selectOneMember(userId);
+			if (member != null) {
+				userImage = member.getUserImage();
+			}
+		}
 
 		// 2. DB에서 회원 삭제
-		MemberService service = new MemberService();
 		int result = service.deleteOneUser(userId);
 
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
@@ -41,13 +62,15 @@ public class DeleteServlet extends HttpServlet {
 			}
 
 			// 4. 세션 파기
-			if (session != null) session.invalidate();
+			if (session != null) {
+				session.invalidate();
+			}
 
 			// 5. 성공 메시지
 			request.setAttribute("title", "알림");
 			request.setAttribute("msg", "회원 탈퇴가 완료되었습니다.");
 			request.setAttribute("icon", "success");
-			request.setAttribute("loc", "/member/loginFrm");
+			request.setAttribute("loc", "/loginFrm");
 
 		} else {
 			// 실패 메시지

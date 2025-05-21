@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="/resources/css/default.css">
+<link type="text/css" rel="stylesheet" href="/resources/css/mypage.css" />
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="/resources/js/sweetalert.min.js"></script>
 <style>
@@ -118,6 +118,15 @@
 		}
 		
 		//새 비밀번호와 새 비밀번호 확인값이 같은지?
+				
+		if($('#memberPw').val() == $('#newMemberPw').val()){
+			swal({
+				title : "알림",
+				text : "기존 비밀번호와 새비밀번호가 같습니다. 다른 비밀번호를 사용해주세요.",
+				icon : "warning"
+			});
+			return false;
+		}
 				
 		if($('#newMemberPw').val() != $('#newMemberPwRe').val()){
 			swal({
