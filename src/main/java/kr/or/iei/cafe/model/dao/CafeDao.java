@@ -851,7 +851,7 @@ public class CafeDao {
 		 int result = 0;
 		    
 		    // 최신 결제내역을 가져오기 위해 pay_id를 내림차순 정렬, 1건만 조회
-		    String query = "Insert into tbl_image  (cafe_no, image_name, image_path) values (?, 'defaultCafe.png', '/resources/upload/defaultCafe.png')";
+		    String query = "Insert into tbl_image  (cafe_no, image_name, image_path) values (?, 'defaultCafe.png', '/resources/cafeImage/defaultCafe.png')";
 		    
 		    try {
 				pstmt = conn.prepareStatement(query);
