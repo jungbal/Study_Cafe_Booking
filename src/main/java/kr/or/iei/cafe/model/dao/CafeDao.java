@@ -543,8 +543,18 @@ public class CafeDao {
 				+ "FROM (\r\n"
 				+ "    SELECT \r\n"
 				+ "        c.*,\r\n"
-				+ "        hr.status AS apply_status,\r\n"
-				+ "        cd.code_name AS reject_reason,\r\n"
+				+ "        -- reject_reason이 null이 아니면 '반려 상태', null이면 '미확인 상태'\r\n"
+				+ "        CASE\r\n"
+				+ "            WHEN cd.code_name IS NULL THEN '미확인 상태'\r\n"
+				+ "            ELSE '반려 상태'\r\n"
+				+ "        END AS apply_status,\r\n"
+				+ "        \r\n"
+				+ "        -- 반려 사유는 존재하면 출력, 없으면 '미확인 상태'로 간주\r\n"
+				+ "        CASE\r\n"
+				+ "            WHEN cd.code_name IS NULL THEN '미확인 상태'\r\n"
+				+ "            ELSE cd.code_name\r\n"
+				+ "        END AS reject_reason,\r\n"
+				+ "\r\n"
 				+ "        hr.apply_date,\r\n"
 				+ "        ROW_NUMBER() OVER (PARTITION BY c.cafe_no ORDER BY hr.apply_date DESC) AS rn\r\n"
 				+ "    FROM \r\n"
@@ -557,7 +567,8 @@ public class CafeDao {
 				+ "        c.host_id = ?\r\n"
 				+ ") sub\r\n"
 				+ "WHERE rn = 1\r\n"
-				+ "ORDER BY apply_date DESC;";
+				+ "ORDER BY apply_date DESC";
+
 		
 		try {
 			pstmt = conn.prepareStatement(query);
