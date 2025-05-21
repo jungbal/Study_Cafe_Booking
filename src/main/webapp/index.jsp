@@ -81,7 +81,7 @@ body {
     <c:forEach var="cafe" items="${cafeList}">
         <a class="cafe-link" href="/cafeDetail?cafeNo=${cafe.cafeNo}">
             <div class="cafe-item">
-                <img src="${cafe.cafeImagePath}" alt="${cafe.cafeName}">
+                <img src="${pageContext.request.contextPath}${cafe.cafeImagePath}" alt="${cafe.cafeName}">
                 <p><strong>${cafe.cafeName}</strong></p>
                 <p class="cafe-addr">${cafe.cafeAddr}</p>
             </div>

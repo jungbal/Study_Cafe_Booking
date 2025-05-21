@@ -57,6 +57,7 @@ public class ChangeCafeServlet extends HttpServlet {
        Part filePart = request.getPart("userImage");
        String fileName = null;
        String filePath = null;
+       String fileWebPath = null;
        if (filePart != null && filePart.getSize() > 0) {
            fileName = extractFileName(filePart);
            
@@ -66,15 +67,15 @@ public class ChangeCafeServlet extends HttpServlet {
            if (!saveDirFile.exists()) {
                saveDirFile.mkdirs();
            }
-           
+           System.out.println("saveDir : " + saveDir);
            filePath = saveDir + File.separator + fileName;
            filePart.write(filePath);
+           fileWebPath = "/resources/upload/" + fileName;
        }
        System.out.println("fileName : " + fileName);
-       System.out.println("filePath : " + filePath);
-
+       System.out.println("filePath : " + filePath); 
       
-       Cafe cafe = new Cafe(cafeNo, cafeName, cafePhone, cafeAddr, cafeBiznum, cafeIntroduce, cafeStartHour, cafeEndHour, cafeStatus, cafeIntroDetail, hostId, null, filePath, fileName);
+       Cafe cafe = new Cafe(cafeNo, cafeName, cafePhone, cafeAddr, cafeBiznum, cafeIntroduce, cafeStartHour, cafeEndHour, cafeStatus, cafeIntroDetail, hostId, null, fileWebPath, fileName);
       
       int result = service.changeCafe(cafe);
       
