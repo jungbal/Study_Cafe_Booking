@@ -27,5 +27,9 @@ public class Cafe {
 	private String cafeImageNo;
 	private String cafeImagePath;
 	private String cafeImageName;
+	
+	// 카페 신청 시 승인/반려 여부, 반려 사유
+	private String cafeRejectReason;
+	private String cafeApplyStatus;
 
 }

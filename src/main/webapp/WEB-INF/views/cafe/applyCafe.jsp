@@ -74,6 +74,7 @@
     <!-- 버튼 -->
     <div class="text-center">
       <button type="submit" id="submit" class="bg-blue-600 text-white px-6 py-3 rounded-md font-bold hover:bg-blue-700 transition duration-300">신청</button>
+      <p id="submitMsg"></p>
     </div>
 
   </form>
@@ -96,6 +97,7 @@
       chkObj.cafeAddr = true;
     } else {
       $('#addrMsg').text('숫자 포함 10글자 이상 입력해주세요.');
+      chkObj.cafeAddr = false;
     }
   });
 
@@ -107,6 +109,7 @@
       chkObj.cafePhone = true;
     } else {
       $('#phoneMsg').text('전화번호 형식이 올바르지 않습니다.');
+      chkObj.cafePhone = false;
     }
   });
 
@@ -118,6 +121,7 @@
       chkObj.cafeBiznum = true;
     } else {
       $('#biznumMsg').text('사업자 번호 형식이 올바르지 않습니다.');
+      chkObj.cafeBiznum = false;
     }
   });
 
@@ -126,25 +130,28 @@
     const regExp = /^([01]\d|2[0-3]):[0-5]\d$/;
     if (regExp.test($(this).val())) {
       $('#startHourMsg').text('');
+      chkObj.cafeStartHour = true;
     } else {
       $('#startHourMsg').text('영업 시간 형식이 올바르지 않습니다.');
+      chkObj.cafeStartHour = false;
     }
   });
 
   const cafeEndHour = $('#cafeEndHour');
   cafeEndHour.on('input', function () {
-    const regExp = /^([01]\d|2[0-3]):[0-5]\d$/;
+    const regExp = /^(?:([01]\d|2[0-3]):[0-5]\d|24:00)$/
     if (regExp.test($(this).val())) {
       $('#endHourMsg').text('');
+      chkObj.cafeEndHour = true;
     } else {
       $('#endHourMsg').text('영업 시간 형식이 올바르지 않습니다.');
+      chkObj.cafeEndHour = false;
     }
   });
-  
-	const submit = $('#submit');
+ 
+	$('#formSubmit').on('submit', function(e) {
 	const allVal = Object.values(chkObj).every(value => Boolean(value));
 	
-	$('#formSubmit').on('submit', function(e) {
 		  if(!allVal) {
 		    e.preventDefault(); 
 		    $('#submitMsg').text('모든 값을 정확히 입력하세요.');

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.cafe.model.vo.Cafe;
+import kr.or.iei.cafe.model.vo.Code;
 import kr.or.iei.cafe.model.vo.History;
 import kr.or.iei.common.JDBCTemplate;
 import kr.or.iei.member.model.vo.Member;
@@ -247,7 +248,7 @@ public class CafeDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			JDBCTemplate.close(conn);
+			JDBCTemplate.close(pstmt);
 		}
 		return result;
 	}
@@ -539,7 +540,36 @@ public class CafeDao {
 		ResultSet rset = null;
 		Cafe cafeInfo = null;
 		
-		String query = "select* from tbl_cafe where host_id = ?";
+		String query = "SELECT *\r\n"
+				+ "FROM (\r\n"
+				+ "    SELECT \r\n"
+				+ "        c.*,\r\n"
+				+ "        -- reject_reason이 null이 아니면 '반려 상태', null이면 '미확인 상태'\r\n"
+				+ "        CASE\r\n"
+				+ "            WHEN cd.code_name IS NULL THEN '미확인 상태'\r\n"
+				+ "            ELSE '반려 상태'\r\n"
+				+ "        END AS apply_status,\r\n"
+				+ "        \r\n"
+				+ "        -- 반려 사유는 존재하면 출력, 없으면 '미확인 상태'로 간주\r\n"
+				+ "        CASE\r\n"
+				+ "            WHEN cd.code_name IS NULL THEN '미확인 상태'\r\n"
+				+ "            ELSE cd.code_name\r\n"
+				+ "        END AS reject_reason,\r\n"
+				+ "\r\n"
+				+ "        hr.apply_date,\r\n"
+				+ "        ROW_NUMBER() OVER (PARTITION BY c.cafe_no ORDER BY hr.apply_date DESC) AS rn\r\n"
+				+ "    FROM \r\n"
+				+ "        tbl_cafe c\r\n"
+				+ "    JOIN \r\n"
+				+ "        tbl_host_request hr ON c.cafe_no = hr.host_no\r\n"
+				+ "    LEFT JOIN \r\n"
+				+ "        tbl_code cd ON hr.reject_id = cd.code_id\r\n"
+				+ "    WHERE \r\n"
+				+ "        c.host_id = ?\r\n"
+				+ ") sub\r\n"
+				+ "WHERE rn = 1\r\n"
+				+ "ORDER BY apply_date DESC";
+
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -559,6 +589,8 @@ public class CafeDao {
 				cafeInfo.setCafeEndHour(rset.getString("cafe_end_hour"));
 				cafeInfo.setCafeStatus(rset.getString("cafe_status"));
 				cafeInfo.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
+				cafeInfo.setCafeApplyStatus(rset.getString("apply_status"));
+				cafeInfo.setCafeRejectReason(rset.getString("reject_reason"));
 				
 			}
 		
@@ -868,24 +900,77 @@ public class CafeDao {
 	}
 
 	public int updateHostRequestStatus(Connection conn, String cafeNo) {
-		 PreparedStatement pstmt = null;
-		    int result = 0;
+		PreparedStatement pstmt = null;
+	    int result = 0;
 
-		    String query = "UPDATE user_tbl SET user_status = 'Y' WHERE host_no = ?";
+	    String query = "UPDATE user_tbl SET user_status = 'Y' WHERE host_no = ?";
 
-		    try {
-		        pstmt = conn.prepareStatement(query);
-		        pstmt.setString(1, cafeNo);
-		        result = pstmt.executeUpdate();
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		    } finally {
-		        JDBCTemplate.close(pstmt);
-		    }
+	    try {
+	        pstmt = conn.prepareStatement(query);
+	        pstmt.setString(1, cafeNo);
+	        result = pstmt.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        JDBCTemplate.close(pstmt);
+	    }
 
-		    return result;
+	    return result;
 		
 	}
 
+	// tbl_code code_name 값 변경
+	public int insertCodeName(Connection conn, String cafeNo, String rejectCode) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		String query = "update tbl_host_request set reject_id = ? where host_no = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, rejectCode);
+			pstmt.setString(2, cafeNo);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+	        JDBCTemplate.close(pstmt);
+	    }
+	    return result;
+	}
 
+	public ArrayList<Code> selectAllCodeId(Connection conn) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		ArrayList<Code> codeList = new ArrayList<Code>();
+		
+		String query = "select * from tbl_code where code_parent='A1'";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Code code = new Code();
+				
+				code.setCodeId(rset.getString("code_id"));
+				code.setCodeName(rset.getString("code_name"));
+				code.setCodeParent(rset.getString("code_parent"));
+				
+				codeList.add(code);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+	        JDBCTemplate.close(rset);
+	        JDBCTemplate.close(pstmt);
+		
+		}
+		return codeList;
+		
+	}
 }

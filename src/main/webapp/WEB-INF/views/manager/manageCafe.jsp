@@ -20,17 +20,22 @@
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-300 border border-gray-300 rounded-lg overflow-hidden shadow-sm">
                 <thead class="bg-gray-100">
+                   <!-- 디버깅 -->
+                   <c:if test="${empty cafe.cafeNo}">
+						    <tr><td colspan="6" class="text-red-500 font-bold">⚠️ cafeNo가 비어있습니다</td></tr>
+						</c:if>
                     <tr>
                         <th class="px-4 py-2 text-left">업체명</th>
                         <th class="px-4 py-2 text-left">호스트ID</th>
                         <th class="px-4 py-2 text-left">주소</th>
                         <th class="px-4 py-2 text-left">상태</th>
-                        <th class="px-4 py-2 text-left">상태변경</th>
+                        <th class="px-4 py-2 text-left">상태변경</th>                        
                         <th class="px-4 py-2 text-center">신청정보</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <c:forEach var="cafe" items="${cafeList}">
+                    <!-- 디버깅 --><script>console.log("cafeNo: '${cafe.cafeNo}'");</script>
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-2">${cafe.cafeName}</td>
                             <td class="px-4 py-2">${cafe.hostId}</td>
@@ -39,14 +44,17 @@
                             <td class="px-4 py-2">
                                 <c:choose>
                                     <c:when test="${cafe.cafeManageStatus == '수정대기'}">
-                                        <select name="${cafe.cafeNo}" class="border border-gray-300 rounded px-2 py-1 w-full">
+                                    <!--"handleStatusChange('${cafe.cafeNo}')" 에서 값이 null로 넘어감 -->
+                                        <select id="statusSelect_${cafe.cafeNo}" name="${cafe.cafeNo}" onchange="handleStatusChange('${cafe.cafeNo}')"  
+                                        	class="border border-gray-300 rounded px-2 py-1 w-full"> 
                                             <option value="0">상태변경</option>
                                             <option value="1">승인</option>
-                                            <option value="3">반려</option>
+                                            <option value="3">반려</option> <!-- select.value 값 => 3 반려를 눌렀을 때만 반려 코드 selectbox가 생성되므로  -->
                                         </select>
                                     </c:when>
                                     <c:when test="${cafe.cafeManageStatus == '등록대기'}">
-                                        <select name="${cafe.cafeNo}" class="border border-gray-300 rounded px-2 py-1 w-full">
+                                        <select id="statusSelect_${cafe.cafeNo}" name="${cafe.cafeNo}" onchange="handleStatusChange('${cafe.cafeNo}')"
+                                        	class="border border-gray-300 rounded px-2 py-1 w-full">
                                             <option value="0">상태변경</option>
                                             <option value="2">승인</option>
                                             <option value="3">반려</option>
@@ -59,6 +67,14 @@
                                         </select>
                                     </c:when>
                                 </c:choose>
+                                
+                                <select id="rejectReason_${cafe.cafeNo}" name="rejectReason_${cafe.cafeNo}" class="rejectReason mt-2 border border-gray-300 rounded px-2 py-1 w-full" style="display: none">
+								    <option value="">반려 사유 선택</option>
+								    <c:forEach var="codeList" items="${codeList}">
+								        <option value="3_${codeList.codeId}">${codeList.codeName}</option>
+								    </c:forEach>
+								</select>
+                                
                             </td>
                             <td class="px-4 py-2 text-center">
                                 <c:choose>
@@ -93,11 +109,42 @@
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 
 <script>
+// 반려 클릭 시, 반려 selectBox 동적으로 추가하는 스크립트
+function handleStatusChange(cafeNo) {
+	
+	console.log("스크립트 cafeNo : " + cafeNo); // 스크립트 cafeNo : 2
+	document.querySelectorAll("select[name]");
+	document.querySelector(`select[name=${cafeNo}]`);
+	
+	const statusSelect = document.querySelector(`select[name='${cafeNo}']`);
+   // const statusSelect = document.querySelector(`select[name='${cafeNo}']`);
+    const reasonSelect = document.getElementById(`rejectReason_${cafeNo}`);
+    
+	console.log("`select[name='${cafeNo}']` : " + `select[name='${cafeNo}']`);
+
+    /* if (!statusSelect || !reasonSelect) {
+        console.warn(`Elements not found for cafeNo=${cafeNo}`);
+        return;
+    } */
+
+    if (statusSelect.value === "3") {
+        reasonSelect.style.display = "block"; // 보여주기
+    } else {
+        reasonSelect.style.display = "none"; // 숨기기
+        reasonSelect.value = ""; // 선택 초기화
+    }
+}
+
 function submitCafeForm() {
     const statusMap = {};
     document.querySelectorAll("select").forEach(select => {
+    	// rejectReason_로 시작하는 select는 제외
+        if (select.name.startsWith("rejectReason_")) {
+            return;
+        }
+    	
         const cafeNo = select.name;
-        const selectedValue = select.value;
+        const selectedValue = select.value; // 3번 (반려)를 클릭했을 경우, selectedValue 값을 
         if (selectedValue && selectedValue !== '0') {
             statusMap[cafeNo] = selectedValue;
         }
