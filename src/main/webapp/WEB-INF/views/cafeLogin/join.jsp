@@ -183,8 +183,11 @@ main {
   const idDuplChkBtn = $('#idDuplChkBtn');
   
   idDuplChkBtn.on('click', function(){
+	  
+	  console.log(memberId.val());  
+	  
 	 if(!checkObj.memberId){
-		swal({
+		swal.fire({
 			title : "알림",
 			text : "유효한 ID를 입력하고, 중복체크를 진행하세요.",
 			icon : "warning"
@@ -199,7 +202,7 @@ main {
 			type : "get",								
 			success : function(res){ // res는 서블릿에서 getWriter() 한 cnt값이 들어있음			
 				if(res == 0){ //중복 X  == 회원가입 가능
-					swal({
+					swal.fire({
 						title : "알림",
 						text : "사용 가능한 ID 입니다.",
 						icon : "success"
@@ -207,7 +210,7 @@ main {
 					
 					checkObj.idDuplChk = true;
 				}else{
-					swal({
+					swal.fire({
 						title : "알림",
 						text : "중복된 ID 입니다.",
 						icon : "warning"
