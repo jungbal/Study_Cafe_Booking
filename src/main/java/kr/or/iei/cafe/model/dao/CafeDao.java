@@ -829,5 +829,25 @@ public class CafeDao {
 			return result;
 	}
 
+	public int updateHostRequestStatus(Connection conn, String cafeNo) {
+		 PreparedStatement pstmt = null;
+		    int result = 0;
+
+		    String query = "UPDATE user_tbl SET user_status = 'Y' WHERE host_no = ?";
+
+		    try {
+		        pstmt = conn.prepareStatement(query);
+		        pstmt.setString(1, cafeNo);
+		        result = pstmt.executeUpdate();
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    } finally {
+		        JDBCTemplate.close(pstmt);
+		    }
+
+		    return result;
+		
+	}
+
 
 }
