@@ -58,7 +58,7 @@ public class LoginServlet extends HttpServlet {
 		    } else {
 		        // 로그인 성공 시 redirect 처리 (view 변수 선언 금지)
 		    	 cafeservice = new CafeService();
-					String hostId = cafeservice.matchHostId(loginId);
+				String hostId = cafeservice.matchHostId(loginId);
 		    	
 		        HttpSession session = request.getSession();
 		        session.setAttribute("loginCafe", loginCafe);

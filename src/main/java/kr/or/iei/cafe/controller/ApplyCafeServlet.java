@@ -53,12 +53,16 @@ public class ApplyCafeServlet extends HttpServlet {
 		cafeInfo.setCafeStartHour(cafeStartHour);
 		cafeInfo.setCafeEndHour(cafeEndHour);
 		
-		   HttpSession session = request.getSession();
-		   Login loginCafe = (Login) session.getAttribute("loginCafe");
-		   String loginId = loginCafe.getLoginId();
+	   HttpSession session = request.getSession();
+	   Login loginCafe = (Login) session.getAttribute("loginCafe");
+	   String loginId = loginCafe.getLoginId();
 
 		CafeService service = new CafeService();
 		int result = service.insertCafe(cafeInfo, loginId);
+		
+		CafeService cafeservice = new CafeService();
+		String hostId = cafeservice.matchHostId(loginId);
+		 session.setAttribute("hostId", hostId);
 
 		RequestDispatcher view = null;
 		if(result > 0) { // 업체 신청이 됐을 때
