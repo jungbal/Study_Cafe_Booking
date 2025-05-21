@@ -44,7 +44,7 @@ public class MypageServlet extends HttpServlet {
         Member loginMember = (Member) session.getAttribute("loginMember");
 
         if (loginMember == null) {
-            response.sendRedirect(request.getContextPath() + "/member/loginFrm");
+            response.sendRedirect(request.getContextPath() + "/loginFrm");
             return;
         }
 
@@ -61,7 +61,7 @@ public class MypageServlet extends HttpServlet {
         if (tab.equals("review")) {
             CommentService service = new CommentService();
             List<Comment> reviewList = service.selectMyCommentsByType(userId, "RV");
-            List<Comment> qnaList = service.selectMyCommentsByType(userId, "QNA");
+            List<Comment> qnaList = service.selectMyCommentsByType(userId, "QA");
             request.setAttribute("reviewList", reviewList);
             request.setAttribute("qnaList", qnaList);
         }

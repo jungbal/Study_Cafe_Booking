@@ -54,7 +54,7 @@ public class ChkPwServlet extends HttpServlet {
 		Member loginMember = (Member) session.getAttribute("loginMember");
 
 		if (loginMember == null) {
-			response.sendRedirect("/member/loginFrm");
+			response.sendRedirect("/loginFrm");
 			return;
 		}
 
