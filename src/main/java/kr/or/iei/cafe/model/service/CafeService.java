@@ -324,6 +324,19 @@ public class CafeService {
 		return hostId;
 	}
 
+	public int editCafe(String loginId, Cafe cafeInfo) {
+		Connection conn = JDBCTemplate.getConnection();
+		int editResult = dao.editResult(conn, loginId, cafeInfo);
+		
+		if(editResult>0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		return editResult;
+	}
+
 
 
 }

@@ -90,7 +90,7 @@ p {
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 	
 	<main>
-	<form action= "#" method="post">
+	<form action= "/editCafe" method="post">
 		<div class="input-wrap">
 			<div class="input-title">
 				<label for="cafeName">업체명</label>

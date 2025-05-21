@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>신고 목록</title>
-
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body class="bg-gray-100 text-gray-800">
 
