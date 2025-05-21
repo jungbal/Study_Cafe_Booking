@@ -160,7 +160,7 @@
 		
 		const cafeEndHour = $('#cafeEndHour');
 		cafeEndHour.on('input', function(){
-			const regExp = /^([01]\d|2[0-3]):[0-5]\d$/ ;
+			const regExp = /^(?:([01]\d|2[0-3]):[0-5]\d|24:00)$/ ;
 			if(regExp.test($(this).val())){
 				$('#endHourMsg').text('');
 			}else{
