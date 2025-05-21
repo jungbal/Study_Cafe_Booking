@@ -6,11 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>이용자 목록</title>
-
-
-<style>
-	
-</style>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body class="bg-gray-100">
 	<div class="wrap max-w-6xl mx-auto p-6 bg-white shadow-md mt-8 rounded-md">

@@ -6,13 +6,12 @@
 <head>
 <meta charset="UTF-8">
 <title>신청 정보</title>
-
+<script src="https://cdn.tailwindcss.com"></script>
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50 text-gray-800 pt-0">
 
-<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
-
-<main class="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow">
+<main class="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow">
   <h2 class="text-2xl font-semibold mb-6 border-b pb-2">카페 신청 정보</h2>
   <table class="table-auto w-full border border-gray-200">
     <tbody>
