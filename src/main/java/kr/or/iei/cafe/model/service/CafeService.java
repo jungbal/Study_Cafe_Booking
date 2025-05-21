@@ -202,60 +202,79 @@ public class CafeService {
 	}
 
    // 업체 관리 승인/반려 시 
-   public Map<String, String> updateCafeStatus(Map<String, String> updateMap) {
-       Connection conn = JDBCTemplate.getConnection();
-       boolean isAllSuccess = true;	//isAllSuccess(boolena 자료형)로 반환해주게 되면 어떤 작업이 성공했는지 실패했는지 알림창을 보여줄 구체적인 메시지 정보를 만들 수 없다.
-       Map<String, String> resultMap = new HashMap<String, String>();
+	public Map<String, String> updateCafeStatus(Map<String, String> updateMap) {
+	    Connection conn = JDBCTemplate.getConnection();
+	    boolean isAllSuccess = true;
+	    Map<String, String> resultMap = new HashMap<>();
 
-       for (Map.Entry<String, String> entry : updateMap.entrySet()) {
-           String cafeNo = entry.getKey();
-           String statusValue = entry.getValue();
-           int result = 0;
+	    for (Map.Entry<String, String> entry : updateMap.entrySet()) {
+	        String cafeNo = entry.getKey();
+	        String statusValue = entry.getValue();
+	        int result = 0;
 
-           switch (statusValue) {
-               case "1": // 수정대기 승인
+	        switch (statusValue) {
+	            case "1": // 수정대기 승인
+	                result = dao.updateWait(conn, cafeNo);
+	                resultMap.put(cafeNo, result > 0 ? "수정 승인 완료" : "수정 승인 실패");
+	                break;
 
-                  result = dao.updateWait(conn, cafeNo);
-                  resultMap.put(cafeNo, result > 0 ? "수정 승인 완료" : "수정 승인 실패");
+	            case "2": // 등록대기 승인
+	            	 result = dao.insertWait(conn, cafeNo);
 
-                //  result = dao.updateWait(conn, cafeNo);
+		                if (result > 0) {
+		                    int roleResult = dao.updateUserRoleToHost(conn, cafeNo);
+		                    if (roleResult > 0) {
+		                        resultMap.put(cafeNo, "등록 승인 완료 (권한 변경 완료)");
+		                    } else {
+		                        resultMap.put(cafeNo, "등록 승인 됐지만 권한 변경 실패");
+		                        isAllSuccess = false;
+		                    }
+		                } else {
+		                    resultMap.put(cafeNo, "등록 승인 실패");
+		                    isAllSuccess = false;
+		                }
+		                break;
 
-                   break;
-               case "2": // 등록대기 승인
-                   result = dao.insertWait(conn, cafeNo);
-                   resultMap.put(cafeNo, result > 0 ? "등록 승인 완료" : "등록 승인 실패");
-                   break;
-               case "3": // 반려: 처리 안 함
-                   continue;
-               case "4": // 삭제 처리
-                   int rst = dao.updateRole(conn, cafeNo);
-                   if (rst > 0) {
-                       result = dao.deleteHost(conn, cafeNo);
-                   }
-                   resultMap.put(cafeNo, result > 0 ? "삭제완료 " : "삭제 실패");
-                   break;
-               default: // 유효하지 않은 값
-                   isAllSuccess = false;
-                   break;
-           }
-           
-           if (result == 0) {
-               System.err.println("처리 실패: cafeNo = " + cafeNo + ", status = " + statusValue);
-               isAllSuccess = false;
-               break;
-           }
-       }
+	            case "3": // 반려: 아무 작업 안 함
+	                continue;
 
-       if (isAllSuccess) {
+	            case "4": // 삭제 처리
+	                int rst = dao.updateRole(conn, cafeNo); // 권한 먼저 바꿈
+	                if (rst > 0) {
+	                    result = dao.deleteHost(conn, cafeNo); // host 삭제
+	                }
+	                resultMap.put(cafeNo, result > 0 ? "삭제 완료" : "삭제 실패");
+	                break;
 
-    		   JDBCTemplate.commit(conn); 
-    	   }else {
-    		   JDBCTemplate.rollback(conn);
-    	   }
-	       JDBCTemplate.close(conn);
-	       return resultMap;
-	   }
+	            case "0": // 아무 것도 선택 안 함
+	                continue;
+
+	            default: // 유효하지 않은 값
+	                isAllSuccess = false;
+	                resultMap.put(cafeNo, "잘못된 상태값");
+	                break;
+	        }
+
+	        if (result == 0) {
+	            System.err.println("처리 실패: cafeNo = " + cafeNo + ", status = " + statusValue);
+	            isAllSuccess = false;
+	            break;
+	        }
+	    }
+
+	    if (isAllSuccess) {
+	        JDBCTemplate.commit(conn);
+	    } else {
+	        JDBCTemplate.rollback(conn);
+	    }
+
+	    JDBCTemplate.close(conn);
+	    return resultMap;
+	}
+
+
        
+
 
 	// 업체(호스트) 신청
 	public int insertCafe(Cafe cafeInfo, String loginId) {
@@ -278,6 +297,7 @@ public class CafeService {
 		return result;
 	}
 	
+
 	public ArrayList<Cafe> selectMainCafes() {
 		Connection conn = JDBCTemplate.getConnection();
 		ArrayList<Cafe> cafeList = dao.selectMainCafes(conn);
