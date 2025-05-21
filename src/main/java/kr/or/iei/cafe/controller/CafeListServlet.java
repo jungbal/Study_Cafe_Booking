@@ -1,6 +1,7 @@
 package kr.or.iei.cafe.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.or.iei.cafe.model.service.CafeService;
 import kr.or.iei.cafe.model.vo.Cafe;
+import kr.or.iei.cafe.model.vo.Code;
 import kr.or.iei.common.ListData;
 
 /**
@@ -39,6 +41,10 @@ public class CafeListServlet extends HttpServlet {
 		//3. 로직
 		CafeService service = new CafeService();
 		ListData<Cafe> cafeList = service.selectAllCafe(reqPage);
+		
+		// (추가) codeList 값 추가.
+		ArrayList<Code> codeList = service.selectAllCodeId();
+		
 		//4. 결과 처리
 			//4.1 이동할 페이지 경로 등록
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/manager/manageCafe.jsp");
@@ -46,7 +52,8 @@ public class CafeListServlet extends HttpServlet {
 			//4.2 화면 구현에 필요한 데이트 등록
 		request.setAttribute("cafeList", cafeList.getList());
 		request.setAttribute("pageNavi", cafeList.getPageNavi());
-		
+		request.setAttribute("codeList", codeList);
+
 			//4.3 페이지 이동
 		view.forward(request, response);
 		

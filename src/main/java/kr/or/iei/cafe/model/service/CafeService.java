@@ -7,6 +7,7 @@ import java.util.Map;
 
 import kr.or.iei.cafe.model.dao.CafeDao;
 import kr.or.iei.cafe.model.vo.Cafe;
+import kr.or.iei.cafe.model.vo.Code;
 import kr.or.iei.cafe.model.vo.History;
 import kr.or.iei.common.JDBCTemplate;
 import kr.or.iei.common.ListData;
@@ -211,8 +212,20 @@ public class CafeService {
 	        String cafeNo = entry.getKey();
 	        String statusValue = entry.getValue();
 	        int result = 0;
+	        
+	     // 반려일 경우: statusValue = "3_B1" 형식
+	        String statusValue2 = statusValue;
+	        String rejectCode = null;
 
-	        switch (statusValue) {
+	        if (statusValue.startsWith("3_")) {
+	            String[] parts = statusValue.split("_", 2);
+	            if (parts.length == 2) {
+	                statusValue2 = parts[0];   // "3"
+	                rejectCode = parts[1];     // "B1"
+	            }
+	        }
+
+	        switch (statusValue2) { // statusValue을 statusValue2에 넣기
 	            case "1": // 수정대기 승인
 	                result = dao.updateWait(conn, cafeNo);
 	                resultMap.put(cafeNo, result > 0 ? "수정 승인 완료" : "수정 승인 실패");
@@ -235,8 +248,10 @@ public class CafeService {
 		                }
 		                break;
 
-	            case "3": // 반려: 아무 작업 안 함
-	                continue;
+	            case "3":  // 반려일 경우
+	            	result  = dao.insertCodeName(conn, cafeNo, rejectCode);
+	            	resultMap.put(cafeNo, result > 0 ? "반려 사유 입력 완료" : "반려 사유 입력 실패");
+	            	break;
 
 	            case "4": // 삭제 처리
 	                int rst = dao.updateRole(conn, cafeNo); // 권한 먼저 바꿈
@@ -335,6 +350,13 @@ public class CafeService {
 		}
 		JDBCTemplate.close(conn);
 		return editResult;
+	}
+
+	public ArrayList<Code> selectAllCodeId() {
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<Code> codeList = dao.selectAllCodeId(conn);
+		JDBCTemplate.close(conn);
+		return codeList;
 	}
 
 

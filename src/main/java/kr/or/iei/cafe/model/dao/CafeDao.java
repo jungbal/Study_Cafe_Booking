@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.cafe.model.vo.Cafe;
+import kr.or.iei.cafe.model.vo.Code;
 import kr.or.iei.cafe.model.vo.History;
 import kr.or.iei.common.JDBCTemplate;
 import kr.or.iei.member.model.vo.Member;
@@ -899,24 +900,77 @@ public class CafeDao {
 	}
 
 	public int updateHostRequestStatus(Connection conn, String cafeNo) {
-		 PreparedStatement pstmt = null;
-		    int result = 0;
+		PreparedStatement pstmt = null;
+	    int result = 0;
 
-		    String query = "UPDATE user_tbl SET user_status = 'Y' WHERE host_no = ?";
+	    String query = "UPDATE user_tbl SET user_status = 'Y' WHERE host_no = ?";
 
-		    try {
-		        pstmt = conn.prepareStatement(query);
-		        pstmt.setString(1, cafeNo);
-		        result = pstmt.executeUpdate();
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		    } finally {
-		        JDBCTemplate.close(pstmt);
-		    }
+	    try {
+	        pstmt = conn.prepareStatement(query);
+	        pstmt.setString(1, cafeNo);
+	        result = pstmt.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        JDBCTemplate.close(pstmt);
+	    }
 
-		    return result;
+	    return result;
 		
 	}
 
+	// tbl_code code_name 값 변경
+	public int insertCodeName(Connection conn, String cafeNo, String rejectCode) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		String query = "update tbl_host_request set reject_id = ? where host_no = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, rejectCode);
+			pstmt.setString(2, cafeNo);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+	        JDBCTemplate.close(pstmt);
+	    }
+	    return result;
+	}
 
+	public ArrayList<Code> selectAllCodeId(Connection conn) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		ArrayList<Code> codeList = new ArrayList<Code>();
+		
+		String query = "select * from tbl_code where code_parent='A1'";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Code code = new Code();
+				
+				code.setCodeId(rset.getString("code_id"));
+				code.setCodeName(rset.getString("code_name"));
+				code.setCodeParent(rset.getString("code_parent"));
+				
+				codeList.add(code);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+	        JDBCTemplate.close(rset);
+	        JDBCTemplate.close(pstmt);
+		
+		}
+		return codeList;
+		
+	}
 }
