@@ -265,7 +265,10 @@ public class CafeService {
 		
 		int hostRequestResult = dao.insertHostRqst(conn, cafeInfo);
 		
-		if(result>0 && hostRequestResult>0) {
+		// tbl_image 테이블에 기본 이미지 insert 하는 메소드 추가
+		int insertImageResult = dao.insertDefaultImage(conn, cafeInfo);
+		
+		if(result>0 && hostRequestResult>0 && insertImageResult > 0) {
 			JDBCTemplate.commit(conn);
 		}else {
 			JDBCTemplate.rollback(conn);

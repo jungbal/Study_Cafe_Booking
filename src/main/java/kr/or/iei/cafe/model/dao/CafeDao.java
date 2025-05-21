@@ -698,6 +698,8 @@ public class CafeDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
 		}
 		return result;
 	}
@@ -762,6 +764,27 @@ public class CafeDao {
 		}
 	    
 	    return payId;
+	}
+
+	public int insertDefaultImage(Connection conn, Cafe cafeInfo) {
+		 PreparedStatement pstmt = null;
+		 int result = 0;
+		    
+		    // 최신 결제내역을 가져오기 위해 pay_id를 내림차순 정렬, 1건만 조회
+		    String query = "Insert into tbl_image  (cafe_no, image_name, image_path) values (?, 'defaultCafe.png', '/resources/upload/defaultCafe.png')";
+		    
+		    try {
+				pstmt = conn.prepareStatement(query);
+				pstmt.setString(1, cafeInfo.getCafeNo());
+				
+				result = pstmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			return result;
 	}
 
 
