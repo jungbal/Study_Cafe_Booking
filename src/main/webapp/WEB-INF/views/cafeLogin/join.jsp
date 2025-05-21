@@ -175,7 +175,7 @@ main {
 		  idMessage.text('');
 		  checkObj.memberId = true;
 	  }else{
-		  idMessage.text('유효한 값을 입력하세요(10자이내)');
+		  idMessage.text('유효한 값을 입력하세요(숫자포함 10자이내)');
 		  checkObj.memberId = false;
 	  }
   });
@@ -279,16 +279,23 @@ main {
 		}
 	});
   
-	const submit = $('#submit');
+
 	
 	$('#formSubmit').on('submit', function(e) {
+		const allVal = Object.values(checkObj).every(value => Boolean(value));
+		
 		  if (!checkObj.idDuplChk) {
 		    e.preventDefault(); 
 		    $('#submitMsg').text('아이디 중복 체크를 진행하세요');
 		  }
+		
+		  if(!allVal) {
+		    e.preventDefault(); 
+		    $('#submitMsg').text('모든 값을 정확히 입력하세요.');
+		  }
 		});
 	
-  
+	
   </script>
 </body>
 </html>

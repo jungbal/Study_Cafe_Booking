@@ -1,187 +1,104 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>업체(신청서식) 수정</title>
-<style>
-	body {
-  margin: 0;
-  padding: 0;
-  background-color: #f0f4f8;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 140px);
-  padding-top: 70px;
-  padding-bottom: 70px;
-}
-
-form {
-  background-color: #ffffff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  width: 500px;
-  box-sizing: border-box;
-}
-
-.input-wrap {
-  margin-bottom: 20px;
-}
-
-.input-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #333333;
-  margin-bottom: 6px;
-}
-
-input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #cccccc;
-  border-radius: 6px;
-  transition: border-color 0.3s;
-}
-
-input[type="text"]:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
-p {
-  font-size: 13px;
-  color: #dc3545;
-  margin-top: 6px;
-  margin-left: 2px;
-}
-
-.submit-wrap {
-  margin-top: 30px;
-  text-align: center;
-}
-
-.submit-btn1 {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.submit-btn1:hover {
-  background-color: #0056b3;
-}
-</style>
-<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
+  <meta charset="UTF-8">
+  <title>업체(신청서식) 수정</title>
+  <link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
-	
-	<main>
-	<form action= "/editCafe" method="post">
-		<div class="input-wrap">
-			<div class="input-title">
-				<label for="cafeName">업체명</label>
-			</div>
-			<div>
-				<input type="text" id="cafeName" name="cafeName" value="${cafeInfo.cafeName}">
-			</div>
-		</div>
-		
-		<div class="input-wrap">
-			<div class="input-title">
-				<label for="cafeAddr">업체 주소</label>
-			</div>
-			<div>
-				<input type="text" id="cafeAddr" name="cafeAddr" value="${cafeInfo.cafeAddr}">
-			</div>
-			<p id="addrMsg"></p>
-		</div>
-		
-		<div class="input-wrap">
-			<div class="input-title">
-				<label for="cafePhone">카페 전화번호</label>
-			</div>
-			<div>
-				<input type="text" id="cafePhone" name="cafePhone" placeholder="010-0000-0000형식" maxlength="13" value="${cafeInfo.cafePhone}">
-			</div>
-			<p id="phoneMsg"></p>
-		</div>
-		
-		<div class="input-wrap">
-			<div class="input-title">
-				<label for="cafeBiznum">사업자 등록번호</label>
-			</div>
-			<div>
-				<input type="text" id="cafeBiznum" name="cafeBiznum" placeholder="000-00-00000형식" maxlength="12" value="${cafeInfo.cafeBiznum}">
-			</div>
-			<p id="biznumMsg"></p>
-		</div>
-		
-		<div class="input-wrap">
-			<div class="input-title">
-				<label for="cafeIntroduce">소개글</label>
-			</div>
-			<div>
-				<input type="text" id="cafeIntroduce" name="cafeIntroduce" placeholder="최대 한글160자" value="${cafeInfo.cafeIntroduce}">
-			</div>
-		</div>
-		
-		<div class="input-wrap">
-			<div class="input-title">
-				<label for="cafeIntroDetail">공간소개</label>
-			</div>
-			<div>
-				<input type="text" id="cafeIntroDetail" name="cafeIntroDetail" placeholder="최대 한글160자" value="${cafeInfo.cafeIntroDetail}">
-			</div>
-		</div>
+<body class="bg-gray-50 min-h-screen text-gray-800">
 
-		<div class="input-wrap">
-			<div class="input-title">
-				<label for="cafeStartHour">영업 시작시간</label>
-			</div>
-			<div>
-				<input type="text" id="cafeStartHour" name="cafeStartHour" placeholder="00:00 형식" maxlength="5" value="${cafeInfo.cafeStartHour}">
-			</div>
-			<p id="startHourMsg"></p>
-		</div>
-		
-		<div class="input-wrap">
-			<div class="input-title">
-				<label for="cafeEndHour">영업 종료시간</label>
-			</div>
-			<div>
-				<input type="text" id="cafeEndHour" name="cafeEndHour" placeholder="00:00 형식" maxlength="5" value="${cafeInfo.cafeEndHour}">
-			</div>
-			<p id="endHourMsg"></p>
-		</div>
-		
-		<div class="input-wrap">
-			<div class="input-title">
-				<label for="status">심사 현황</label>
-				<input type="text" id="cafeRejectReason" name="cafeRejectReason" value="${cafeInfo.cafeRejectReason}">
-				<input type="text" id="cafeApplyStatus" name="cafeApplyStatus" value="${cafeInfo.cafeApplyStatus}">
-			</div>
-			<div>
-				<p id="status"></p>
-			</div>
-		</div>
-		
-		<div class="submit-wrap">
-			<button type="submit" class="submit-btn1">수정</button> 
-		</div>
+  <jsp:include page="/WEB-INF/views/common/header.jsp" />
+
+  <main class="max-w-2xl mx-auto p-6 bg-white mt-10 rounded-lg shadow-md">
+    <form action="/editCafe" method="post" class="space-y-6">
+      
+      <!-- 업체명 -->
+      <div>
+        <label for="cafeName" class="block text-sm font-medium">업체명</label>
+        <input type="text" id="cafeName" name="cafeName" value="${cafeInfo.cafeName}" 
+               class="mt-1 w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+
+      <!-- 주소 -->
+      <div>
+        <label for="cafeAddr" class="block text-sm font-medium">업체 주소</label>
+        <input type="text" id="cafeAddr" name="cafeAddr" value="${cafeInfo.cafeAddr}" 
+               class="mt-1 w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <p id="addrMsg" class="text-sm text-red-500 mt-1"></p>
+      </div>
+
+      <!-- 전화번호 -->
+      <div>
+        <label for="cafePhone" class="block text-sm font-medium">전화번호</label>
+        <input type="text" id="cafePhone" name="cafePhone" maxlength="13" value="${cafeInfo.cafePhone}" placeholder="010-0000-0000형식"
+               class="mt-1 w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <p id="phoneMsg" class="text-sm text-red-500 mt-1"></p>
+      </div>
+
+      <!-- 사업자 등록번호 -->
+      <div>
+        <label for="cafeBiznum" class="block text-sm font-medium">사업자 등록번호</label>
+        <input type="text" id="cafeBiznum" name="cafeBiznum" maxlength="12" value="${cafeInfo.cafeBiznum}" placeholder="000-00-00000형식"
+               class="mt-1 w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <p id="biznumMsg" class="text-sm text-red-500 mt-1"></p>
+      </div>
+
+      <!-- 소개글 -->
+      <div>
+        <label for="cafeIntroduce" class="block text-sm font-medium">소개글</label>
+        <input type="text" id="cafeIntroduce" name="cafeIntroduce" placeholder="최대 한글160자" value="${cafeInfo.cafeIntroduce}"
+               class="mt-1 w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+
+      <!-- 공간소개 -->
+      <div>
+        <label for="cafeIntroDetail" class="block text-sm font-medium">공간소개</label>
+        <input type="text" id="cafeIntroDetail" name="cafeIntroDetail" placeholder="최대 한글160자" value="${cafeInfo.cafeIntroDetail}"
+               class="mt-1 w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+
+      <!-- 시작시간 -->
+      <div>
+        <label for="cafeStartHour" class="block text-sm font-medium">영업 시작시간</label>
+        <input type="text" id="cafeStartHour" name="cafeStartHour" placeholder="00:00 형식" maxlength="5" value="${cafeInfo.cafeStartHour}"
+               class="mt-1 w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <p id="startHourMsg" class="text-sm text-red-500 mt-1"></p>
+      </div>
+
+      <!-- 종료시간 -->
+      <div>
+        <label for="cafeEndHour" class="block text-sm font-medium">영업 종료시간</label>
+        <input type="text" id="cafeEndHour" name="cafeEndHour" placeholder="00:00 형식" maxlength="5" value="${cafeInfo.cafeEndHour}"
+               class="mt-1 w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <p id="endHourMsg" class="text-sm text-red-500 mt-1"></p>
+      </div>
+
+      <!-- 심사 현황 -->
+      <div class="p-4 border border-red-300 bg-red-50 rounded-md">
+        <h2 class="text-red-600 font-semibold mb-3">심사 현황</h2>
+        <div class="mb-3">
+          <label class="block text-sm font-medium">신청 상태</label>
+          <input type="text" id="cafeApplyStatus" name="cafeApplyStatus" value="${cafeInfo.cafeApplyStatus}" readonly
+                 class="mt-1 w-full bg-gray-100 border rounded-md p-2 text-sm text-gray-600">
+        </div>
+        <div>
+          <label class="block text-sm font-medium">반려 사유</label>
+          <input type="text" id="cafeRejectReason" name="cafeRejectReason" value="${cafeInfo.cafeRejectReason}" readonly
+                 class="mt-1 w-full bg-gray-100 border rounded-md p-2 text-sm text-gray-600">
+        </div>
+      </div>
+
+      <!-- 수정 버튼 -->
+      <c:if test="${cafeInfo.cafeApplyStatus eq '반려 상태'}">
+        <div class="text-center">
+          <button type="submit"
+                  class="mt-6 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">수정</button>
+        </div>
+      </c:if>
 </form>	
 </main>	
 		<script>
@@ -243,7 +160,7 @@ p {
 		
 		const cafeEndHour = $('#cafeEndHour');
 		cafeEndHour.on('input', function(){
-			const regExp = /^([01]\d|2[0-3]):[0-5]\d$/ ;
+			const regExp = /^(?:([01]\d|2[0-3]):[0-5]\d|24:00)$/ ;
 			if(regExp.test($(this).val())){
 				$('#endHourMsg').text('');
 			}else{

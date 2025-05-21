@@ -139,7 +139,7 @@
 
   const cafeEndHour = $('#cafeEndHour');
   cafeEndHour.on('input', function () {
-    const regExp = /^([01]\d|2[0-3]):[0-5]\d$/;
+    const regExp = /^(?:([01]\d|2[0-3]):[0-5]\d|24:00)$/
     if (regExp.test($(this).val())) {
       $('#endHourMsg').text('');
       chkObj.cafeEndHour = true;
@@ -148,21 +148,13 @@
       chkObj.cafeEndHour = false;
     }
   });
-  
-	const submit = $('#submit');
-
+ 
 	$('#formSubmit').on('submit', function(e) {
 	const allVal = Object.values(chkObj).every(value => Boolean(value));
 	
 		  if(!allVal) {
 		    e.preventDefault(); 
 		    $('#submitMsg').text('모든 값을 정확히 입력하세요.');
-		  }else{
-			swal.fire({
-				title : "알림",
-				text : "신청이 완료됐습니다.",
-				icon : "success"
-			});
 		  }
 		});
 	
