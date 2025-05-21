@@ -13,7 +13,6 @@
 	<table class="pay-table tab-visible">
 	<thead>
 		<tr>
-			<th>결제번호</th>
 			<th>결제일자</th>
 			<th>결제수단</th>
 			<th>결제금액</th>
@@ -27,7 +26,6 @@
 		<tbody>
 		<c:forEach var="p" items="${sessionScope.payList}">
 			<tr>
-				<td>${p.payId}</td>
 				<td>${p.payTime}</td>
 				<td>${p.payMethod}</td>
 				<td>${p.payAmount}원</td>

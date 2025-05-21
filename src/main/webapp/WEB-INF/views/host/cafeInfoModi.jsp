@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   <title>업체 정보 수정</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body class="bg-gray-100 min-h-screen">
   <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>

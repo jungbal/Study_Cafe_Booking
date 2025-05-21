@@ -10,12 +10,12 @@
 </head>
 <body class="font-sans m-0 p-0">
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
-<main>
+<main class="max-w-7xl mx-auto px-4">
   <h1 class="text-center text-3xl font-semibold my-8">결제하기</h1>
   <div class="flex justify-between px-5">
     
     <!-- 공간 정보 + 결제 예정 금액 -->
-    <div class="border border-gray-300 rounded-xl p-5 w-[48%]">
+    <div class="border border-gray-300 rounded-xl p-5 w-[48%] bg-white">
       <h2 class="text-2xl font-semibold mb-4">공간 정보</h2>
       <div class="mb-3">
         <strong>카페명:</strong> ${cafe.cafeName} <br />
@@ -63,7 +63,7 @@
     </div>
 
     <!-- 결제 상세 정보 -->
-    <div class="border border-gray-300 rounded-xl p-5 w-[48%]">
+    <div class="border border-gray-300 rounded-xl p-5 w-[48%] bg-white">
       <h2 class="text-2xl font-semibold mb-4">결제 상세 정보</h2>
       <div class="mb-3">
         <strong>예약 날짜:</strong>
