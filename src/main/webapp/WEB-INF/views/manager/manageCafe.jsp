@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <title>업체 리스트</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
 </head>
 <body class="bg-gray-50 text-gray-800">
 
