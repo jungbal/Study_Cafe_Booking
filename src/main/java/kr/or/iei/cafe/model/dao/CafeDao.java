@@ -557,7 +557,7 @@ public class CafeDao {
 				+ "        c.host_id = ?\r\n"
 				+ ") sub\r\n"
 				+ "WHERE rn = 1\r\n"
-				+ "ORDER BY apply_date DESC;";
+				+ "ORDER BY apply_date DESC";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
