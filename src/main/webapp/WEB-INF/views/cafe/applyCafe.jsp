@@ -16,7 +16,7 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
 <main class="flex justify-center items-center min-h-[calc(100vh-140px)] py-[70px]">
-  <form action="/ApplyCafeServlet" method="post" class="bg-white p-10 rounded-xl shadow-lg w-full max-w-lg">
+  <form action="/ApplyCafeServlet" id="formSubmit" method="post" class="bg-white p-10 rounded-xl shadow-lg w-full max-w-lg">
     
     <!-- 업체명 -->
     <div class="mb-5">
@@ -73,7 +73,7 @@
 
     <!-- 버튼 -->
     <div class="text-center">
-      <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-md font-bold hover:bg-blue-700 transition duration-300">신청</button>
+      <button type="submit" id="submit" class="bg-blue-600 text-white px-6 py-3 rounded-md font-bold hover:bg-blue-700 transition duration-300">신청</button>
     </div>
 
   </form>
@@ -95,7 +95,7 @@
       $('#addrMsg').text('');
       chkObj.cafeAddr = true;
     } else {
-      $('#addrMsg').text('10글자 이상 입력해주세요.');
+      $('#addrMsg').text('숫자 포함 10글자 이상 입력해주세요.');
     }
   });
 
@@ -140,6 +140,18 @@
       $('#endHourMsg').text('영업 시간 형식이 올바르지 않습니다.');
     }
   });
+  
+	const submit = $('#submit');
+	const allVal = Object.values(chkObj).every(value => Boolean(value));
+	
+	$('#formSubmit').on('submit', function(e) {
+		  if(!allVal) {
+		    e.preventDefault(); 
+		    $('#submitMsg').text('모든 값을 정확히 입력하세요.');
+		  }
+		});
+	
+  
 </script>
 
 </body>

@@ -18,13 +18,13 @@ import kr.or.iei.cafe.model.vo.Cafe;
  * Servlet implementation class EditCafe
  */
 @WebServlet("/editCafe")
-public class EditCafe extends HttpServlet {
+public class EditCafeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EditCafe() {
+    public EditCafeServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
