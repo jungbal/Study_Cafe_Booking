@@ -25,7 +25,7 @@
                         <th class="px-4 py-2 text-left">호스트ID</th>
                         <th class="px-4 py-2 text-left">주소</th>
                         <th class="px-4 py-2 text-left">상태</th>
-                        <th class="px-4 py-2 text-left">상태변경</th>
+                        <th class="px-4 py-2 text-left">상태변경</th>                        
                         <th class="px-4 py-2 text-center">신청정보</th>
                     </tr>
                 </thead>
