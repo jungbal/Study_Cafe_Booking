@@ -30,7 +30,7 @@
           </c:when>
           <c:otherwise>
             <c:if test="${not empty currentUsage}">
-              <p class="text-red-600 font-bold">이미 좌석 이용중인 회원입니다.</p>
+              <p class="text-red-600 font-bold">현재 좌석 이용중인 회원입니다.</p>
             </c:if>
             <c:if test="${empty currentUsage}">
               <div class="flex flex-wrap gap-2 max-w-lg mb-6">

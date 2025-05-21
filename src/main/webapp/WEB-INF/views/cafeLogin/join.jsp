@@ -103,7 +103,7 @@ main {
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
 <main>
- <form action='/joinServlet' method='post' autocomplete="off"> 
+ <form action='/joinServlet' id='formSubmit' method='post' autocomplete="off"> 
  <div class="form-wrap">
  	<div class="input-wrap">
 	     <div class="input-title">
@@ -147,7 +147,8 @@ main {
      </div>
      
      <div class="join-button-box">
-      	<button type="submit" class="btn-primary lg">회원가입</button>
+      	<button type="submit" id="submit" class="btn-primary lg">회원가입</button>
+      	<p id="submitMsg" class="submit-msg"></p>
      </div>
  </div>    
  </form>
@@ -174,7 +175,7 @@ main {
 		  idMessage.text('');
 		  checkObj.memberId = true;
 	  }else{
-		  idMessage.text('유효하지 않은 아이디입니다');
+		  idMessage.text('유효한 값을 입력하세요(10자이내)');
 		  checkObj.memberId = false;
 	  }
   });
@@ -183,10 +184,11 @@ main {
   const idDuplChkBtn = $('#idDuplChkBtn');
   
   idDuplChkBtn.on('click', function(){
+	  
 	 if(!checkObj.memberId){
-		swal({
+		swal.fire({
 			title : "알림",
-			text : "유효한 ID를 입력하고, 중복체크를 진행하세요.",
+			text : "유효한 ID를 입력하고, 중복체크를 진행하세요",
 			icon : "warning"
 		});
 	
@@ -199,17 +201,17 @@ main {
 			type : "get",								
 			success : function(res){ // res는 서블릿에서 getWriter() 한 cnt값이 들어있음			
 				if(res == 0){ //중복 X  == 회원가입 가능
-					swal({
+					swal.fire({
 						title : "알림",
-						text : "사용 가능한 ID 입니다.",
+						text : "사용 가능한 ID 입니다",
 						icon : "success"
 					});
 					
 					checkObj.idDuplChk = true;
 				}else{
-					swal({
+					swal.fire({
 						title : "알림",
-						text : "중복된 ID 입니다.",
+						text : "중복된 ID 입니다",
 						icon : "warning"
 					});
 					
@@ -241,7 +243,7 @@ main {
 			
 		}else{
 			checkObj.memberPw = false;
-			$(pwMessage).text('비밀번호 형식이 유효하지 않습니다.');
+			$(pwMessage).text('비밀번호 형식이 유효하지 않습니다');
 		}
 	});
 	
@@ -255,7 +257,7 @@ main {
 			$(pwMessage).text('');
 			checkObj.memberPwRe = true;
 		}else{
-			$(pwMessage).text('비밀번호가 일치하지 않습니다.');
+			$(pwMessage).text('비밀번호가 일치하지 않습니다');
 			checkObj.memberPwRe = false;
 		}
 	}
@@ -272,12 +274,20 @@ main {
 			$(phoneMessage).text('');
 			checkObj.memberPhone = true;
 		}else{
-			$(phoneMessage).text('전화번호 형식이 올바르지 않습니다.');
+			$(phoneMessage).text('전화번호 형식이 올바르지 않습니다');
 			checkObj.memberPhone = false;
 		}
 	});
   
-  
+	const submit = $('#submit');
+	
+	$('#formSubmit').on('submit', function(e) {
+		  if (!checkObj.idDuplChk) {
+		    e.preventDefault(); 
+		    $('#submitMsg').text('아이디 중복 체크를 진행하세요');
+		  }
+		});
+	
   
   </script>
 </body>

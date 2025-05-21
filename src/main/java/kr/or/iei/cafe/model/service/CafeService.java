@@ -141,11 +141,14 @@ public class CafeService {
 	    try {
 	        // 1. 결제 테이블 업데이트하기
 	        int payResult = dao.insertPayHistory(conn, ticketPrice, userId);
+	        
+	        //2. 결제 테이블에서 pay_id 가져오기
+	        String payId = dao.selectPayIdByUserId(conn, userId);
 
 	        // 2. 결제가 성공했을 경우에만 이용내역 업데이트 시도
 	        int historyResult = 0;
 	        if (payResult > 0) {
-	            historyResult = dao.insertHistory(conn, ticketId, ticketPrice, ticketHour, cafeNo, seatNo, userId);
+	            historyResult = dao.insertHistory(conn, ticketId, ticketPrice, ticketHour, cafeNo, seatNo, userId, payId);
 	        }
 
 	        // 3. 두 작업 모두 성공하면 커밋, 아니면 롤백
@@ -272,6 +275,7 @@ public class CafeService {
 
        
 
+<<<<<<< HEAD
 // 업체(호스트) 신청
 public int insertCafe(Cafe cafeInfo, String loginId) {
     Connection conn = JDBCTemplate.getConnection();
@@ -298,6 +302,29 @@ public int insertCafe(Cafe cafeInfo, String loginId) {
     return (result > 0 && hostRequestResult > 0 && updateUserStatusResult > 0) ? 1 : 0;
 }
 
+=======
+	// 업체(호스트) 신청
+	public int insertCafe(Cafe cafeInfo, String loginId) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = dao.insertCafe(conn, cafeInfo, loginId);
+		
+		int hostRequestResult = dao.insertHostRqst(conn, cafeInfo);
+		
+		// tbl_image 테이블에 기본 이미지 insert 하는 메소드 추가
+		int insertImageResult = dao.insertDefaultImage(conn, cafeInfo);
+		
+		if(result>0 && hostRequestResult>0 && insertImageResult > 0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+	
+>>>>>>> master
 	public ArrayList<Cafe> selectMainCafes() {
 		Connection conn = JDBCTemplate.getConnection();
 		ArrayList<Cafe> cafeList = dao.selectMainCafes(conn);

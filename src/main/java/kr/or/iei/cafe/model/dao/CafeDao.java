@@ -340,15 +340,15 @@ public class CafeDao {
 
 	// 이용내역 테이블 업데이트
 	public int insertHistory(Connection conn, String ticketId, String ticketPrice, String ticketHour, String cafeNo, String seatNo,
-	        String userId) {
+	        String userId, String payId) {
 	    PreparedStatement pstmt = null;
 	    int result = 0;
 
 	    // SYSDATE + ticketHour (시간 더하기) : Oracle에서는 DATE + 숫자 = 날짜 + 일수이므로, 시간으로 변환하려면 ticketHour / 24
 	    String query = "INSERT INTO TBL_HISTORY (" +
-	            "HISTORY_ID, HISTORY_START, HISTORY_END, HISTORY_CAFE_NO, HISTORY_SEAT_NO, HISTORY_TICKET_ID, HISTORY_USER_ID" +
+	            "HISTORY_ID, HISTORY_START, HISTORY_END, HISTORY_CAFE_NO, HISTORY_SEAT_NO, HISTORY_TICKET_ID, HISTORY_USER_ID, PAY_ID" +
 	            ") VALUES (" +
-	            "TO_CHAR(SEQ_TBL_PAY_HISTORY.NEXTVAL), SYSDATE, SYSDATE + (? / 24), ?, ?, ?, ?" +
+	            "TO_CHAR(SEQ_TBL_PAY_HISTORY.NEXTVAL), SYSDATE, SYSDATE + (? / 24), ?, ?, ?, ?, ?" +
 	            ")";
 
 	    try {
@@ -360,6 +360,7 @@ public class CafeDao {
 	        pstmt.setString(3, seatNo);
 	        pstmt.setString(4, ticketId);
 	        pstmt.setString(5, userId);
+	        pstmt.setString(6, payId);
 
 	        result = pstmt.executeUpdate();
 	    } catch (SQLException e) {
@@ -699,6 +700,8 @@ public class CafeDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
 		}
 		return result;
 	}
@@ -768,6 +771,63 @@ public class CafeDao {
 		return result;
 	}
 
+
+
+	// userId 로 payId 가져오기 (결제내역이 가장 최신인 것)
+	public String selectPayIdByUserId(Connection conn, String userId) {
+	    PreparedStatement pstmt = null;
+	    ResultSet rset = null;
+	    String payId = null;
+	    
+	    // 최신 결제내역을 가져오기 위해 pay_id를 내림차순 정렬, 1건만 조회
+	    String query = "SELECT pay_id\r\n"
+	    		+ "FROM (\r\n"
+	    		+ "    SELECT pay_id\r\n"
+	    		+ "    FROM tbl_pay_history\r\n"
+	    		+ "    WHERE pay_user_id = ?\r\n"
+	    		+ "    ORDER BY pay_id DESC\r\n"
+	    		+ ")\r\n"
+	    		+ "WHERE ROWNUM = 1\r\n"
+	    		+ "";
+	    
+	    try {
+	        pstmt = conn.prepareStatement(query);
+	        pstmt.setString(1, userId);
+	        rset = pstmt.executeQuery();
+	        
+	        if (rset.next()) {
+	            payId = rset.getString("pay_id");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+	    
+	    return payId;
+	}
+
+	public int insertDefaultImage(Connection conn, Cafe cafeInfo) {
+		 PreparedStatement pstmt = null;
+		 int result = 0;
+		    
+		    // 최신 결제내역을 가져오기 위해 pay_id를 내림차순 정렬, 1건만 조회
+		    String query = "Insert into tbl_image  (cafe_no, image_name, image_path) values (?, 'defaultCafe.png', '/resources/upload/defaultCafe.png')";
+		    
+		    try {
+				pstmt = conn.prepareStatement(query);
+				pstmt.setString(1, cafeInfo.getCafeNo());
+				
+				result = pstmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			return result;
+	}
 
 
 }
