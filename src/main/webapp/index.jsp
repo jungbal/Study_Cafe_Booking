@@ -66,7 +66,7 @@ body {
 
 
 
-<img src="/resources/cssImage/banner.jpg" alt="배너이미지" class="main-banner">
+<img src="/resources/cssImage/banner2.jpg" alt="배너이미지" class="main-banner">
 	 
 
 
