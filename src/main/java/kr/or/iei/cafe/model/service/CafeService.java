@@ -44,66 +44,78 @@ public class CafeService {
    public ListData<Cafe> selectAllCafe(int reqPage) {
 	    Connection conn = JDBCTemplate.getConnection();
 
-	    int viewNoticeCnt = 10; // 한 페이지당 보여줄 글 수
-	    int end = viewNoticeCnt * reqPage;
-	    int start = end - viewNoticeCnt + 1;
+	    int viewNoticeCnt = 10; // 한 페이지당 보여줄 업체 수
+	    int end = viewNoticeCnt * reqPage;	// ex) 10*페이지 수(2) => 20
+	    int start = end - viewNoticeCnt + 1;// ex) 20 - 10 + 1 => 11 시작
 
 	    ArrayList<Cafe> list = dao.selectAllCafe(conn, start, end);
 
-	    // 전체 글 수 조회
-	    int totCnt = dao.selectTotalCount(conn);
-	    int totPage = (totCnt % viewNoticeCnt == 0) ? (totCnt / viewNoticeCnt) : (totCnt / viewNoticeCnt + 1);
+	    
+	    int totCnt = dao.selectTotalCount(conn); // 전체 업체 조회(totCnt) 
+	    
+	    
+	    int totPage = 0;
+	    if(totCnt % viewNoticeCnt > 0) {	//나눈 나머지가 0보다 클 경우 
+	    	totPage = totCnt / viewNoticeCnt + 1;	// 한 페이지 더 보여질 수 있게 설정
+	    }else {								//나눈 나머지가 0일 경우
+	    	totPage = totCnt/viewNoticeCnt;		//추가할 페이지가 없다.
+	    }
 
-	    int pageNaviSize = 5;
-	    int pageNo = ((reqPage - 1) / pageNaviSize) * pageNaviSize + 1;
+	    int pageNaviSize = 5;	//페이지 네이션 5개만 보일 수 있게 설정
+	    int pageNo = ((reqPage - 1) / pageNaviSize) * pageNaviSize + 1;		//시작번호(pageNo)를 나타내주는 변수 ex) (reqPage(7)-1) / 5 ) * 5 + 1 => 6=> 시작페이지가 6으로 된다. 
 
-	    StringBuilder pageNavi = new StringBuilder();
-	    pageNavi.append("<ul class='flex justify-center items-center space-x-2 mt-4'>");
+	 // 페이지 하단에 보여줄 페이지네이션 HTML 코드 작성
+	 // 페이지 하단에 보여줄 페이지네이션 HTML 코드 작성
+	    String pageNavi = "<ul class='flex justify-center items-center space-x-2 mt-4'>";
 
 	    // 이전 버튼
 	    if (pageNo != 1) {
-	        pageNavi.append("<li>");
-	        pageNavi.append("<a href='/manager/cafeManage?reqPage=")
-	                .append(pageNo - 1)
-	                .append("' class='px-3 py-1 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 transition'>&larr;</a>");
-	        pageNavi.append("</li>");
+	        pageNavi += "<li>";
+	        pageNavi += "<a class='px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition' href='/manager/cafeManage?reqPage=" + (pageNo - 1) + "'>";
+	        pageNavi += "&laquo;";
+	        pageNavi += "</a></li>";
 	    }
 
-	    // 페이지 번호들
-	    for (int i = 0; i < pageNaviSize && pageNo <= totPage; i++) {
-	        pageNavi.append("<li>");
+	    // 페이지 번호 버튼
+	    for (int i = 0; i < pageNaviSize; i++) {
+	        pageNavi += "<li>";
+
 	        if (pageNo == reqPage) {
-	            pageNavi.append("<a href='/manager/cafeManage?reqPage=")
-	                    .append(pageNo)
-	                    .append("' class='px-3 py-1 rounded-md border border-blue-500 bg-blue-500 text-white font-semibold'>");
+	            // 현재 페이지
+	            pageNavi += "<a class='px-3 py-1 bg-blue-500 text-white rounded font-bold' href='/manager/cafeManage?reqPage=" + pageNo + "'>";
 	        } else {
-	            pageNavi.append("<a href='/manager/cafeManage?reqPage=")
-	                    .append(pageNo)
-	                    .append("' class='px-3 py-1 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 transition'>");
+	            // 다른 페이지
+	            pageNavi += "<a class='px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition' href='/manager/cafeManage?reqPage=" + pageNo + "'>";
 	        }
-	        pageNavi.append(pageNo);
-	        pageNavi.append("</a></li>");
+
+	        pageNavi += pageNo;
+	        pageNavi += "</a></li>";
 	        pageNo++;
+
+	        // 마지막 페이지를 넘어서면 반복 중지
+	        if (pageNo > totPage) {
+	            break;
+	        }
 	    }
 
 	    // 다음 버튼
 	    if (pageNo <= totPage) {
-	        pageNavi.append("<li>");
-	        pageNavi.append("<a href='/manager/cafeManage?reqPage=")
-	                .append(pageNo)
-	                .append("' class='px-3 py-1 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 transition'>&rarr;</a>");
-	        pageNavi.append("</li>");
+	        pageNavi += "<li>";
+	        pageNavi += "<a class='px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition' href='/manager/cafeManage?reqPage=" + pageNo + "'>";
+	        pageNavi += "&raquo;";
+	        pageNavi += "</a></li>";
 	    }
 
-	    pageNavi.append("</ul>");
-
-	    ListData<Cafe> listData = new ListData<>();
-	    listData.setList(list);
-	    listData.setPageNavi(pageNavi.toString());
-
-	    JDBCTemplate.close(conn);
-	    return listData;
-	}
+	    pageNavi += "</ul>";
+	      
+	      ListData<Cafe> listData = new ListData<Cafe>();
+	      listData.setList(list);
+	      listData.setPageNavi(pageNavi);
+	      
+	      
+	      JDBCTemplate.close(conn);
+	      return listData;
+	   }
 
    /*
    public int selectCafeList(String cafeNo) {
@@ -209,8 +221,8 @@ public class CafeService {
 	    Map<String, String> resultMap = new HashMap<>();
 
 	    for (Map.Entry<String, String> entry : updateMap.entrySet()) {
-	        String cafeNo = entry.getKey();
-	        String statusValue = entry.getValue();
+	        String cafeNo = entry.getKey(); //105
+	        String statusValue = entry.getValue(); //3 (3_B2이 안 옴)
 	        int result = 0;
 	        
 	     // 반려일 경우: statusValue = "3_B1" 형식
