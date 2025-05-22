@@ -221,8 +221,8 @@ public class CafeService {
 	    Map<String, String> resultMap = new HashMap<>();
 
 	    for (Map.Entry<String, String> entry : updateMap.entrySet()) {
-	        String cafeNo = entry.getKey();
-	        String statusValue = entry.getValue();
+	        String cafeNo = entry.getKey(); //105
+	        String statusValue = entry.getValue(); //3 (3_B2이 안 옴)
 	        int result = 0;
 	        
 	     // 반려일 경우: statusValue = "3_B1" 형식
