@@ -32,7 +32,7 @@
           <c:forEach var="report" items="${reportList}">
             <tr class="hover:bg-gray-50">
               <td class="border border-gray-300 px-4 py-2">${report.reportId}</td>
-              <td class="border border-gray-300 px-4 py-2">${report.cafeNo}</td>
+              <td class="border border-gray-300 px-4 py-2">${report.cafeName}</td>
               <td class="border border-gray-300 px-4 py-2">${report.reporterId}</td>
               <td class="border border-gray-300 px-4 py-2">${report.targetCommentId}</td>
               <td class="border border-gray-300 px-4 py-2">${report.content}</td>
