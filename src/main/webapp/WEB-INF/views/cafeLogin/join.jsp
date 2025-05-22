@@ -11,10 +11,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="min-h-screen flex flex-col bg-gray-100 text-gray-900">
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
-<main class="max-w-xl mx-auto mt-10 bg-white shadow-lg p-8 rounded-xl">
+<main class="flex-grow max-w-xl mx-auto mt-10 bg-white shadow-lg p-8 rounded-xl">
   <h2 class="text-2xl font-bold mb-6 text-center">회원가입</h2>
   <form action="/joinServlet" id="formSubmit" method="post" autocomplete="off">
     
@@ -61,7 +61,7 @@
     </div>
   </form>
 </main>
-
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 <script>
 const checkObj = {
   "memberId": false,
