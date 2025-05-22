@@ -12,5 +12,7 @@ public class MemberReport {
 	private String reporterId;
 	private String targetCommentId;
 	private String reportCodeId;
+	private String cafeName;
+	private String content;
 	
 }

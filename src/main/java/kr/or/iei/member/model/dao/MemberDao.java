@@ -242,22 +242,21 @@ public class MemberDao {
 		
 		ArrayList<MemberReport> list = new ArrayList<MemberReport>();
 		
-		String query = "SELECT *\r\n"
-				+ "FROM (\r\n"
-				+ "    SELECT \r\n"
-				+ "        ur.*, \r\n"
-				+ "        c.comment_id,\r\n"
-				+ "        cd.code_name,\r\n"
-				+ "        ROW_NUMBER() OVER (ORDER BY ur.report_id DESC) AS RNUM\r\n"
-				+ "    FROM \r\n"
-				+ "        tbl_user_report ur\r\n"
-				+ "    JOIN \r\n"
-				+ "        tbl_comment c ON ur.target_comment_id = c.comment_id\r\n"
-				+ "    JOIN \r\n"
-				+ "        tbl_code cd ON ur.report_code_id = cd.code_id\r\n"
-				+ ") A\r\n"
-				+ "WHERE RNUM >= ? AND RNUM <= ?";
-		
+		String query = "SELECT * FROM ( " +
+                "    SELECT ur.*, " +
+                "           c.comment_id, " +
+                "           c.content, " +
+                "           cf.cafe_no, " +
+                "           cf.cafe_name, " + 
+                "           cd.code_name, " +
+                "           ROW_NUMBER() OVER (ORDER BY ur.report_id DESC) AS RNUM " +
+                "    FROM tbl_user_report ur " +
+                "    JOIN tbl_comment c ON ur.target_comment_id = c.comment_id " +
+                "    JOIN tbl_cafe cf ON c.comment_cafe_no = cf.cafe_no " +
+                "    JOIN tbl_code cd ON ur.report_code_id = cd.code_id " +
+                ") A " +
+                "WHERE RNUM >= ? AND RNUM <= ?";
+
 		try {
 			pstmt = conn.prepareStatement(query);
 			
@@ -272,6 +271,8 @@ public class MemberDao {
 				report.setReporterId(rset.getString("reporter_id"));
 				report.setTargetCommentId(rset.getString("comment_id"));
 				report.setReportCodeId(rset.getString("code_name"));
+				report.setCafeName(rset.getString("cafe_name"));
+				report.setContent(rset.getString("content"));
 				
 				list.add(report);
 			}

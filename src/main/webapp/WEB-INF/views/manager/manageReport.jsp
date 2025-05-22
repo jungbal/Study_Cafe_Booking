@@ -21,8 +21,10 @@
         <thead>
           <tr class="bg-gray-100 text-left">
             <th class="border border-gray-300 px-4 py-2">신고 번호</th>
+            <th class="border border-gray-300 px-4 py-2">카페명</th>
             <th class="border border-gray-300 px-4 py-2">신고한 사용자ID</th>
             <th class="border border-gray-300 px-4 py-2">신고된 사용자ID</th>
+            <th class="border border-gray-300 px-4 py-2">신고 내용</th>
             <th class="border border-gray-300 px-4 py-2">신고 사유</th>
           </tr>
         </thead>
@@ -30,8 +32,10 @@
           <c:forEach var="report" items="${reportList}">
             <tr class="hover:bg-gray-50">
               <td class="border border-gray-300 px-4 py-2">${report.reportId}</td>
+              <td class="border border-gray-300 px-4 py-2">${report.cafeNo}</td>
               <td class="border border-gray-300 px-4 py-2">${report.reporterId}</td>
               <td class="border border-gray-300 px-4 py-2">${report.targetCommentId}</td>
+              <td class="border border-gray-300 px-4 py-2">${report.content}</td>
               <td class="border border-gray-300 px-4 py-2">${report.reportCodeId}</td>
             </tr>
           </c:forEach>
