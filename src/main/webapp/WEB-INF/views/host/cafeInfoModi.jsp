@@ -79,14 +79,14 @@
 
     <div class="flex flex-col space-y-3">
       <form action="${pageContext.request.contextPath}/member/pwChgFrm" method="get">
-        <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 w-full"
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
           onclick="window.open('${pageContext.request.contextPath}/member/pwChgFrm','pwChg','width=450,height=300,scrollbars=yes'); return false;">
           비밀번호 변경
         </button>
       </form>
 
       <form action="${pageContext.request.contextPath}/member/delete" method="post">
-        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 w-full">
+        <button type="submit" class="bg-red-400 text-white px-4 py-2 rounded hover:bg-red-700 w-full">
           회원 탈퇴
         </button>
       </form>
