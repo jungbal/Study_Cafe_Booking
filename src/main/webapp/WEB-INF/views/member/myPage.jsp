@@ -26,6 +26,7 @@
       background-color: #f5f5f5;
       border: none;
       cursor: pointer;
+      border-radius: 8px; /* 둥글게 하고 싶으면 추가 */
     }
     .sidebar button.active {
       background-color: #3498db;

@@ -95,6 +95,13 @@ main {
   padding-bottom: 70px; /* 푸터 높이 */
 }
 
+.submit-msg {
+  font-size: 13px;
+  color: #dc3545; /* 붉은색으로 에러 메시지 표시 */
+  margin-top: 6px;
+  margin-left: 2px;
+}
+
 </style>
 
 <link type="text/css" rel="stylesheet" href="/resources/css/common.css" />
@@ -208,6 +215,10 @@ main {
 					});
 					
 					checkObj.idDuplChk = true;
+					if(checkObj.idDuplChk){
+					$('#submitMsg').text('');
+					}
+					
 				}else{
 					swal.fire({
 						title : "알림",
@@ -284,16 +295,20 @@ main {
 	$('#formSubmit').on('submit', function(e) {
 		const allVal = Object.values(checkObj).every(value => Boolean(value));
 		
-		  if (!checkObj.idDuplChk) {
-		    e.preventDefault(); 
-		    $('#submitMsg').text('아이디 중복 체크를 진행하세요');
-		  }
-		
 		  if(!allVal) {
-		    e.preventDefault(); 
-		    $('#submitMsg').text('모든 값을 정확히 입력하세요.');
-		  }
-		});
+			    e.preventDefault(); 
+			    $('#submitMsg').text('모든 값을 정확히 입력하세요.');
+			    
+			    if (!checkObj.idDuplChk) {
+				    e.preventDefault(); 
+				    $('#submitMsg').text('아이디 중복 체크를 진행하세요');
+				  }
+			  }
+			});  
+	
+	
+		
+
 	
 	
   </script>

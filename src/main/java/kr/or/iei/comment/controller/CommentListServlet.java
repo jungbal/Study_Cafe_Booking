@@ -49,7 +49,7 @@ public class CommentListServlet extends HttpServlet {
 		
 		// 리뷰와 Q&A 둘 다 가져오기
 		List<Comment> reviewList = service.selectMyCommentsByType(userId, "RV");
-		List<Comment> qnaList = service.selectMyCommentsByType(userId, "QNA");
+		List<Comment> qnaList = service.selectMyCommentsByType(userId, "QA");
 
 		// 넘겨주기
 		request.setAttribute("reviewList", reviewList);
