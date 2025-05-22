@@ -36,6 +36,15 @@
               <button type="submit" class="text-red-600 hover:underline">삭제</button>
             </form>
           </c:if>
+          
+          <!-- 신고 버튼: 로그인 한 유저만 가능 -->
+          <c:if test="${not empty loginCafe}">
+			  <button type="button"
+			          class="text-yellow-600 hover:underline inline-block ml-2 mt-2"
+			          onclick="openReportPopup('${qa.commentId}', '${loginCafe.loginId}')">
+			    신고
+			  </button>
+			</c:if>
 
           <!-- 답글 달기: 로그인한 카페 사장만 가능 -->
           <c:if test="${not empty loginCafe and loginCafe.loginId eq cafe.hostId}">
@@ -72,6 +81,14 @@
                     <button type="submit" class="text-red-600 hover:underline">삭제</button>
                   </form>
                 </c:if>
+                <!-- 신고 버튼: 로그인 한 유저만 가능 -->
+                <c:if test="${not empty loginCafe}">
+			  <button type="button"
+			          class="text-yellow-600 hover:underline inline-block ml-2 mt-2"
+			          onclick="openReportPopup('${reply.commentId}', '${loginCafe.loginId}')">
+			    신고
+			  </button>
+			</c:if>
               </div>
             </c:if>
           </c:forEach>
@@ -82,8 +99,24 @@
 </div>
 
 <script>
-  function toggleReplyForm(commentId) {
+function toggleReplyForm(commentId) {
     const form = document.getElementById('reply-form-' + commentId);
     form.classList.toggle('hidden');
   }
+
+function openReportPopup(commentId, reporterId) {
+	  const url = "/cafeDetail/comment/report?commentId=" + commentId + "&reporterId=" + reporterId;
+
+	  const popupWidth = 800;
+	  const popupHeight = 700;
+
+	  const left = window.screenX + (window.innerWidth - popupWidth) / 2;
+	  const top = window.screenY + (window.innerHeight - popupHeight) / 2;
+
+	  window.open(
+	    url,
+	    '신고하기',
+	    "width=" + popupWidth + ",height=" + popupHeight + ",top=" + top + ",left=" + left + ",resizable=no,scrollbars=yes"
+	  );
+	}
 </script>

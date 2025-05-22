@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import kr.or.iei.cafe.model.vo.Code;
+import kr.or.iei.cafe.model.vo.Comment;
 import kr.or.iei.common.JDBCTemplate;
 import kr.or.iei.member.model.vo.Member;
 import kr.or.iei.member.model.vo.MemberReport;
@@ -285,5 +287,94 @@ public class MemberDao {
 		}
 		return list;
 	
+	}
+	
+	
+	// 댓글 신고하는 메소드 (tbl_user_report 에 insert)
+	public int insertReport (Connection conn, String reporterId, String commentId, String reasonCode) {
+		PreparedStatement pstmt = null;
+		int result =0;
+		
+		String query = "insert into tbl_user_report (reporter_id, target_comment_id, report_code_id) values (?, ?, ?)";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, reporterId);
+			pstmt.setString(2, commentId);
+			pstmt.setString(3, reasonCode);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+		
+	}
+
+	// comment_id 로 comment 객체 select 하는 메소드
+	public Comment selectCommentById(Connection conn, String commentId) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		Comment comment = null;
+		
+		String query = "select * from tbl_comment where comment_id = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, commentId);
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				comment = new Comment();
+				comment.setCommentId(rset.getString("comment_id"));
+				comment.setTargetType(rset.getString("target_type"));
+				comment.setContent(rset.getString("content"));
+				comment.setCommentTime(rset.getString("comment_time"));
+				comment.setCommentUserId(rset.getString("comment_user_id"));
+				comment.setCommentCafeNo(rset.getString("comment_cafe_no"));
+				comment.setCommentParent(rset.getString("comment_parent"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return comment;
+	}
+
+	public ArrayList<Code> selectReportCodeById(Connection conn) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+        ArrayList<Code> codeList = new ArrayList<Code>();
+		
+        String query = "select * from tbl_code where code_parent='A2'";
+        
+        try {
+			pstmt=conn.prepareStatement(query);
+			rset=pstmt.executeQuery();
+				
+			while(rset.next()) {
+				Code code = new Code();
+				
+                code.setCodeId(rset.getString("code_id"));
+                code.setCodeName(rset.getString("code_name"));
+                code.setCodeParent(rset.getString("code_parent"));
+                
+                codeList.add(code);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return codeList;
 	}
 }
