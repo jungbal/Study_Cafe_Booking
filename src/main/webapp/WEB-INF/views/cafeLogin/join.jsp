@@ -24,7 +24,7 @@
       <div class="flex gap-2">
         <input type="text" id="memberId" name="loginId" placeholder="영문, 숫자 혼합 4~10글자" maxlength="20"
           class="flex-1 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-        <button type="button" id="idDuplChkBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">중복체크</button>
+        <button type="button" id="idDuplChkBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-400">중복체크</button>
       </div>
       <p id="idMessage" class="text-sm text-red-500 mt-1"></p>
     </div>
@@ -54,7 +54,7 @@
 
     <!-- 회원가입 버튼 -->
     <div class="text-center">
-      <button type="submit" id="submit" class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-green-700 text-lg font-semibold">
+      <button type="submit" id="submit" class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-400 text-lg font-semibold">
         회원가입
       </button>
       <p id="submitMsg" class="text-sm text-red-500 mt-2"></p>

@@ -33,7 +33,7 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <c:forEach var="cafe" items="${cafeList}">
                     <c:if test="${!(cafe.cafeRejectReason == 'N' and cafe.cafeApplyStatus != null)}">
-                        <tr class="hover:bg-gray-50">
+                        <tr class="hover:bg-gray-300">
                             <td class="px-4 py-2">${cafe.cafeName}</td>
                             <td class="px-4 py-2">${cafe.hostId}</td>
                             <td class="px-4 py-2">${cafe.cafeAddr}</td>
@@ -88,7 +88,7 @@
         <input type="hidden" name="selectedStatusJson" id="selectedStatusJson">
 
         <div class="mt-6 text-right">
-            <button type="submit" onclick="return submitCafeForm();" class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition">
+            <button type="submit" onclick="return submitCafeForm();" class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-400 transition">
                 저장
             </button>
         </div>
