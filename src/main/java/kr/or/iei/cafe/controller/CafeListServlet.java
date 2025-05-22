@@ -36,11 +36,11 @@ public class CafeListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//1. 인코딩 - 필터
 		//2. 값 추출
-		int reqPage = Integer.parseInt(request.getParameter("reqPage"));
+		int reqPage = Integer.parseInt(request.getParameter("reqPage"));	//reqPage는 int자료형으로 getParameter는 string이므로 강제 형변환
 		
 		//3. 로직
 		CafeService service = new CafeService();
-		ListData<Cafe> cafeList = service.selectAllCafe(reqPage);
+		ListData<Cafe> cafeList = service.selectAllCafe(reqPage);	//서비스에서 리턴해야되는 값이 카페리스트와 페이지네이션 2개여서 두개의 값을 저장할수 있는 ListData 객체 생성해서 리턴
 		
 		// (추가) codeList 값 추가.
 		ArrayList<Code> codeList = service.selectAllCodeId();

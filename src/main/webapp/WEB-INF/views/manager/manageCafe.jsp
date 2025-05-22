@@ -21,7 +21,7 @@
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-300 border border-gray-300 rounded-lg overflow-hidden shadow-sm">
                 <thead class="bg-gray-100">
-                    <tr>
+					<tr>
                         <th class="px-4 py-2 text-left">업체명</th>
                         <th class="px-4 py-2 text-left">호스트ID</th>
                         <th class="px-4 py-2 text-left">주소</th>
@@ -71,7 +71,7 @@
                             </td>
                             <td class="px-4 py-2 text-center">
                                 <c:choose>
-                                    <c:when test="${cafe.cafeManageStatus == '수정대기' || cafe.cafeManageStatus == '등록대기'}">
+                                    <c:when test="${cafe.cafeManageStatus == '수정대기' || cafe.cafeManageStatus == '등록대기'}">	<%-- cafeManageStatus => 카페에 대한 상태 => 그 값이 수정대기 && 등록대기일 경우에만 보여줌--%>
                                         <button type="button" onclick="requestInfo('${cafe.cafeNo}')" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
                                             신청정보 열람
                                         </button>
@@ -107,6 +107,7 @@
 
 <script>
 function handleStatusChange(cafeNo) {
+
     // 1. 함수 호출 시 cafeNo 값과 타입 확인
     console.log("handleStatusChange 함수 호출됨");
     console.log("전달된 cafeNo:", cafeNo, typeof cafeNo);
@@ -150,6 +151,8 @@ function handleStatusChange(cafeNo) {
         }
     }
 }
+    
+
 
 
 function handleRejectReasonChange(cafeNo) {
@@ -206,7 +209,8 @@ function submitCafeForm() {
 
 
 
-function requestInfo(cafeNo) {
+
+function requestInfo(cafeNo) {		//cafeNo는 파라미터 
     const url = "/admin/cafeRequestDetail?cafeNo=" + cafeNo;
     window.open(url, "신청정보", "width=600,height=500,left=100,top=100");
 }
