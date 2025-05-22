@@ -308,9 +308,10 @@ public class CafeService {
 
 	    int result = dao.insertCafe(conn, cafeInfo, loginId);
 	    int hostRequestResult = dao.insertHostRqst(conn, cafeInfo);
-	    int insertImageResult = dao.insertDefaultImage(conn, cafeInfo);
+	    Cafe cafe = dao.selectOneCafe(conn, loginId);
+	    System.out.println("cafeService에서 cafe.getCafeNo(): " + cafe.getCafeNo());
+	    int insertImageResult = dao.insertDefaultImage(conn, cafe.getCafeNo());
 
-	    // ✅ 추가된 승인 처리
 	    int updateUserStatusResult = 0;
 	    if (result > 0 && hostRequestResult > 0 && insertImageResult > 0) {
 	        updateUserStatusResult = dao.updateUserStatus(conn, loginId);
@@ -371,7 +372,4 @@ public class CafeService {
 		JDBCTemplate.close(conn);
 		return codeList;
 	}
-
-
-
 }

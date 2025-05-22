@@ -589,7 +589,7 @@ public class CafeDao {
 				+ "        c.host_id = ?\r\n"
 				+ ") sub\r\n"
 				+ "WHERE rn = 1\r\n"
-				+ "ORDER BY apply_date DESC;";
+				+ "ORDER BY apply_date DESC";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -599,7 +599,7 @@ public class CafeDao {
 			
 			if(rset.next()) {
 				cafeInfo = new Cafe();
-				
+				cafeInfo.setCafeNo(rset.getString("cafe_no"));
 				cafeInfo.setCafeName(rset.getString("cafe_name"));
 				cafeInfo.setCafeAddr(rset.getString("cafe_addr"));
 				cafeInfo.setCafePhone(rset.getString("cafe_phone"));
@@ -934,7 +934,7 @@ public class CafeDao {
 		return editResult;
 	}
 	
-	public int insertDefaultImage(Connection conn, Cafe cafeInfo) {
+	public int insertDefaultImage(Connection conn, String cafeNo) {
 		 PreparedStatement pstmt = null;
 		 int result = 0;
 		    
@@ -943,7 +943,7 @@ public class CafeDao {
 		    
 		    try {
 				pstmt = conn.prepareStatement(query);
-				pstmt.setString(1, cafeInfo.getCafeNo());
+				pstmt.setString(1, cafeNo);
 				
 				result = pstmt.executeUpdate();
 			} catch (SQLException e) {
@@ -1025,6 +1025,5 @@ public class CafeDao {
 		}
 		return codeList;
 	}
-
 
 }
