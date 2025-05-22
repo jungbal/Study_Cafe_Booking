@@ -15,6 +15,7 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
 <main class="flex-grow max-w-xl mx-auto mt-10 bg-white shadow-lg p-8 rounded-xl">
+
   <h2 class="text-2xl font-bold mb-6 text-center">회원가입</h2>
   <form action="/joinServlet" id="formSubmit" method="post" autocomplete="off">
     
