@@ -21,9 +21,6 @@
             <table class="min-w-full divide-y divide-gray-300 border border-gray-300 rounded-lg overflow-hidden shadow-sm">
                 <thead class="bg-gray-100">
                    <!-- 디버깅 -->
-                   <c:if test="${empty cafe.cafeNo}">
-						    <tr><td colspan="6" class="text-red-500 font-bold">⚠️ cafeNo가 비어있습니다</td></tr>
-						</c:if>
                     <tr>
                         <th class="px-4 py-2 text-left">업체명</th>
                         <th class="px-4 py-2 text-left">호스트ID</th>
@@ -78,7 +75,7 @@
                             </td>
                             <td class="px-4 py-2 text-center">
                                 <c:choose>
-                                    <c:when test="${cafe.cafeManageStatus == '수정대기' || cafe.cafeManageStatus == '등록대기'}">
+                                    <c:when test="${cafe.cafeManageStatus == '수정대기' || cafe.cafeManageStatus == '등록대기'}">	<%-- cafeManageStatus => 카페에 대한 상태 => 그 값이 수정대기 && 등록대기일 경우에만 보여줌--%>
                                         <button type="button" onclick="requestInfo('${cafe.cafeNo}')" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
                                             신청정보 열람
                                         </button>
@@ -111,26 +108,18 @@
 <script>
 // 반려 클릭 시, 반려 selectBox 동적으로 추가하는 스크립트
 function handleStatusChange(cafeNo) {
-	
-	console.log("스크립트 cafeNo : " + cafeNo); // 스크립트 cafeNo : 2
-	document.querySelectorAll("select[name]");
-	document.querySelector(`select[name=${cafeNo}]`);
-	
-	const statusSelect = document.querySelector(`select[name='${cafeNo}']`);
-   // const statusSelect = document.querySelector(`select[name='${cafeNo}']`);
+    const statusSelect = document.querySelector(`select[name='${cafeNo}']`);
     const reasonSelect = document.getElementById(`rejectReason_${cafeNo}`);
-    
-	console.log("`select[name='${cafeNo}']` : " + `select[name='${cafeNo}']`);
 
-    /* if (!statusSelect || !reasonSelect) {
+    if (!statusSelect || !reasonSelect) {
         console.warn(`Elements not found for cafeNo=${cafeNo}`);
         return;
-    } */
+    }
 
     if (statusSelect.value === "3") {
-        reasonSelect.style.display = "block"; // 보여주기
+        reasonSelect.style.display = "block"; // 반려 사유 보이기
     } else {
-        reasonSelect.style.display = "none"; // 숨기기
+        reasonSelect.style.display = "none";  // 숨기기
         reasonSelect.value = ""; // 선택 초기화
     }
 }
@@ -152,7 +141,7 @@ function submitCafeForm() {
     document.getElementById("selectedStatusJson").value = JSON.stringify(statusMap);
     return true;
 }
-function requestInfo(cafeNo) {
+function requestInfo(cafeNo) {		//cafeNo는 파라미터 
     const url = "/admin/cafeRequestDetail?cafeNo=" + cafeNo;
     window.open(url, "신청정보", "width=600,height=500,left=100,top=100");
 }

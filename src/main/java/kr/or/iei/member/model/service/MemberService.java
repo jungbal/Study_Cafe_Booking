@@ -3,6 +3,7 @@ package kr.or.iei.member.model.service;
 import java.sql.Connection;
 import java.util.ArrayList;
 
+import kr.or.iei.cafe.model.vo.Cafe;
 import kr.or.iei.common.JDBCTemplate;
 import kr.or.iei.common.ListData;
 import kr.or.iei.member.model.dao.MemberDao;
@@ -78,70 +79,78 @@ public class MemberService {
 	 public ListData<Member> selectAllUser(int reqPage) {
 		    Connection conn = JDBCTemplate.getConnection();
 
-		    // 한 페이지에서 보여줄 회원 수 
-		    int viewNoticeCnt = 10;
-
-		    int end = viewNoticeCnt * reqPage;
-		    int start = end - viewNoticeCnt + 1;
+		    int viewNoticeCnt = 10; // 한 페이지당 보여줄 회원 수 
+		    int end = viewNoticeCnt * reqPage;	// ex) 10*페이지 수(2) => 20
+		    int start = end - viewNoticeCnt + 1;// ex) 20 - 10 + 1 => 11 시작
 
 		    ArrayList<Member> list = dao.selectAllUser(conn, start, end);
 
-		    // 전체 회원 수 조회
-		    int totcnt = dao.selectTotalCount(conn);
-
+		    
+		    int totCnt = dao.selectTotalCount(conn); // 전체 회원 조회(totCnt) 
+		    
+		    
 		    int totPage = 0;
-		    if (totcnt % viewNoticeCnt > 0) {
-		        totPage = totcnt / viewNoticeCnt + 1;
-		    } else {
-		        totPage = totcnt / viewNoticeCnt;
+		    if(totCnt % viewNoticeCnt > 0) {	//나눈 나머지가 0보다 클 경우 
+		    	totPage = totCnt / viewNoticeCnt + 1;	// 한 페이지 더 보여질 수 있게 설정
+		    }else {								//나눈 나머지가 0일 경우
+		    	totPage = totCnt/viewNoticeCnt;		//추가할 페이지가 없다.
 		    }
 
-		    // 페이지 네비게이션 사이즈
-		    int pageNaviSize = 5;
+		    int pageNaviSize = 5;	//페이지 네이션 5개만 보일 수 있게 설정
+		    int pageNo = ((reqPage - 1) / pageNaviSize) * pageNaviSize + 1;		//시작번호(pageNo)를 나타내주는 변수 ex) (reqPage(7)-1) / 5 ) * 5 + 1 => 6=> 시작페이지가 6으로 된다. 
 
-		    int pageNo = ((reqPage - 1) / pageNaviSize) * pageNaviSize + 1;
-
-		    String pageNavi = "<nav class='flex justify-center mt-8'>";
-		    pageNavi += "<ul class='inline-flex items-center -space-x-px text-sm'>";
+		 // 페이지 하단에 보여줄 페이지네이션 HTML 코드 작성
+		 // 페이지 하단에 보여줄 페이지네이션 HTML 코드 작성
+		    String pageNavi = "<ul class='flex justify-center items-center space-x-2 mt-4'>";
 
 		    // 이전 버튼
 		    if (pageNo != 1) {
 		        pageNavi += "<li>";
-		        pageNavi += "<a href='/manager/userManage?reqPage=" + (pageNo - 1) + "' class='px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700'>&laquo;</a>";
-		        pageNavi += "</li>";
+		        pageNavi += "<a class='px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition' href='/manager/userManage?reqPage=" + (pageNo - 1) + "'>";
+		        pageNavi += "&laquo;";
+		        pageNavi += "</a></li>";
 		    }
 
-		    // 페이지 번호 출력
+		    // 페이지 번호 버튼
 		    for (int i = 0; i < pageNaviSize; i++) {
-		        if (pageNo > totPage) break;
-
 		        pageNavi += "<li>";
+
 		        if (pageNo == reqPage) {
-		            pageNavi += "<a href='/manager/userManage?reqPage=" + pageNo + "' class='px-3 py-2 leading-tight text-white bg-blue-600 border border-gray-300'>" + pageNo + "</a>";
+		            // 현재 페이지
+		            pageNavi += "<a class='px-3 py-1 bg-blue-500 text-white rounded font-bold' href='/manager/userManage?reqPage=" + pageNo + "'>";
 		        } else {
-		            pageNavi += "<a href='/manager/userManage?reqPage=" + pageNo + "' class='px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700'>" + pageNo + "</a>";
+		            // 다른 페이지
+		            pageNavi += "<a class='px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition' href='/manager/userManage?reqPage=" + pageNo + "'>";
 		        }
-		        pageNavi += "</li>";
+
+		        pageNavi += pageNo;
+		        pageNavi += "</a></li>";
 		        pageNo++;
+
+		        // 마지막 페이지를 넘어서면 반복 중지
+		        if (pageNo > totPage) {
+		            break;
+		        }
 		    }
 
 		    // 다음 버튼
 		    if (pageNo <= totPage) {
 		        pageNavi += "<li>";
-		        pageNavi += "<a href='/manager/userManage?reqPage=" + pageNo + "' class='px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700'>&raquo;</a>";
-		        pageNavi += "</li>";
+		        pageNavi += "<a class='px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition' href='/manager/userManage?reqPage=" + pageNo + "'>";
+		        pageNavi += "&raquo;";
+		        pageNavi += "</a></li>";
 		    }
 
-		    pageNavi += "</ul></nav>";
-
-		    // 결과 객체 생성 및 반환
-		    ListData<Member> listData = new ListData<Member>();
-		    listData.setList(list);
-		    listData.setPageNavi(pageNavi);
-
-		    JDBCTemplate.close(conn);
-		    return listData;
-		}
+		    pageNavi += "</ul>";
+		      
+		      ListData<Member> listData = new ListData<Member>();
+		      listData.setList(list);
+		      listData.setPageNavi(pageNavi);
+		      
+		      
+		      JDBCTemplate.close(conn);
+		      return listData;
+		   }
 	 
 	public int deleteOneUser(String userId) {
 		Connection conn = JDBCTemplate.getConnection();
