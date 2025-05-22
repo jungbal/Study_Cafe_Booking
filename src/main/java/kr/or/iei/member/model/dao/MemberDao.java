@@ -273,7 +273,6 @@ public class MemberDao {
 				report.setTargetCommentId(rset.getString("comment_id"));
 				report.setReportCodeId(rset.getString("code_name"));
 				
-				
 				list.add(report);
 			}
 		} catch (SQLException e) {

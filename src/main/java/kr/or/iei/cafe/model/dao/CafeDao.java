@@ -133,37 +133,63 @@ public class CafeDao {
 		
 		ArrayList<Cafe> list = new ArrayList<Cafe>();
 		
-		String query =  "SELECT * FROM ( " +
-		        "  SELECT ROWNUM RNUM, A.* FROM ( " +
-		        "    SELECT  " +
-		        "      sub.cafe_no, sub.cafe_name, sub.cafe_phone, sub.cafe_addr, " +
-		        "      sub.cafe_biznum, sub.cafe_introduce, sub.cafe_start_hour, sub.cafe_end_hour, " +
-		        "      sub.cafe_status, sub.cafe_intro_detail, sub.host_id, " +
-		        "      sub.status AS host_request_status, sub.apply_date, " +
-		        "      sub.user_role, sub.user_status, " +
-		        "      CASE " +
-		        "        WHEN sub.cafe_status = 'N' AND sub.status = 'N' AND sub.user_role = '3' AND sub.user_status = 'Y' THEN '등록대기' " +
-		        "        WHEN sub.cafe_status = 'N' AND sub.status = 'N' AND sub.user_role = '2' AND sub.user_status = 'Y' THEN '수정대기' " +
-		        "        WHEN sub.cafe_status = 'Y' AND sub.status = 'Y' THEN '승인' " +
-		        "      END AS cafe_manage_status " +
-		        "    FROM ( " +
-		        "      SELECT  " +
-		        "        c.cafe_no, c.cafe_name, c.cafe_phone, c.cafe_addr, " +
-		        "        c.cafe_biznum, c.cafe_introduce, c.cafe_start_hour, c.cafe_end_hour, " +
-		        "        c.cafe_status, c.cafe_intro_detail, c.host_id, " +
-		        "        h.status, h.apply_date, " +
-		        "        u.user_role, u.user_status, " +
-		        "        ROW_NUMBER() OVER (PARTITION BY c.cafe_no ORDER BY h.apply_date ASC) AS rn " +
-		        "      FROM tbl_cafe c " +
-		        "      JOIN tbl_host_request h ON c.cafe_no = h.host_no " +
-		        "      JOIN tbl_user u ON c.host_id = u.user_id " +
-		        "      WHERE (c.cafe_status = 'N' AND h.status = 'N' AND u.user_role = '3' AND u.user_status = 'Y') " +
-		        "         OR (c.cafe_status = 'N' AND h.status = 'N' AND u.user_role = '2' AND u.user_status = 'Y') " +
-		        "         OR (c.cafe_status = 'Y' AND h.status = 'Y') " +
-		        "    ) sub " +
-		        "    WHERE sub.rn = 1 " +
-		        "  ) A " +
-		        ") WHERE RNUM >= ? AND RNUM <= ?";
+		String query =  "SELECT *\r\n"
+				+ "FROM (\r\n"
+				+ "    SELECT ROWNUM AS RNUM, A.*\r\n"
+				+ "    FROM (\r\n"
+				+ "        SELECT\r\n"
+				+ "            sub.cafe_no,\r\n"
+				+ "            sub.cafe_name,\r\n"
+				+ "            sub.cafe_phone,\r\n"
+				+ "            sub.cafe_addr,\r\n"
+				+ "            sub.cafe_biznum,\r\n"
+				+ "            sub.cafe_introduce,\r\n"
+				+ "            sub.cafe_start_hour,\r\n"
+				+ "            sub.cafe_end_hour,\r\n"
+				+ "            sub.cafe_status,\r\n"
+				+ "            sub.cafe_intro_detail,\r\n"
+				+ "            sub.host_id,\r\n"
+				+ "            sub.status AS host_request_status,\r\n"
+				+ "            sub.apply_date,\r\n"
+				+ "            sub.reject_id,\r\n"
+				+ "            sub.user_role,\r\n"
+				+ "            sub.user_status,\r\n"
+				+ "            CASE\r\n"
+				+ "                WHEN sub.cafe_status = 'N' AND sub.status = 'N' AND sub.user_role = '3' AND sub.user_status = 'Y' THEN '등록대기'\r\n"
+				+ "                WHEN sub.cafe_status = 'N' AND sub.status = 'N' AND sub.user_role = '2' AND sub.user_status = 'Y' THEN '수정대기'\r\n"
+				+ "                WHEN sub.cafe_status = 'Y' AND sub.status = 'Y' THEN '승인'\r\n"
+				+ "            END AS cafe_manage_status\r\n"
+				+ "        FROM (\r\n"
+				+ "            SELECT\r\n"
+				+ "                c.cafe_no,\r\n"
+				+ "                c.cafe_name,\r\n"
+				+ "                c.cafe_phone,\r\n"
+				+ "                c.cafe_addr,\r\n"
+				+ "                c.cafe_biznum,\r\n"
+				+ "                c.cafe_introduce,\r\n"
+				+ "                c.cafe_start_hour,\r\n"
+				+ "                c.cafe_end_hour,\r\n"
+				+ "                c.cafe_status,\r\n"
+				+ "                c.cafe_intro_detail,\r\n"
+				+ "                c.host_id,\r\n"
+				+ "                h.status,\r\n"
+				+ "                h.apply_date,\r\n"
+				+ "                h.reject_id,\r\n"
+				+ "                u.user_role,\r\n"
+				+ "                u.user_status,\r\n"
+				+ "                ROW_NUMBER() OVER (PARTITION BY c.cafe_no ORDER BY h.apply_date ASC) AS rn\r\n"
+				+ "            FROM tbl_cafe c\r\n"
+				+ "            JOIN tbl_host_request h ON c.cafe_no = h.host_no\r\n"
+				+ "            JOIN tbl_user u ON c.host_id = u.user_id\r\n"
+				+ "            WHERE \r\n"
+				+ "                (c.cafe_status = 'N' AND h.status = 'N' AND u.user_role = '3' AND u.user_status = 'Y')\r\n"
+				+ "                OR (c.cafe_status = 'N' AND h.status = 'N' AND u.user_role = '2' AND u.user_status = 'Y')\r\n"
+				+ "                OR (c.cafe_status = 'Y' AND h.status = 'Y')\r\n"
+				+ "        ) sub\r\n"
+				+ "        WHERE sub.rn = 1\r\n"
+				+ "    ) A\r\n"
+				+ ")\r\n"
+				+ "WHERE RNUM >= ? AND RNUM <= ?";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -188,6 +214,8 @@ public class CafeDao {
 				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
 				cafe.setHostId(rset.getString("host_id"));
 				cafe.setCafeManageStatus(rset.getString("cafe_manage_status"));
+				cafe.setCafeRejectReason(rset.getString("HOST_REQUEST_STATUS"));
+				cafe.setCafeApplyStatus(rset.getString("reject_id"));
 				
 				list.add(cafe);
 			}
@@ -928,7 +956,7 @@ public class CafeDao {
 		
 		try {
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, rejectCode);
+			pstmt.setString(1, rejectCode); // null 값
 			pstmt.setString(2, cafeNo);
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {

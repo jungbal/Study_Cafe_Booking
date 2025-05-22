@@ -32,6 +32,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <c:forEach var="cafe" items="${cafeList}">
+                    <c:if test="${!(cafe.cafeRejectReason == 'N' and cafe.cafeApplyStatus != null)}">
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-2">${cafe.cafeName}</td>
                             <td class="px-4 py-2">${cafe.hostId}</td>
@@ -81,6 +82,7 @@
                                 </c:choose>
                             </td>
                         </tr>
+                        </c:if>
                     </c:forEach>
                 </tbody>
             </table>
@@ -150,66 +152,65 @@ function handleStatusChange(cafeNo) {
 }
 
 
-// 반려 사유를 선택하면 상태 변경 select의 value를 해당 반려 사유 값으로 덮어씌움
 function handleRejectReasonChange(cafeNo) {
-    const statusSelect = document.getElementById('statusSelect_'+cafeNo);
-    const reasonSelect = document.getElementById('rejectReason_'+cafeNo);
-    console.log("statusSelect : " + statusSelect.value); // 3
-    console.log("reasonSelect : " + reasonSelect.value); //3_B2
+    const statusSelect = document.getElementById('statusSelect_' + cafeNo);
+    const reasonSelect = document.getElementById('rejectReason_' + cafeNo);
 
-    if (!statusSelect || !reasonSelect) {
-        console.warn(`요소를 찾을 수 없습니다: statusSelect or reasonSelect for cafeNo=${cafeNo}`);
-        return;
-    }
-
-    if (reasonSelect.value) { // ?????? 이 부분 수정 3 = 3_B2 .. 
-        statusSelect.value = reasonSelect.value;  // ex) "3_B1"
-    } else {
-        // 반려 사유 선택 안 하면 상태 변경 select를 기본 "3"(반려)로 복원
-        statusSelect.value = "3";
+    if (statusSelect && reasonSelect) {
+        if (reasonSelect.value) {
+            console.log("반려 사유 선택됨: " + reasonSelect.value);
+            //statusSelect.value = reasonSelect.value; // 상태를 반려 사유로 업데이트
+        } else {
+            console.log("반려 사유 선택 안 됨, 상태 복원");
+            statusSelect.value = "3"; // 기본 반려 값 설정
+        }
     }
 }
+
+
 
 function submitCafeForm() {
     const statusMap = {};
+    let isValid = true;
 
     document.querySelectorAll("select[id^='statusSelect_']").forEach(statusSelect => {
         const cafeNo = statusSelect.id.replace('statusSelect_', '');
-        const statusValue = statusSelect.value;
-        console.log("cafeNo:" +  cafeNo + ", statusValue:" + statusValue);
-
+        let statusValue = statusSelect.value;
         const reasonSelect = document.getElementById('rejectReason_' + cafeNo);
-        if (reasonSelect) {
-            console.log("reasonSelect found for cafeNo"+ cafeNo+", value: " + reasonSelect.value);
-        } else {
-            console.log(`reasonSelect NOT found for cafeNo ${cafeNo}`);
+
+        if (statusValue === "3") {
+            // 반려인데 사유를 선택하지 않음
+            if (!reasonSelect || reasonSelect.value === "") {
+                alert("반려 사유를 선택해주세요.");
+                reasonSelect?.focus();
+                isValid = false;
+                return; // 해당 항목에서 중단하고 다음으로 넘어가지 않음
+            }
+            statusValue = reasonSelect.value; // 반려 사유 반영
         }
 
-        let selectedValue = statusValue;
-
-        if (statusValue.startsWith('3') && reasonSelect && reasonSelect.value) {
-            selectedValue = reasonSelect.value;
-            console.log("반려 사유로 상태 변경: "+selectedValue);
-        }
-
-        if (selectedValue !== "0" && selectedValue !== "") {
-            statusMap[cafeNo] = selectedValue;
-            console.log("statusMap["+cafeNo+"] = "+ selectedValue);
+        if (statusValue !== "0" && statusValue !== "") {
+            statusMap[cafeNo] = statusValue;
         }
     });
 
-    const jsonStr = JSON.stringify(statusMap);
-    console.log("최종 selectedStatusJson:", jsonStr);
-    document.getElementById("selectedStatusJson").value = jsonStr;
+    if (!isValid) {
+        return false; // 유효성 검사 실패 시 form 제출 중단
+    }
 
-    return true;
+    const jsonStr = JSON.stringify(statusMap);
+    document.getElementById("selectedStatusJson").value = jsonStr;
+    return true; // 유효성 통과 시 form 제출
 }
+
+
 
 
 function requestInfo(cafeNo) {
     const url = "/admin/cafeRequestDetail?cafeNo=" + cafeNo;
     window.open(url, "신청정보", "width=600,height=500,left=100,top=100");
 }
+
 
 </script>
 
