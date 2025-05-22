@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import kr.or.iei.cafe.model.vo.Cafe;
+import kr.or.iei.cafe.model.vo.Code;
+import kr.or.iei.cafe.model.vo.Comment;
 import kr.or.iei.common.JDBCTemplate;
 import kr.or.iei.common.ListData;
 import kr.or.iei.member.model.dao.MemberDao;
@@ -243,6 +245,31 @@ public class MemberService {
 	JDBCTemplate.close(conn);
 		
 	return listData;
+	}
+
+	public Comment selectCommentById(String commentId) {
+		Connection conn = JDBCTemplate.getConnection();
+		Comment comment = dao.selectCommentById(conn, commentId);
+		JDBCTemplate.close(conn);
+		return  comment;
+	}
+
+	public ArrayList<Code> selectReportCodeById() {
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<Code> codeList = dao.selectReportCodeById(conn);
+		JDBCTemplate.close(conn);
+		return codeList;
+	}
+
+	public int insertReport(String reporterId, String commentId, String reasonCode) {
+		Connection conn = JDBCTemplate.getConnection();
+		int result = dao.insertReport(conn, reporterId, commentId, reasonCode);
+		if(result > 0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		return result;
 	}
 		
 		
