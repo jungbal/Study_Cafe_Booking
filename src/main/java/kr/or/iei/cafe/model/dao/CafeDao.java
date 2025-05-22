@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
 import kr.or.iei.Login.model.vo.Login;
 import kr.or.iei.cafe.model.vo.Cafe;
 import kr.or.iei.cafe.model.vo.Code;
@@ -689,21 +691,20 @@ public class CafeDao {
 		String sql = "SELECT SEQ_TBL_CAFE.CURRVAL FROM dual";
 	
 		
-		String cafeNo = cafeInfo.getCafeNo();
+		String cafeNo = null;
 		
 		try {
 			pstmt2 = conn.prepareStatement(sql);
 			rset = pstmt2.executeQuery();
 				if (rset.next()) {
 				    cafeNo = rset.getString(1);
-				    cafeInfo.setCafeNo(cafeNo); 
 				}
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, cafeNo);
 			hostRqstResult = pstmt.executeUpdate();
 			
 		
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -716,7 +717,44 @@ public class CafeDao {
 		return hostRqstResult;
 
 		}
+	
+	public int insertHostRqstV2(Connection conn, String loginId, Cafe cafeInfo) {
+	PreparedStatement pstmt= null;
+	PreparedStatement pstmt2 = null;
+	ResultSet rset = null;
+	int hostRqstResultV2 = 0;
+	
+	String query = "insert into tbl_host_request(apply_no, apply_date, status, reject_id, host_no) "
+			+ "values(SEQ_TBL_HOST_REQUEST.nextval, sysdate, default, null, ?)";
+			
+	String sql = "SELECT cafe_no from tbl_cafe where host_id = ? ";
+	
+	String cafeNo = null;
+	
+	try {
+		pstmt2 = conn.prepareStatement(sql);
+		pstmt2.setString(1, loginId);
+		rset = pstmt2.executeQuery();
+			if (rset.next()) {
+			    cafeNo = rset.getString(1);
+			}
+		pstmt = conn.prepareStatement(query);
+		pstmt.setString(1, cafeNo);
+		hostRqstResultV2  = pstmt.executeUpdate();
 		
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}finally {
+		JDBCTemplate.close(pstmt);
+		JDBCTemplate.close(pstmt2);
+		JDBCTemplate.close(rset);
+	}
+	
+	return hostRqstResultV2 ;
+
+	}
 
 	// 호스트 신청 내역 테이블 insert
 	public int insertHostRequest(Connection conn, Cafe cafe) {

@@ -342,8 +342,9 @@ public class CafeService {
 	public int editCafe(String loginId, Cafe cafeInfo) {
 		Connection conn = JDBCTemplate.getConnection();
 		int editResult = dao.editResult(conn, loginId, cafeInfo);
+		int hostRqstResultV2  = dao.insertHostRqstV2(conn, loginId, cafeInfo);
 		
-		if(editResult>0) {
+		if(editResult>0 && hostRqstResultV2 >0) {
 			JDBCTemplate.commit(conn);
 		}else {
 			JDBCTemplate.rollback(conn);
