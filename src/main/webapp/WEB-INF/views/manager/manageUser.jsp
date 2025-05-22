@@ -31,9 +31,9 @@
 								<td class="px-4 py-2">${user.userRole}</td>
 								<td class="px-4 py-2">${user.userPhone}</td>
 								<td class="px-4 py-2">
-									<c:if test="${user.userRole == 3}">
+									<c:if test="${user.userRole == 3}">		<%-- userList로 가져와서 권한이 3인 사람만 삭제버튼이 나올 수 있게 설정 --%>
 										<form action="/user/deleteUser" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
-											<input type="hidden" name="userId" value="${user.userId}" />
+											<input type="hidden" name="userId" value="${user.userId}" >		<%-- 화면에 보여주지는 않지만 누구를 삭제할 지 알아야해서 name 값 지정--%>
 											<button type="submit" class="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1 rounded">삭제</button>
 										</form>
 									</c:if>

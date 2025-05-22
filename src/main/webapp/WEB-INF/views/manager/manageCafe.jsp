@@ -40,7 +40,7 @@
                             <td class="px-4 py-2">${cafe.cafeManageStatus}</td>
                             <td class="px-4 py-2">
                                 <c:choose>
-                                    <c:when test="${cafe.cafeManageStatus == '수정대기'}">
+                                    <c:when test="${cafe.cafeManageStatus == '수정대기'}">		<%-- 상태가 수정대기일 떄만 보일 수 있게  --%>
                                     <!--"handleStatusChange('${cafe.cafeNo}')" 에서 값이 null로 넘어감 -->
                                         <select id="statusSelect_${cafe.cafeNo}" name="${cafe.cafeNo}" onchange="handleStatusChange('${cafe.cafeNo}')"  
                                         	class="border border-gray-300 rounded px-2 py-1 w-full"> 
@@ -49,7 +49,7 @@
                                             <option value="3">반려</option> <!-- select.value 값 => 3 반려를 눌렀을 때만 반려 코드 selectbox가 생성되므로  -->
                                         </select>
                                     </c:when>
-                                    <c:when test="${cafe.cafeManageStatus == '등록대기'}">
+                                    <c:when test="${cafe.cafeManageStatus == '등록대기'}">		<%-- 상태가 등록대기일 떄만 보일 수 있게  --%>
                                         <select id="statusSelect_${cafe.cafeNo}" name="${cafe.cafeNo}" onchange="handleStatusChange('${cafe.cafeNo}')"
                                         	class="border border-gray-300 rounded px-2 py-1 w-full">
                                             <option value="0">상태변경</option>
@@ -57,7 +57,7 @@
                                             <option value="3">반려</option>
                                         </select>
                                     </c:when>
-                                    <c:when test="${cafe.cafeManageStatus == '승인'}">
+                                    <c:when test="${cafe.cafeManageStatus == '승인'}">		<%-- 상태가 승인떄만 보일 수 있게  --%>
                                         <select name="${cafe.cafeNo}" class="border border-gray-300 rounded px-2 py-1 w-full">
                                             <option value="0">상태변경</option>
                                             <option value="4">삭제</option>
