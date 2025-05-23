@@ -32,7 +32,7 @@
              class="px-4 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-10 w-full" />
       <button type="submit"
               class="px-4 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 h-10 flex items-center justify-center">
-        <span class="whitespace-nowrap">검색</span>
+        <span class="whitespace-nowrap text-white">검색</span>
       </button>
     </form>
 
@@ -91,4 +91,5 @@
 </header>
 
 <!-- 헤더 아래 공간 확보 -->
-<div class="h-[80px]"></div>
+<div class="h-[80px]" style="<c:if test='${not empty hideHeaderSpacer && hideHeaderSpacer}'>display: none;</c:if>"></div>
+

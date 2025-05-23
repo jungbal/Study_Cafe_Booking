@@ -1,6 +1,6 @@
 /* ===== 마이페이지 공통 스타일 ===== */
 :root {
-	--main1: #3498db; /* 기존 파란색 메인 컬러 */
+	--main1: #2563EB; /* 기존 파란색 메인 컬러 */
 	--gray1: #f9f9f9;
 	--gray3: #ccc;
 	--gray6: #666;
@@ -112,7 +112,7 @@ body {
 }
 
 .primary:hover {
-	background-color: #2980b9;
+	background-color: #2563eb;
 }
 
 .danger {
@@ -177,9 +177,9 @@ tr.reply {
 }
 
 .update-btn {
-	background-color: #c6e2ff; /* 배경색 */
-	border: 2px solid #c6e2ff; /* 배경색과 동일한 테두리 */
-	color: #0056b3; /* 텍스트 색상 (더 명확한 파란색) */
+	background-color: #dbeafe; /* 배경색 */
+	border: 2px solid #dbeafe; /* 배경색과 동일한 테두리 */
+	color: #1d4ed8; /* 텍스트 색상 (더 명확한 파란색) */
 	cursor: pointer;
 	padding: 6px 12px;
 	border-radius: 6px;
@@ -188,9 +188,9 @@ tr.reply {
 }
 
 .update-btn:hover {
-	background-color: #b0d4ff; /* hover 시 더 진한 느낌 */
-	border-color: #b0d4ff;
-	color: #003d80;
+	background-color: #bfdbfe; /* hover 시 더 진한 느낌 */
+	border-color: #bfdbfe;
+	color: #1e40af;
 }
 
 .delete-btn {
@@ -247,7 +247,7 @@ tr.reply {
 }
 
 .chkpw-box button:hover {
-	background-color: #2980b9;
+	background-color: 	#2563eb;
 }
 
 .chkPw-wrapper {
@@ -280,7 +280,7 @@ tr.reply {
 }
 
 .chkPw-wrapper button {
-	background-color: #3498db;
+	background-color: #2563EB;
 	color: white;
 	padding: 12px;
 	border: none;
@@ -292,5 +292,5 @@ tr.reply {
 }
 
 .chkPw-wrapper button:hover {
-	background-color: #2980b9;
+	background-color: #2563eb;
 }
