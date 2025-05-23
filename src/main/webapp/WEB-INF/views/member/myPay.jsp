@@ -21,8 +21,8 @@
           <th class="px-3 py-2 border-b border-gray-300 whitespace-nowrap">상태</th>
           <th class="px-3 py-2 border-b border-gray-300 whitespace-nowrap">카페명</th>
           <th class="px-3 py-2 border-b border-gray-300 whitespace-nowrap">좌석번호</th>
-          <th class="px-3 py-2 border-b border-gray-300">예약시작시간</th>
-          <th class="px-3 py-2 border-b border-gray-300">예약종료시간</th>
+          <th class="px-3 py-2 border-b border-gray-300">이용시작시간</th>
+          <th class="px-3 py-2 border-b border-gray-300">이용종료시간</th>
         </tr>
       </thead>
       <tbody>
