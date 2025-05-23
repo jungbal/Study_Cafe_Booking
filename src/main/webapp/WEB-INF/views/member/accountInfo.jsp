@@ -44,29 +44,36 @@
                     file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
     </div>
 
-    <!-- 수정 버튼 -->
-    <div class="pt-4">
-      <button type="submit"
-              class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
-        수정
-      </button>
-    </div>
-  </form>
+<!-- 수정 버튼 -->
+  <!-- 버튼들 컨테이너 -->
+  <div class="pt-4 flex justify-end gap-3">
+    
 
-  <!-- 하단 버튼 -->
-  <div class="pt-5 border-t mt-6 flex gap-3">
+    <!-- 비밀번호 변경 버튼 -->
     <button type="button"
             onclick="openPwChangePopup()"
             class="bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 text-sm">
       비밀번호 변경
     </button>
-    <form action="${pageContext.request.contextPath}/member/delete" method="post">
-      <button type="submit"
-              class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm">
-        회원 탈퇴
-      </button>
-    </form>
+    <!-- 수정 버튼 -->
+    <button type="submit"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+      수정
+    </button>
   </div>
+</form>
+
+<!-- 하단 버튼 -->
+<div class="pt-5 border-t mt-6 flex gap-3 justify-end">
+
+  <form action="${pageContext.request.contextPath}/member/delete" method="post">
+    <button type="submit"
+            class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm">
+      회원 탈퇴
+    </button>
+  </form>
+</div>
+
 </div>
 
 <script>
@@ -86,10 +93,11 @@ function previewFile(input) {
 }
 
 function openPwChangePopup() {
-  window.open(
-    "/member/pwChgFrm",
-    "pwChgPopup",
-    "width=500,height=300,left=200,top=150"
-  );
-}
+	  window.open(
+	    "/member/pwChgFrm",
+	    "pwChgPopup",
+	    "width=460,height=655,left=200,top=150"
+	  );
+	}
+
 </script>
