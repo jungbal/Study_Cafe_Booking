@@ -67,10 +67,13 @@
                           </label>
                         </c:forEach>
                       </div>
+              			<%-- 호스트일 경우 이용권 선택하기 버튼 클릭 불가 --%>
+                       <c:if test="${loginCafe.loginId ne cafe.hostId}">
                       <button type="submit"
                               class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                         이용권 선택하기
                       </button>
+                      </c:if>
                     </c:when>
                     <c:otherwise>
                       <p class="text-red-600 font-bold mt-2">이용권 정보가 등록되지 않은 업체입니다. 호스트에게 문의해주세요.</p>

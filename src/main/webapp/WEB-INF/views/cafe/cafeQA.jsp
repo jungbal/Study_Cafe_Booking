@@ -37,8 +37,7 @@
             </form>
           </c:if>
           
-          <!-- 신고 버튼: 로그인 한 유저만 가능 -->
-          <c:if test="${not empty loginCafe}">
+          <c:if test="${not empty loginCafe and loginCafe.loginId ne qa.commentUserId}">
 			  <button type="button"
 			          class="text-yellow-600 hover:underline inline-block ml-2 mt-2"
 			          onclick="openReportPopup('${qa.commentId}', '${loginCafe.loginId}')">
@@ -82,7 +81,7 @@
                   </form>
                 </c:if>
                 <!-- 신고 버튼: 로그인 한 유저만 가능 -->
-                <c:if test="${not empty loginCafe}">
+                <c:if test="${not empty loginCafe and loginCafe.loginId ne reply.commentUserId}">
 			  <button type="button"
 			          class="text-yellow-600 hover:underline inline-block ml-2 mt-2"
 			          onclick="openReportPopup('${reply.commentId}', '${loginCafe.loginId}')">
