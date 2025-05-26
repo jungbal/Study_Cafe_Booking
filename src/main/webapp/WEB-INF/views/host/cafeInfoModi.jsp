@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,12 +61,13 @@
       <input type="hidden" name="hostId" value="${cafe.hostId}">
 
       <div>
-        <span class="text-gray-700 block mb-2">프로필 이미지</span>
-        <img id="previewImage"
-     src="<c:out value='${pageContext.request.contextPath}/resources/upload/${cafe.cafeImagePath}/${cafe.cafeImageName}'/>"
-     alt="프로필 이미지"
-     class="w-24 h-24 object-cover rounded-full mb-2"
-     style="${empty cafe.cafeImageName ? 'display:none;' : ''}">
+        <span class="text-gray-700 block mb-2">카페 메인 이미지</span>
+        <c:if test="${not empty cafe.cafeImagePath and not empty cafe.cafeImageName}">
+          <img id="previewImage"
+               src="${pageContext.request.contextPath}${cafe.cafeImagePath}"
+               alt="카페 이미지"
+               class="w-24 h-24 object-cover rounded-full mb-2">
+        </c:if>
         <input type="file" name="userImage" accept="image/*" onchange="previewFile(this)" class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-500 file:text-white hover:file:bg-blue-600">
       </div>
 
@@ -119,7 +122,7 @@
       .then(response => {
         if (response.ok) {
           alert('업체 정보가 성공적으로 수정되었습니다.');
-          location.href = '/main'; // 이동
+          location.href = '/main';
         } else {
           throw new Error("서버 오류");
         }

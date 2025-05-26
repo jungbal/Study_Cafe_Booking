@@ -180,8 +180,8 @@ public class HostDao {
 				cafe.setCafeStatus(rset.getString("cafe_status"));
 				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
 				cafe.setHostId(hostId);
-				cafe.setCafeImagePath(rset.getString("image_path"));
 				cafe.setCafeImageName(rset.getString("image_name"));
+				cafe.setCafeImagePath(rset.getString("image_path"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

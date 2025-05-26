@@ -62,7 +62,7 @@ public class ChangeCafeServlet extends HttpServlet {
            fileName = extractFileName(filePart);
            
            // 저장 경로
-           String saveDir = getServletContext().getRealPath("/resources/upload");
+           String saveDir = getServletContext().getRealPath("/resources/cafeImage");
            File saveDirFile = new File(saveDir);
            if (!saveDirFile.exists()) {
                saveDirFile.mkdirs();
@@ -70,7 +70,7 @@ public class ChangeCafeServlet extends HttpServlet {
            System.out.println("saveDir : " + saveDir);
            filePath = saveDir + File.separator + fileName;
            filePart.write(filePath);
-           fileWebPath = "/resources/upload/" + fileName;
+           fileWebPath = "/resources/cafeImage/" + fileName;
        }
        System.out.println("fileName : " + fileName);
        System.out.println("filePath : " + filePath); 
