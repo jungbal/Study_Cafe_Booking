@@ -51,12 +51,16 @@ public class ChangeCafeServlet extends HttpServlet {
       String cafeIntroDetail = request.getParameter("cafeIntroDetail");
       String hostId = request.getParameter("hostId");
       
+      // 기존 이미지 값 받기
+      String originalImageName = request.getParameter("cafeImageName");
+      String originalImagePath = request.getParameter("cafeImagePath");
+      
        HostService service = new HostService();
       
       // 이미지 파일 처리
        Part filePart = request.getPart("userImage");
        String fileName = null;
-       String filePath = null;
+       //String filePath = null;
        String fileWebPath = null;
        if (filePart != null && filePart.getSize() > 0) {
            fileName = extractFileName(filePart);
@@ -67,16 +71,23 @@ public class ChangeCafeServlet extends HttpServlet {
            if (!saveDirFile.exists()) {
                saveDirFile.mkdirs();
            }
-           System.out.println("saveDir : " + saveDir);
-           filePath = saveDir + File.separator + fileName;
+           //System.out.println("saveDir : " + saveDir);
+           String filePath = saveDir + File.separator + fileName;
            filePart.write(filePath);
            fileWebPath = "/resources/cafeImage/" + fileName;
+       }else {
+           // 새 이미지가 업로드되지 않았을 경우 기존 이미지 유지
+           fileName = originalImageName;
+           fileWebPath = originalImagePath;
+           System.out.println("fileName : " + fileName);
+           System.out.println("filePath : " + fileWebPath); 
        }
-       System.out.println("fileName : " + fileName);
-       System.out.println("filePath : " + filePath); 
+     
+       
       
        Cafe cafe = new Cafe(cafeNo, cafeName, cafePhone, cafeAddr, cafeBiznum, cafeIntroduce, cafeStartHour, cafeEndHour, cafeStatus, cafeIntroDetail, hostId, null, fileWebPath, fileName);
-      
+      System.out.println("fileName : " + fileName);
+      System.out.println("fileWebPath : " + fileWebPath);
       int result = service.changeCafe(cafe);
       
       
