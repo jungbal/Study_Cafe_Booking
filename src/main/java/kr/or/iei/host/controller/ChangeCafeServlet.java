@@ -51,13 +51,17 @@ public class ChangeCafeServlet extends HttpServlet {
       String cafeIntroDetail = request.getParameter("cafeIntroDetail");
       String hostId = request.getParameter("hostId");
       
+      // 기존 이미지 값 받기
+      String originalImageName = request.getParameter("cafeImageName");
+      String originalImagePath = request.getParameter("cafeImagePath");
+      
        HostService service = new HostService();
       
-      // 이미지 파일 처리
+    // 이미지 파일 처리
        Part filePart = request.getPart("userImage");
-       String fileName = null;		// 실제 파일 이름
-       String filePath = null;		// 서버에 저장될 전체 경로
-       String fileWebPath = null;	// 웹에서 접근 가능한 경로
+       String fileName = null;
+       //String filePath = null;
+       String fileWebPath = null;
        if (filePart != null && filePart.getSize() > 0) {
            fileName = extractFileName(filePart);	// 업로드된 파일의 이름 추출
            
@@ -67,20 +71,25 @@ public class ChangeCafeServlet extends HttpServlet {
            if (!saveDirFile.exists()) {
                saveDirFile.mkdirs();
            }
-           
-           //실제 파일 저장
-           filePath = saveDir + File.separator + fileName;
+
+           //System.out.println("saveDir : " + saveDir);
+           String filePath = saveDir + File.separator + fileName;
            filePart.write(filePath);
-           
            //웹에서 접근할 수 있는 경로 저장
            fileWebPath = "/resources/cafeImage/" + fileName;
+       }else {
+           // 새 이미지가 업로드되지 않았을 경우 기존 이미지 유지
+           fileName = originalImageName;
+           fileWebPath = originalImagePath;
        }
-       
-      
+       System.out.println("fileName : " + fileName);
+       System.out.println("filePath : " + fileWebPath); 
+
        // 수정된 정보를 담은 Cafe 객체 생성
        Cafe cafe = new Cafe(cafeNo, cafeName, cafePhone, cafeAddr, cafeBiznum, cafeIntroduce, cafeStartHour, cafeEndHour, cafeStatus, cafeIntroDetail, hostId, null, fileWebPath, fileName);
-      
-       //DB에 수정 요청
+      System.out.println("fileName : " + fileName);
+      System.out.println("fileWebPath : " + fileWebPath);
+
       int result = service.changeCafe(cafe);
       
       //결과에 따라 응답처리 

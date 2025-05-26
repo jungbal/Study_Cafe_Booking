@@ -48,7 +48,7 @@ public class CafeQAServlet extends HttpServlet {
 		// 4. 결과 처리
 			// 4.1. 이동할 JSP 페이지 지정
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/cafeQA.jsp");
-			// 4.2. 화면 구현에 필요한 데이터 등록 => 세션에 이미 데이터 구현되어 있음.. 받기만 하면 됨
+			// 4.2. 화면 구현에 필요한 데이터 등록
 		request.setAttribute("qaList", qaList); 	
 		request.setAttribute("cafe", cafe);
 			//4.3. 페이지 이동

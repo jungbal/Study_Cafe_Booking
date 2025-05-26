@@ -33,17 +33,17 @@ public class ReportCommentServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String commentId = request.getParameter("commentId");
-		String reporterId = request.getParameter("reporterId"); // 신고하는 사람 ID
 		
-		// 로직 : 
-		//1. commentId 로 comment 테이블에서 select 해오기
+		// 1. 로직 : 
+		//1.1. commentId 로 comment 테이블에서 select 해오기
 		MemberService service = new MemberService();
 		Comment comment = service.selectCommentById(commentId);
 		
 		
-		//2. 신고 코드 조회
+		//1.2. 신고 코드 조회 -> commentReport에 selectbox로 보여주기
 		ArrayList<Code> codeList = service.selectReportCodeById();
 		
+		// 3. 결과 처리
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/commentReport.jsp");
 		request.setAttribute("comment", comment);
 		request.setAttribute("codeList", codeList);

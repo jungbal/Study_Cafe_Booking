@@ -70,6 +70,9 @@
         </c:if>
         <input type="file" name="userImage" accept="image/*" onchange="previewFile(this)" class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-500 file:text-white hover:file:bg-blue-600">
       </div>
+      
+      <input type="hidden" name="cafeImageName" value="${cafe.cafeImageName}">
+  	  <input type="hidden" name="cafeImagePath" value="${cafe.cafeImagePath}">
 
       <div class="flex justify-end space-x-4">
         <button type="button" onclick="submitForm()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">

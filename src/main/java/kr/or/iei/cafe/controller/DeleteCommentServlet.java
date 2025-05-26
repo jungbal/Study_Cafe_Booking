@@ -32,11 +32,12 @@ public class DeleteCommentServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//1. 값 추출 : cafeNo(해당 카페 번호), commnetId (삭제할 댓글 번호)
 		String cafeNo = request.getParameter("cafeNo");
 		String commentId = request.getParameter("commentId");
 		
 		CommentService commentService = new CommentService();
-		int result = commentService.deleteComment(commentId);
+		int result = commentService.deleteComment(commentId); // deleteComment : commentId로 해당 댓글 삭제
 		
 		//4.결과 처리
         //4.1 이동할 페이지 경로 지정
@@ -53,7 +54,7 @@ public class DeleteCommentServlet extends HttpServlet {
         request.setAttribute("icon", "error");
         
      }
-     request.setAttribute("loc", "/cafeDetail?cafeNo=" + cafeNo+"&tab=review");
+     request.setAttribute("loc", "/cafeDetail?cafeNo=" + cafeNo+"&tab=review"); // 성공 or 실패했을 경우, 메시지 출력 후 다시 리뷰 탭으로 이동됨
      //4.3 페이지 이동
      view.forward(request, response);
 	}

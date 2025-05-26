@@ -30,7 +30,7 @@ public class cafeDetailServlet extends HttpServlet {
      * @see HttpServlet#HttpServlet()
      */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    // 1. 값 추출 : 카페 번호
+	    // 1. 값 추출 : cafeList.jsp에서 request로 보낸 카페 번호
 	    String cafeNo = request.getParameter("cafeNo");
 
 	    // 2. 서비스 객체 생성
@@ -38,13 +38,13 @@ public class cafeDetailServlet extends HttpServlet {
 	    TicketService ticketService = new TicketService();
 
 	    // 3. 카페 정보 가져오기
-	    Cafe cafe = service.selectCafeByNo(cafeNo);
+	    Cafe cafe = service.selectCafeByNo(cafeNo); // selectCafeByNo: cafe_no로 Cafe 객체를 가져옴
 
 	    // 4. 이용권 정보 가져오기
-	    ArrayList<Ticket> ticketList = ticketService.selectCafeTicket(cafeNo);
+	    ArrayList<Ticket> ticketList = ticketService.selectCafeTicket(cafeNo); // selectCafeTicket: cafeNo로 해당 카페의 이용권 리스트를 가져옴
 
 	    // 5. 현재 시간 기준으로 사용중인 좌석 리스트 조회
-	    ArrayList<History> seatList = service.isSeatAvailable(cafeNo);
+	    ArrayList<History> seatList = service.isSeatAvailable(cafeNo); // isSeatAvailable: cafeNo로 해당 카페에서 현재 이용상태인 좌석 번호 조회해서 리스트로 가져옴
 
 	    // 6. 로그인 세션에서 로그인 회원 정보 가져오기
 	    HttpSession session = request.getSession(false);

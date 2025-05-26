@@ -34,7 +34,8 @@ public class CafeDao {
 				+ "LEFT JOIN \r\n"
 				+ "    tbl_image i ON c.cafe_no = i.cafe_no\r\n"
 				+ "WHERE \r\n"
-				+ "    c.cafe_name LIKE ? OR c.cafe_addr LIKE ?";
+				+ "    (c.cafe_name LIKE ? OR c.cafe_addr LIKE ?)\r\n"
+				+ "    AND c.cafe_status = 'Y'";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -668,12 +669,14 @@ public class CafeDao {
 				+ "                cafe_no, image_path,\r\n"
 				+ "                ROW_NUMBER() OVER (PARTITION BY cafe_no ORDER BY image_no) AS rn\r\n"
 				+ "            FROM tbl_image\r\n"
-				+ "        ) WHERE rn = 1\r\n"
+				+ "        ) \r\n"
+				+ "        WHERE rn = 1\r\n"
 				+ "    ) i ON c.cafe_no = i.cafe_no\r\n"
+				+ "    WHERE c.cafe_status = 'Y' "
 				+ "    ORDER BY \r\n"
 				+ "        cm.comment_count DESC NULLS LAST\r\n"
-				+ ") WHERE ROWNUM <= 8\r\n"
-				+ "";
+				+ ") \r\n"
+				+ "WHERE ROWNUM <= 8";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
