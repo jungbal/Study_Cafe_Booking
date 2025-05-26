@@ -24,9 +24,8 @@ public class ApplyCafeFrmServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+    
+//    업체 신청 입력 페이지로 연결
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/applyCafe.jsp");
 		view.forward(request, response);
