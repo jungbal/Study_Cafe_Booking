@@ -44,6 +44,30 @@
           </c:forEach>
         </c:if>
       </c:forEach>
+      
+      <!-- 부모 없이 단독 존재하는 답글 (추가) -->
+      <c:forEach var="c" items="${reviewList}">
+        <c:if test="${not empty c.commentParent}">
+          <c:set var="hasParent" value="false" />
+          <c:forEach var="parent" items="${reviewList}">
+            <c:if test="${parent.commentId == c.commentParent}">
+              <c:set var="hasParent" value="true" />
+            </c:if>
+          </c:forEach>
+          <c:if test="${!hasParent}">
+            <tr class="bg-gray-50 border-b">
+              <td class="p-3 text-black">${c.cafeName}</td>
+              <td class="p-3 text-black">↳ ${c.content}</td>
+              <td class="p-3 text-black">${c.commentTime}</td>
+              <td class="p-3 whitespace-nowrap space-x-2">
+                <button class="update-btn text-blue-600 hover:underline" data-id="${c.commentId}" data-type="review">수정</button>
+                <span class="text-gray-400">|</span>
+                <button type="button" class="delete-btn text-red-600 hover:underline" data-id="${c.commentId}">삭제</button>
+              </td>
+            </tr>
+          </c:if>
+        </c:if>
+      </c:forEach>
     </tbody>
   </table>
 </div>
@@ -82,6 +106,30 @@
               </tr>
             </c:if>
           </c:forEach>
+        </c:if>
+      </c:forEach>
+      
+      <!-- 부모 없이 단독 존재하는 답글 (추가) -->
+      <c:forEach var="c" items="${qnaList}">
+        <c:if test="${not empty c.commentParent}">
+          <c:set var="hasParent" value="false" />
+          <c:forEach var="parent" items="${qnaList}">
+            <c:if test="${parent.commentId == c.commentParent}">
+              <c:set var="hasParent" value="true" />
+            </c:if>
+          </c:forEach>
+          <c:if test="${!hasParent}">
+            <tr class="bg-gray-50 border-b">
+              <td class="p-3 text-black">${c.cafeName}</td>
+              <td class="p-3 text-black">↳ ${c.content}</td>
+              <td class="p-3 text-black">${c.commentTime}</td>
+              <td class="p-3 whitespace-nowrap space-x-2">
+                <button class="update-btn text-blue-600 hover:underline" data-id="${c.commentId}" data-type="qna">수정</button>
+                <span class="text-gray-400">|</span>
+                <button type="button" class="delete-btn text-red-600 hover:underline" data-id="${c.commentId}">삭제</button>
+              </td>
+            </tr>
+          </c:if>
         </c:if>
       </c:forEach>
     </tbody>
