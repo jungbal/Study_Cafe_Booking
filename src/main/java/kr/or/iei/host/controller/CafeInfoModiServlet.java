@@ -47,6 +47,7 @@ public class CafeInfoModiServlet extends HttpServlet {
         //Member loginMember = (Member) session.getAttribute("loginMember");
       HttpSession session = request.getSession(false);
       
+      //cafe 로그인 정보만 있고 member 정보가 없는 경우 -> member 정보 조회 후 세션에 저장
       if (session != null && session.getAttribute("loginCafe") != null && session.getAttribute("loginMember") == null) {
           Login loginCafe = (Login) session.getAttribute("loginCafe");
           String userId = loginCafe.getLoginId();
@@ -56,8 +57,10 @@ public class CafeInfoModiServlet extends HttpServlet {
           
       }
       
+      //세션에서 로그인 회원 정보 꺼내기 
       Member loginMember = (Member) session.getAttribute("loginMember");
       
+      	//로그인 정보 없으면 로그인 페이지 이동 
         if (loginMember == null) {
             response.sendRedirect(request.getContextPath() + "/member/loginFrm");
             return;
@@ -73,6 +76,7 @@ public class CafeInfoModiServlet extends HttpServlet {
         // 탭 정보를 JSP에서 조건 분기로 사용하기 위해 request에 등록
         request.setAttribute("tab", tab);
 
+        //리뷰 탭일 경우 : 리뷰, QNA 불러오기 
         if (tab.equals("review")) {
             CommentService service = new CommentService();
             List<Comment> reviewList = service.selectMyCommentsByType(userId, "RV");

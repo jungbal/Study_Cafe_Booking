@@ -35,6 +35,7 @@ public class UpdateCafeServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	//클라이언트로부터 전달받은 모든 파라미터를 MAP 형태로 저장 
     	Map<String, String[]> paramMap = request.getParameterMap();
         Map<String, String> updateMap = new HashMap<>();
 
@@ -54,7 +55,7 @@ public class UpdateCafeServlet extends HttpServlet {
                 String cafeNo = entry.getKey();
                 String statusValue = entry.getValue();
                 
-                // 상태 값이 "3"인 경우, 반려 사유가 포함되어 있으므로 업데이트
+                // 상태값이 반려(3)이고 사유가 포함된 경우 
                 if (statusValue.startsWith("3") && statusValue.contains("_")) {
                     // 반려 사유가 있는 상태이므로 그대로 상태 값을 업데이트
                     updateMap.put(cafeNo, statusValue);
