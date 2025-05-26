@@ -18,7 +18,7 @@ public class TicketDao {
 		
 		ArrayList<Ticket> ticketList = new ArrayList<Ticket>();
 		
-		String query = "select * from tbl_ticket where cafe_no=? order by ticket_price desc";
+		String query = "select * from tbl_ticket where cafe_no=? order by to_number(ticket_price) desc";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
