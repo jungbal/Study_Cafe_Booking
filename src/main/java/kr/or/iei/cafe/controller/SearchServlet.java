@@ -33,16 +33,16 @@ public class SearchServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//1. 인코딩 - 필터
-		//2. 값 추출 - 클라이언트가 검색창에 입력한 값
+		//2. 값 추출 - header.jsp 에서 클라이언트가 검색창에 입력한 값 (srchStr) 가져오기
 		String srchStr = request.getParameter("srchStr");
 		
 		//3. 로직 - 상세 정보 조회
 		CafeService service = new CafeService();
-		ArrayList<Cafe> list = service.srchCafe(srchStr);
+		// srchCafe 메소드 : cafe_name 이나 cafe_addr 중에 검색어를 포함하는 cafe를 ArrayList로 반환
+		ArrayList<Cafe> list = service.srchCafe(srchStr); 
 		
 		//4. 결과 처리
 			//4.1. 이동할 jsp 페이지 경로 지정
-		
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/cafe/cafeList.jsp");
 			//4.2. 화면 구현에 필요한 데이터 등록 (카페 정보 리스트)
 		request.setAttribute("list", list);

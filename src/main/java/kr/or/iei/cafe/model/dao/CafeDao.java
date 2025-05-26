@@ -216,7 +216,7 @@ public class CafeDao {
 				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
 				cafe.setHostId(rset.getString("host_id"));
 				cafe.setCafeManageStatus(rset.getString("cafe_manage_status"));
-				cafe.setCafeRejectReason(rset.getString("HOST_REQUEST_STATUS"));
+				cafe.setCafeRejectReason(rset.getString("user_status"));
 				cafe.setCafeApplyStatus(rset.getString("reject_id"));
 				cafe.setCafeManageStatus(rset.getString("cafe_manage_status"));		// Cafe.java에서 미리 선언해둔 cafeManageStatus를 이용 
 				
