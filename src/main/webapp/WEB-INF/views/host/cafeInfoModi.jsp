@@ -61,10 +61,10 @@
       <div>
         <span class="text-gray-700 block mb-2">프로필 이미지</span>
         <img id="previewImage"
-             src="<c:out value='${not empty sessionScope.loginMember.userImage ? pageContext.request.contextPath.concat("/resources/upload/").concat(sessionScope.loginMember.userImage) : ""}'/>"
-             alt="프로필 이미지"
-             class="w-24 h-24 object-cover rounded-full mb-2"
-             style="${empty sessionScope.loginMember.userImage ? 'display:none;' : ''}">
+     src="<c:out value='${pageContext.request.contextPath}/resources/upload/${cafe.cafeImagePath}/${cafe.cafeImageName}'/>"
+     alt="프로필 이미지"
+     class="w-24 h-24 object-cover rounded-full mb-2"
+     style="${empty cafe.cafeImageName ? 'display:none;' : ''}">
         <input type="file" name="userImage" accept="image/*" onchange="previewFile(this)" class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-500 file:text-white hover:file:bg-blue-600">
       </div>
 

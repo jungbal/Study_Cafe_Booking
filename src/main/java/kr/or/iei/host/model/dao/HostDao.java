@@ -150,7 +150,17 @@ public class HostDao {
 		
 		Cafe cafe = null;
 		
-		String query = "select * from tbl_cafe where host_id = ?";
+		String query = "SELECT \r\n"
+				+ "    c.*, \r\n"
+				+ "    i.image_name, \r\n"
+				+ "    i.image_path\r\n"
+				+ "FROM \r\n"
+				+ "    tbl_cafe c\r\n"
+				+ "LEFT JOIN \r\n"
+				+ "    tbl_image i ON c.cafe_no = i.cafe_no\r\n"
+				+ "WHERE \r\n"
+				+ "    c.host_id = ?\r\n"
+				+ "";
 		
 		try {
 			pstmt=conn.prepareStatement(query);
@@ -170,6 +180,8 @@ public class HostDao {
 				cafe.setCafeStatus(rset.getString("cafe_status"));
 				cafe.setCafeIntroDetail(rset.getString("cafe_intro_detail"));
 				cafe.setHostId(hostId);
+				cafe.setCafeImagePath(rset.getString("image_path"));
+				cafe.setCafeImageName(rset.getString("image_name"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -305,5 +317,6 @@ public class HostDao {
 			}
 			return result;
 		}
+	
 
 }
