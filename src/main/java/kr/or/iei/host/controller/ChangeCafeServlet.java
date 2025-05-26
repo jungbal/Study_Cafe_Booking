@@ -57,13 +57,13 @@ public class ChangeCafeServlet extends HttpServlet {
       
        HostService service = new HostService();
       
-      // 이미지 파일 처리
+    // 이미지 파일 처리
        Part filePart = request.getPart("userImage");
        String fileName = null;
        //String filePath = null;
        String fileWebPath = null;
        if (filePart != null && filePart.getSize() > 0) {
-           fileName = extractFileName(filePart);
+           fileName = extractFileName(filePart);	// 업로드된 파일의 이름 추출
            
            // 저장 경로
            String saveDir = getServletContext().getRealPath("/resources/cafeImage");
@@ -71,38 +71,40 @@ public class ChangeCafeServlet extends HttpServlet {
            if (!saveDirFile.exists()) {
                saveDirFile.mkdirs();
            }
+
            //System.out.println("saveDir : " + saveDir);
            String filePath = saveDir + File.separator + fileName;
            filePart.write(filePath);
+           //웹에서 접근할 수 있는 경로 저장
            fileWebPath = "/resources/cafeImage/" + fileName;
        }else {
            // 새 이미지가 업로드되지 않았을 경우 기존 이미지 유지
            fileName = originalImageName;
            fileWebPath = originalImagePath;
-           System.out.println("fileName : " + fileName);
-           System.out.println("filePath : " + fileWebPath); 
        }
-     
-       
-      
+       System.out.println("fileName : " + fileName);
+       System.out.println("filePath : " + fileWebPath); 
+
+       // 수정된 정보를 담은 Cafe 객체 생성
        Cafe cafe = new Cafe(cafeNo, cafeName, cafePhone, cafeAddr, cafeBiznum, cafeIntroduce, cafeStartHour, cafeEndHour, cafeStatus, cafeIntroDetail, hostId, null, fileWebPath, fileName);
       System.out.println("fileName : " + fileName);
       System.out.println("fileWebPath : " + fileWebPath);
+
       int result = service.changeCafe(cafe);
       
-      
+      //결과에 따라 응답처리 
       RequestDispatcher view = null;
       view=request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
       if(result > 0) {
+    	  //성공 시 메인페이지로 리다이렉트
           request.setAttribute("title", "수정 성공");
           request.setAttribute("msg", "업체가 수정되었습니다. ");
           request.setAttribute("icon", "success");
-          System.out.println("리다이렉트 시도: " + request.getContextPath() + "/main");
     	  response.sendRedirect(request.getContextPath() + "/main");
     	  return;
     	  
       }else {
-        
+        //실패 시 메시지 출력 후 마이페이지로 이동
          request.setAttribute("title", "수정 실패");
          request.setAttribute("msg", "업체 수정 중, 오류가 발생하였습니다. ");
          request.setAttribute("icon", "error");

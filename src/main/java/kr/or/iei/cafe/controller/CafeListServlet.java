@@ -35,7 +35,7 @@ public class CafeListServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//1. 인코딩 - 필터
-		//2. 값 추출
+		//2. 값 추출(reqPage)
 		int reqPage = Integer.parseInt(request.getParameter("reqPage"));	//reqPage는 int자료형으로 getParameter는 string이므로 강제 형변환
 		
 		//3. 로직

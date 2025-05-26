@@ -48,7 +48,7 @@ public class CafeService {
 	    int end = viewNoticeCnt * reqPage;	// ex) 10*페이지 수(2) => 20
 	    int start = end - viewNoticeCnt + 1;// ex) 20 - 10 + 1 => 11 시작
 
-	    ArrayList<Cafe> list = dao.selectAllCafe(conn, start, end);
+	    ArrayList<Cafe> list = dao.selectAllCafe(conn, start, end);	//카페 업체정보 리스트로 반환
 
 	    
 	    int totCnt = dao.selectTotalCount(conn); // 전체 업체 조회(totCnt) 
@@ -282,10 +282,11 @@ public class CafeService {
 	                break;
 	        }
 
+	        //처리 실패 시 로그 출력 및 트랜잭션 실패 플래그 설정 
 	        if (result == 0) {
 	            System.err.println("처리 실패: cafeNo = " + cafeNo + ", status = " + statusValue);
 	            isAllSuccess = false;
-	            break;
+	            break;	//하나라도 실패하면 루프 중단 ( 전체 실패 처리용)
 	        }
 	    }
 
@@ -296,6 +297,7 @@ public class CafeService {
 	    }
 
 	    JDBCTemplate.close(conn);
+	    // 처리 결과 반환 ( 카페번호 -> 결과 메시지) 
 	    return resultMap;
 	}
 

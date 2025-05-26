@@ -140,26 +140,26 @@ public class CafeDao {
 				+ "    SELECT ROWNUM AS RNUM, A.*\r\n"
 				+ "    FROM (\r\n"
 				+ "        SELECT\r\n"
-				+ "            sub.cafe_no,\r\n"
-				+ "            sub.cafe_name,\r\n"
-				+ "            sub.cafe_phone,\r\n"
-				+ "            sub.cafe_addr,\r\n"
-				+ "            sub.cafe_biznum,\r\n"
-				+ "            sub.cafe_introduce,\r\n"
-				+ "            sub.cafe_start_hour,\r\n"
-				+ "            sub.cafe_end_hour,\r\n"
-				+ "            sub.cafe_status,\r\n"
-				+ "            sub.cafe_intro_detail,\r\n"
-				+ "            sub.host_id,\r\n"
-				+ "            sub.status AS host_request_status,\r\n"
-				+ "            sub.apply_date,\r\n"
-				+ "            sub.reject_id,\r\n"
-				+ "            sub.user_role,\r\n"
-				+ "            sub.user_status,\r\n"
+				+ "            sub.cafe_no,\r\n"								//카페번호
+				+ "            sub.cafe_name,\r\n"								//카페이름
+				+ "            sub.cafe_phone,\r\n"								//전화번호
+				+ "            sub.cafe_addr,\r\n"								//주소
+				+ "            sub.cafe_biznum,\r\n"							//사업자 등록번호
+				+ "            sub.cafe_introduce,\r\n"							//간단 소개
+				+ "            sub.cafe_start_hour,\r\n"						//시작시간
+				+ "            sub.cafe_end_hour,\r\n"							//종료시간
+				+ "            sub.cafe_status,\r\n"							//카페 상태 ('Y' 승인 | 'N' 미승인 )
+				+ "            sub.cafe_intro_detail,\r\n"						//상세 소개
+				+ "            sub.host_id,\r\n"								//신청한 사용자 ID
+				+ "            sub.status AS host_request_status,\r\n"			//host_request 테이블의 상태값 ('Y' 승인 | 'N' 미승인 )
+				+ "            sub.apply_date,\r\n"								//신청일
+				+ "            sub.reject_id,\r\n"								//반려사유코드
+				+ "            sub.user_role,\r\n"								//사용자 권한 (2: 호스트, 3: 일반사용자)
+				+ "            sub.user_status,\r\n"							//사용자 상태 ('Y' 활성 | 'N' 비활성)
 				+ "            CASE\r\n"
-				+ "                WHEN sub.cafe_status = 'N' AND sub.status = 'N' AND sub.user_role = '3' AND sub.user_status = 'Y' THEN '등록대기'\r\n"
-				+ "                WHEN sub.cafe_status = 'N' AND sub.status = 'N' AND sub.user_role = '2' AND sub.user_status = 'Y' THEN '수정대기'\r\n"
-				+ "                WHEN sub.cafe_status = 'Y' AND sub.status = 'Y' THEN '승인'\r\n"
+				+ "                WHEN sub.cafe_status = 'N' AND sub.status = 'N' AND sub.user_role = '3' AND sub.user_status = 'Y' THEN '등록대기'\r\n"	//등록대기
+				+ "                WHEN sub.cafe_status = 'N' AND sub.status = 'N' AND sub.user_role = '2' AND sub.user_status = 'Y' THEN '수정대기'\r\n"	//수정대기
+				+ "                WHEN sub.cafe_status = 'Y' AND sub.status = 'Y' THEN '승인'\r\n"	//승인
 				+ "            END AS cafe_manage_status\r\n"
 				+ "        FROM (\r\n"
 				+ "            SELECT\r\n"
@@ -184,14 +184,14 @@ public class CafeDao {
 				+ "            JOIN tbl_host_request h ON c.cafe_no = h.host_no\r\n"
 				+ "            JOIN tbl_user u ON c.host_id = u.user_id\r\n"
 				+ "            WHERE \r\n"
-				+ "                (c.cafe_status = 'N' AND h.status = 'N' AND u.user_role = '3' AND u.user_status = 'Y')\r\n"
-				+ "                OR (c.cafe_status = 'N' AND h.status = 'N' AND u.user_role = '2' AND u.user_status = 'Y')\r\n"
-				+ "                OR (c.cafe_status = 'Y' AND h.status = 'Y')\r\n"
+				+ "                (c.cafe_status = 'N' AND h.status = 'N' AND u.user_role = '3' AND u.user_status = 'Y')\r\n" 		//등록대기 조건: cafe는 미승인(N), 요청도 미승인(N), 일반회원이면서 활성 상태
+				+ "                OR (c.cafe_status = 'N' AND h.status = 'N' AND u.user_role = '2' AND u.user_status = 'Y')\r\n"	//수정대기 조건: cafe는 미승인(N), 요청도 미승인(N), 호스트이면서 활성 상태
+				+ "                OR (c.cafe_status = 'Y' AND h.status = 'Y')\r\n"	// 승인된 경우: cafe는 승인(Y), 요청도 승인(Y)
 				+ "        ) sub\r\n"
 				+ "        WHERE sub.rn = 1\r\n"
 				+ "    ) A\r\n"
 				+ ")\r\n"
-				+ "WHERE RNUM >= ? AND RNUM <= ?";
+				+ "WHERE RNUM >= ? AND RNUM <= ?";	//페이징 처리 
 		
 		try {
 			pstmt = conn.prepareStatement(query);
