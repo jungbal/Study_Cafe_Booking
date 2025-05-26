@@ -33,7 +33,7 @@ public class EditCafeServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+//		jsp에서 input값 가져오기
 		String cafeName = request.getParameter("cafeName");
 		String cafeAddr = request.getParameter("cafeAddr");
 		String cafePhone = request.getParameter("cafePhone");
@@ -43,6 +43,7 @@ public class EditCafeServlet extends HttpServlet {
 		String cafeStartHour = request.getParameter("cafeStartHour");
 		String cafeEndHour = request.getParameter("cafeEndHour");
 		
+//		cafeInfo에 input값 입력
 		Cafe cafeInfo = new Cafe();
 		
 		cafeInfo.setCafeName(cafeName);
@@ -54,6 +55,7 @@ public class EditCafeServlet extends HttpServlet {
 		cafeInfo.setCafeStartHour(cafeStartHour);
 		cafeInfo.setCafeEndHour(cafeEndHour);
 		
+//		세션에서 loginId 가져와 업체 수정 메소드 호출하며 전달.
 		HttpSession session = request.getSession();
 		Login loginCafe = (Login) session.getAttribute("loginCafe");
 		String loginId = loginCafe.getLoginId();
@@ -62,14 +64,14 @@ public class EditCafeServlet extends HttpServlet {
 		int editResult = service.editCafe(loginId, cafeInfo);
 		
 		RequestDispatcher view = null;
-		if(editResult >0) {
+		if(editResult >0) { // 정보가 수정되었을 때
 			view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
 			request.setAttribute("title", "알림");
 			request.setAttribute("msg", "정보가 수정되었습니다.");
 			request.setAttribute("icon", "success");
 			request.setAttribute("loc", "/main");
 			
-		}else {
+		}else { // 정보 수정이 안됐을 때
 			view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
 			request.setAttribute("title", "알림");
 			request.setAttribute("msg", "오류가 발생했습니다. 다시 시도하세요.");

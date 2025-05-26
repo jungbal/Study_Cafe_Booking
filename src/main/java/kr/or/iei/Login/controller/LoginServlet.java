@@ -34,19 +34,22 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+//		VO클래스에서 id와 pw가져옴
 		 	String loginId = request.getParameter("loginId");
 		    String loginPw = request.getParameter("loginPw");
 
 		    LoginService service = new LoginService();
 		    CafeService cafeservice = null;
 		    
+//		    로그인 메소드 호출
 		    Login loginCafe = service.cafeLogin(loginId, loginPw);
+		    
+//		    유저의 권한 구분 메소드 호출
 		    int role = service.chkUserRole(loginId);
 		    
 		    RequestDispatcher view = null;
 
-		    if (loginCafe == null || role == 0) {
-		        // 로그인 실패 시만 forward 처리
+		    if (loginCafe == null || role == 0) { // 아이디 비밀번호가 일치하지 않거나 role이 0이거나(dao에서 role 초기값이 0임)
 		        view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
 		        
 		        request.setAttribute("title", "알림");
@@ -55,8 +58,7 @@ public class LoginServlet extends HttpServlet {
 		        request.setAttribute("loc", "/loginFrm");
 		        
 		        view.forward(request, response);
-		    } else {
-		        // 로그인 성공 시 redirect 처리 (view 변수 선언 금지)
+		    } else { // 로그인 성공 시 redirect 처리 (view 변수 선언 금지)
 		    	 cafeservice = new CafeService();
 				String hostId = cafeservice.matchHostId(loginId);
 		    	
@@ -69,7 +71,6 @@ public class LoginServlet extends HttpServlet {
 		        response.sendRedirect(request.getContextPath() + "/main");
 		        // redirect 이후엔 절대 forward 호출 금지!
 		        
-				
 		    }
 		}
 

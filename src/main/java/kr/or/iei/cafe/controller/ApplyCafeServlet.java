@@ -33,6 +33,8 @@ public class ApplyCafeServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+//		업체 등록 jsp에서 사용자 input태그 입력값을 가져옴
 		String cafeName = request.getParameter("cafeName");
 		String cafeAddr = request.getParameter("cafeAddr");
 		String cafePhone = request.getParameter("cafePhone");
@@ -42,6 +44,7 @@ public class ApplyCafeServlet extends HttpServlet {
 		String cafeStartHour = request.getParameter("cafeStartHour");
 		String cafeEndHour = request.getParameter("cafeEndHour");
 		
+//		cafeInfo 객체에 입력값 저장
 		Cafe cafeInfo = new Cafe();
 		
 		cafeInfo.setCafeName(cafeName);
@@ -53,13 +56,16 @@ public class ApplyCafeServlet extends HttpServlet {
 		cafeInfo.setCafeStartHour(cafeStartHour);
 		cafeInfo.setCafeEndHour(cafeEndHour);
 		
+//		쿼리문에 필요한 식별값인 loginId를 세션에서 가져옴
 	   HttpSession session = request.getSession();
 	   Login loginCafe = (Login) session.getAttribute("loginCafe");
 	   String loginId = loginCafe.getLoginId();
 
+//	   업체 정보가 DB에 입력되도록 업체정보 입력 메소드 호출 
 		CafeService service = new CafeService();
 		int result = service.insertCafe(cafeInfo, loginId);
 		
+//		
 		CafeService cafeservice = new CafeService();
 		String hostId = cafeservice.matchHostId(loginId);
 		 session.setAttribute("hostId", hostId);

@@ -25,9 +25,7 @@ public class IdDuplChkServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+//	사용자 입력 id를 가져와 중복체크하는 메소드 호출하며 전달 및 cnt를 브라우저에 작성
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// ajax에서 key로 요청한 memberId 
 		String memberId = request.getParameter("memberId");
