@@ -29,39 +29,39 @@ public class UpdateServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// 1. 파일 업로드 경로 설정
-		String basePath = getServletContext().getRealPath("/resources/upload");
-		String today = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
-		String savePath = basePath + File.separator + today;
+		// 파일 업로드 경로 설정
+		String basePath = getServletContext().getRealPath("/resources/upload"); // resources/upload 실제 서버 경로
+		String today = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date()); // 오늘 날짜 yyyymmdd 형식
+		String savePath = basePath + File.separator + today; //최종 저장 경로(폴더별로 날짜 구분)
 		File folder = new File(savePath);
 		if (!folder.exists()) {
 			folder.mkdirs(); // 폴더 없으면 생성
 		}
 
-		// 2. MultipartRequest 객체 생성 (cos.jar 사용)
-		int maxSize = 10 * 1024 * 1024; // 10MB
+		// MultipartRequest 객체 생성 (cos.jar 사용, 파일 업로드 처리)
+		int maxSize = 10 * 1024 * 1024; // 최대 업로드 크기 : 10MB
 		MultipartRequest mRequest = new MultipartRequest(
 			request,
 			savePath,
 			maxSize,
 			"UTF-8",
-			new KhRenamePolicy() // 또는 DefaultFileRenamePolicy
+			new KhRenamePolicy() // 또는 파일명 리네임 정책
 		);
 
-		// 3. 데이터 추출
+		// 데이터 추출
 		String userId = mRequest.getParameter("userId");
 		String userPw = mRequest.getParameter("userPw");
 		String userPhone = mRequest.getParameter("userPhone");
 		
 		
 
-		String originalFile = mRequest.getFilesystemName("userImage");
-		String userImage = (originalFile != null) ? today + "/" + originalFile : null;
+		String originalFile = mRequest.getFilesystemName("userImage"); // 업로드된 파일명
+		String userImage = (originalFile != null) ? today + "/" + originalFile : null; //업로드된 파일 있으면 경로 포함, 없으면 null
 
-		// 기존 로그인 정보
+		// 기존 로그인 정보 가져오기
 		HttpSession session = request.getSession(false);
 		
-		/// loginCafe 세션이 존재하고, 아직 loginMember 세션이 없다면
+		// loginCafe 세션이 존재하고, 아직 loginMember 세션이 없다면, loginMember 세팅
 		if (session != null && session.getAttribute("loginCafe") != null && session.getAttribute("loginMember") == null) {
 		    Login loginCafe = (Login) session.getAttribute("loginCafe");
 		    String loginId = loginCafe.getLoginId();
@@ -71,7 +71,7 @@ public class UpdateServlet extends HttpServlet {
 		}
 		Member loginMember = (Member) session.getAttribute("loginMember");
 
-		// 기존 이미지 삭제 시, 날짜 포함된 경로로 삭제
+		// 기존 이미지가 있으면 서버에서 삭제
 		if (originalFile != null && loginMember.getUserImage() != null) {
 		    File delFile = new File(basePath + File.separator + loginMember.getUserImage());
 		    if (delFile.exists()) {
@@ -89,19 +89,20 @@ public class UpdateServlet extends HttpServlet {
 		    userPw = loginMember.getUserPw();
 		}
 
-		// 5. VO 객체로 묶기
+		// VO 객체에 데이터 세팅
 		Member m = new Member();
 		m.setUserId(userId);
 		m.setUserPw(userPw);
 		m.setUserPhone(userPhone);
 		m.setUserImage(userImage);
 
-		// 6. 서비스 호출
+		// 서비스 호출
 		MemberService service = new MemberService();
 		int result = service.updateMember(m);
 
-		// 7. 결과 처리
+		// 결과 처리
 		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
+		//성공시
 		if (result > 0) {
 			request.setAttribute("title", "수정 완료");
 			request.setAttribute("msg", "회원정보가 성공적으로 수정되었습니다.");
@@ -111,12 +112,14 @@ public class UpdateServlet extends HttpServlet {
 			loginMember.setUserPw(userPw);
 			loginMember.setUserPhone(userPhone);
 			loginMember.setUserImage(userImage);
-
-		} else {
+			
+		} else { //실패시
 			request.setAttribute("title", "수정 실패");
 			request.setAttribute("msg", "정보 수정 중 오류가 발생했습니다.");
 			request.setAttribute("icon", "error");
 		}
+		
+		//공통 이동 경로
 		request.setAttribute("loc", "/myPage/myInfo?tab=account");
 		view.forward(request, response);
 	}

@@ -27,6 +27,7 @@ public class MypageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+    	//세션 가져오기
         HttpSession session = request.getSession(false);
         
         // loginUser가 세션에 있다면 → loginMember로 변환해서 세션에 저장
@@ -41,8 +42,10 @@ public class MypageServlet extends HttpServlet {
                 session.setAttribute("loginMember", member);
             }
         }
+        // 최종 loginMember 세션 가져오기
         Member loginMember = (Member) session.getAttribute("loginMember");
 
+        //로그인 안된 경우 -> 로그인 페이지로 리다이렉트
         if (loginMember == null) {
             response.sendRedirect(request.getContextPath() + "/loginFrm");
             return;
