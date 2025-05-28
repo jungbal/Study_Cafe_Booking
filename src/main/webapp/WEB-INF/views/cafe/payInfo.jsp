@@ -115,17 +115,18 @@ document.getElementById('hiddenDateRight').value = formattedDate;
 
 //카카오페이
 // 구매자 정보
-const useremail = response.req_user_email // 이메일??
-const username = response.req_username // 세션에서 유저명 가져오기
-//const userPhone = // 세션에서 전화번호 가져오기
+const useremail = "abc@naver.com" // 이메일 없으니까 임시로 지정
+const username = "${loginCafe.loginId}" // 세션에서 유저명 가져오기
+const userPhone = "${loginCafe.memberPhone}" // 세션에서 전화번호 가져오기
+const cafeNo = "${cafe.cafeNo}"
 
 // 결제창 함수 넣어주기
 const buyButton = document.getElementById('payment') // 결제하기 버튼의 id = payment
-buyButton.setAttribute('onclick', `kakaoPay('${user_email}', '${username}')`)
+buyButton.setAttribute('onclick', kakaoPay(useremail, username))
 
 var IMP = window.IMP;
 
-var today = new Date();
+
 var hours = today.getHours(); // 시
 var minutes = today.getMinutes();  // 분
 var seconds = today.getSeconds();  // 초
@@ -137,7 +138,7 @@ function kakaoPay(useremail, username) {
         if (localStorage.getItem("access")) { // 회원만 결제 가능
             const emoticonName = document.getElementById('title').innerText
 
-            IMP.init("가맹점식별코드"); // 가맹점 식별코드
+            IMP.init("포트원가맹점식별코드(디스코드에적어둠)"); // 가맹점 식별코드
             IMP.request_pay({
                 pg: 'kakaopay.TC0ONETIME', // PG사 코드표에서 선택
                 pay_method: 'card', // 결제 방식
@@ -145,19 +146,25 @@ function kakaoPay(useremail, username) {
                 name: '상품명', // 제품명
                 amount: 100, // 가격
                 //구매자 정보 ↓
-                buyer_email: `${useremail}`,
-                buyer_name: `${username}`,
-                //buyer_tel : '010-1234-5678',
+                buyer_email: useremail,
+                buyer_name: username,
+                buyer_tel : userPhone,
                 //buyer_addr : '서울특별시 강남구 삼성동',
                 // buyer_postcode : '123-456'
             }, async function (rsp) { // callback
                 if (rsp.success) { //결제 성공시
-                    console.log(rsp);
-					...
+                    console.log("결제 성공 : ", rsp);
+					
                     //결제 성공시 프로젝트 DB저장 요청
-                    ...
-
-                    if (response.status == 200) { // DB저장 성공시
+                    // 결제 성공 시 -> 돌아온 정보 모아서 ajax 로 servlet 전달하기 (해야 함)
+                    
+					// ✅ 테스트용: DB 저장 생략하고 성공 처리
+                    alert('결제 완료! (테스트 모드)');
+                    window.location.href = "/cafeDetail?cafeNo=" + cafeNo; // 홈이나 다른 성공 페이지로 이동
+                } else {
+                    alert("결제 실패: " + rsp.error_msg);
+                }
+                    /* if (response.status == 200) { // DB저장 성공시
                         alert('결제 완료!')
                         window.location.reload();
                     } else { // 결제완료 후 DB저장 실패시
@@ -166,10 +173,9 @@ function kakaoPay(useremail, username) {
                     }
                 } else if (rsp.success == false) { // 결제 실패시
                     alert(rsp.error_msg)
-                }
+                } */
             });
-        }
-        else { // 비회원 결제 불가
+        }else { // 비회원 결제 불가
             alert('로그인이 필요합니다!')
         }
     } else { // 구매 확인 알림창 취소 클릭시 돌아가기
