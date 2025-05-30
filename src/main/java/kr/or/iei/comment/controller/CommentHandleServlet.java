@@ -12,7 +12,7 @@ import kr.or.iei.comment.model.vo.Comment;
 public class CommentHandleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	// 댓글 관련 서비스 객체 생성 (비즈니스 로직 처리용)
+	// 댓글 관련 서비스 객체 생성 (비즈니스 로직 처리)
 	private CommentService service = new CommentService();
 
 	// GET 요청 처리: 수정폼 표시 또는 삭제 처리

@@ -142,7 +142,7 @@
 </div>
 
 <script>
-  // 탭 전환 함수 (리뷰 <-> Q&A)
+  // 탭 전환 함수 (리뷰, Q&A)
   function switchReviewQa(event, type) {
     document.querySelectorAll(".sub-tab-btn").forEach(btn => {
       btn.classList.remove("active", "text-black");
