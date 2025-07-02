@@ -29,10 +29,15 @@
           onclick="switchTab('review')">
     리뷰 / Q&A
   </button>
-  <button class="w-full mb-2 px-4 py-2 text-base rounded-lg 
+  <button class="w-full mb-2 px-4 py-2 text-base rounded-lg
                  ${tab eq 'payment' ? 'bg-blue-600 text-white' : 'bg-gray-100'}"
           onclick="switchTab('payment')">
     결제 내역
+  </button>
+  <button class="w-full mb-2 px-4 py-2 text-base rounded-lg
+                 ${tab eq 'reservation' ? 'bg-blue-600 text-white' : 'bg-gray-100'}"
+          onclick="switchTab('reservation')">
+    예약 내역
   </button>
 </div>
 
@@ -47,6 +52,9 @@
     </c:if>
     <c:if test="${tab eq 'payment'}">
       <jsp:include page="myPay.jsp"/>
+    </c:if>
+    <c:if test="${tab eq 'reservation'}">
+      <jsp:include page="myReservation.jsp"/>
     </c:if>
   </div>
 </div>

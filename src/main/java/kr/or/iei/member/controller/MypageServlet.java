@@ -53,9 +53,9 @@ public class MypageServlet extends HttpServlet {
 
         String userId = loginMember.getUserId();
         
-        // 탭 정보 파라미터 받기 (account, review, payment)
+        // 탭 정보 파라미터 받기 (account, review, payment, reservation)
         String tab = request.getParameter("tab");
-        if (tab == null || !(tab.equals("account") || tab.equals("review") || tab.equals("payment"))) {
+        if (tab == null || !(tab.equals("account") || tab.equals("review") || tab.equals("payment") || tab.equals("reservation"))) {
             tab = "account";// 기본값 account
         }
         // 탭 정보를 JSP에서 조건 분기로 사용하기 위해 request에 등록
@@ -69,12 +69,12 @@ public class MypageServlet extends HttpServlet {
             request.setAttribute("qnaList", qnaList);
         }
         
-        // 결제 내역 탭이라면 데이터 조회
-    	if ("payment".equals(tab) && loginMember != null) {
-    		PayService pService = new PayService();
-    		ArrayList<PayHistory> list = pService.selectPayHistoryByUser(userId);
-    		session.setAttribute("payList", list);
-    	}
+        // 결제 내역 또는 예약 내역 탭이라면 데이터 조회
+        if (("payment".equals(tab) || "reservation".equals(tab)) && loginMember != null) {
+                PayService pService = new PayService();
+                ArrayList<PayHistory> list = pService.selectPayHistoryByUser(userId);
+                session.setAttribute("payList", list);
+        }
     	
     	// myPage.jsp로 포워딩
         RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/member/myPage.jsp");
