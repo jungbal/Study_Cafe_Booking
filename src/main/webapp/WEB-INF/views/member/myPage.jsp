@@ -16,7 +16,7 @@
 <div class="flex max-w-screen-lg mx-auto min-h-[600px]">
 <!-- 사이드바 -->
 <div class="w-48 border-r border-gray-300 p-5">
-  <!-- MENU 텍스트 -->
+  <!-- 메뉴 텍스트 -->
   <h2 class="text-lg font-semibold mb-4 text-gray-700">MENU</h2>
 <br>
   <button class="w-full mb-2 px-4 py-2 text-base rounded-lg 
